@@ -1085,6 +1085,24 @@ const MarioGame = () => {
         />
       </div>
 
+      {/* Thanks banner sitting on the road right after the last pipe */}
+      <div
+        className="thanks-wrapper"
+        style={{
+          transform: `translate3d(${scrollOffset * groundScrollSpeed}px, 0, 0)`,
+          left: `${pipeWorldX + 150}px`,
+          bottom: `${windowSize.height - groundLevel}px`,
+          position: 'absolute',
+          zIndex: 140,
+        }}
+      >
+        <img
+          src={`${process.env.PUBLIC_URL || ''}/thanks.png`}
+          alt="Thanks for playing"
+          className="thanks"
+        />
+      </div>
+
 
       {/* UI Layer - Top Container for Score and Welcome */}
       <div className="ui-layer-top">

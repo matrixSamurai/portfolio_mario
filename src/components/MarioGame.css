@@ -522,6 +522,21 @@
   display: block;
 }
 
+/* Thanks banner attached to the road after the last pipe */
+.thanks-wrapper {
+  position: absolute;
+}
+
+.thanks {
+  width: 260px;
+  height: 120px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
 /* Slightly smaller variant for grass2.png (about 40% smaller area) */
 .grass2 {
   width: 156px;
