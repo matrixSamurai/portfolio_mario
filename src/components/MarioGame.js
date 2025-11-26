@@ -428,7 +428,11 @@ const MarioGame = () => {
       
       // Detect swipe up gesture (more forgiving: distance only, up to ~0.8s)
       if (deltaY > 30 && deltaTime < 800 && Math.abs(deltaX) < 120) {
-        triggerJump();
+        // Trigger jump via touchControls so it reuses the same logic
+        setTouchControls(prev => ({ ...prev, jump: true }));
+        setTimeout(() => {
+          setTouchControls(prev => ({ ...prev, jump: false }));
+        }, 120);
       }
       
       // Clear touch zone controls
@@ -577,7 +581,7 @@ const MarioGame = () => {
         return newKeys;
       });
     }
-  }, [touchControls, triggerJump]);
+  }, [touchControls]);
 
   // Check if a key is pressed
   const isKeyPressed = useCallback((key) => {
