@@ -577,7 +577,7 @@ const MarioGame = () => {
         return newKeys;
       });
     }
-  }, [touchControls]);
+  }, [touchControls, triggerJump]);
 
   // Check if a key is pressed
   const isKeyPressed = useCallback((key) => {
