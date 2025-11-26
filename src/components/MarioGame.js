@@ -1426,9 +1426,9 @@ const MarioGame = () => {
               <h3>🎮 Controls</h3>
               {isMobile ? (
                 <>
-                  <p>← ↑ → Buttons or touch left/right sides to move</p>
-                  <p>↑ Button or swipe up to jump</p>
-                  <p>Jump into boxes from below to break them!</p>
+                  <p>Touch right side of the screen to move forward</p>
+                  <p>Touch left side of the screen to move backward</p>
+                  <p>Swipe up anywhere on the screen to jump and break boxes</p>
                 </>
               ) : (
                 <>
