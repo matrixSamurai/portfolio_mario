@@ -414,8 +414,8 @@ const MarioGame = () => {
     };
 
     const handleTouchEnd = (e) => {
-      // Don't interfere with button clicks or dialog box
-      if (e.target.closest('.mobile-button, .sound-toggle, .portfolio-section, .section-panel, .panel-body')) {
+      // Don't interfere with button clicks, but allow swipe detection over the game/dialog
+      if (e.target.closest('.mobile-button, .sound-toggle')) {
         return;
       }
 
@@ -426,8 +426,8 @@ const MarioGame = () => {
       const deltaY = touchStartRef.current.y - touch.clientY; // Negative because Y increases downward
       const deltaTime = Date.now() - touchStartRef.current.time;
       
-      // Detect swipe up gesture (minimum 50px upward movement in less than 300ms)
-      if (deltaY > 50 && deltaTime < 300 && Math.abs(deltaX) < 100) {
+      // Detect swipe up gesture (slightly more forgiving on distance and time)
+      if (deltaY > 30 && deltaTime < 400 && Math.abs(deltaX) < 120) {
         // Trigger jump
         setTouchControls(prev => ({ ...prev, jump: true }));
         setTimeout(() => {
