@@ -55,7 +55,7 @@ const MarioGame = () => {
 
   // Game constants - tuned for authentic Mario Bros feel
   // Make gravity noticeably stronger so jumps feel weighty but still readable
-  const GRAVITY = 0.9;           // Higher gravity = quicker fall
+  const GRAVITY = 1.5;           // Higher gravity = quicker fall
   const JUMP_POWER = -8;         // Strong jump to reach the boxes cleanly
   const MAX_JUMP_HEIGHT = 130;   // Moderate apex to keep jump snappy
   const MOVE_SPEED = 0.4; // Character movement speed (pixels per millisecond for smooth movement)
