@@ -1372,38 +1372,42 @@
   }
 
   .instructions-overlay {
-    top: auto !important;
-    /* Remove vertical centering */
+    top: 230px !important;
+    /* Brought even further below the welcome banner on mobile */
     left: 50% !important;
     /* Center horizontally */
     transform: translateX(-50%) !important;
     /* Center horizontally only */
     right: auto !important;
-    /* Override any right positioning */
     bottom: auto !important;
-    /* Override any bottom positioning */
-    margin-top: 140px !important;
-    /* Position below welcome text and alternative link with more spacing */
+    margin-top: 0 !important;
     width: 100% !important;
-    /* Full width to allow centering */
     justify-content: center !important;
-    /* Center the instructions box */
     align-items: flex-start !important;
-    /* Align to top */
   }
 
   .instructions {
-    max-width: 220px;
+    max-width: 100%;
+    width: 100%;
+    /* Full-width horizontal card on mobile */
     font-size: 12px;
-    padding: 15px;
+    padding: 8px 16px;
+    /* Tighter vertical padding to keep it short */
     margin: 0 auto !important;
-    /* Center the box within overlay */
     position: relative !important;
-    /* Reset any absolute positioning */
     left: auto !important;
-    /* Reset left positioning */
     right: auto !important;
-    /* Reset right positioning */
+    border-radius: 18px;
+  }
+
+  .instructions h3 {
+    margin-bottom: 6px;
+    font-size: 16px;
+  }
+
+  .instructions p {
+    margin: 2px 0;
+    line-height: 1.3;
   }
 
   .alternative-link.mobile-only {
@@ -1431,17 +1435,18 @@
   }
 
   .welcome-text {
-    top: 35px !important;
-    /* Position below score display */
+    top: 10px !important;
+    /* Stick close to the top so panels have more room */
     left: 50% !important;
     /* Center horizontally */
-    transform: translateX(-50%) !important;
-    /* Center the element */
+    transform: translate(-50%, 0) !important;
+    /* Center the element without vertical shift */
     right: auto !important;
     /* Override right positioning */
-    padding-top: 5px;
-    max-width: calc(90% - 20px);
-    /* Wider on mobile for centering */
+    padding-top: 4px;
+    width: calc(100% - 40px);
+    max-width: none;
+    /* Full-width card with equal margins on both sides */
     z-index: 100;
     /* Below score display */
     text-align: center !important;
@@ -1449,17 +1454,21 @@
   }
 
   .welcome-text.game-started {
-    top: 50px !important;
-    left: 10px !important;
-    transform: translate(0, 0) !important;
-    max-width: 160px !important;
-    text-align: left !important;
+    /* On mobile, keep the welcome card centered even after game starts */
+    top: 10px !important;
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+    width: calc(100% - 40px);
+    max-width: none !important;
+    text-align: center !important;
   }
 
   .mario-welcome {
     font-size: 20px;
     letter-spacing: 1.5px;
     line-height: 1.2;
+    padding: 16px 20px;
+    /* Smaller card on mobile so it doesn't visually collide with controls */
     text-align: center !important;
     /* Center align text */
   }
@@ -1491,9 +1500,8 @@
 
 
   .arrow-indicators {
-    display: flex !important;
-    /* Show arrow indicators on mobile */
-    pointer-events: none;
+    display: none !important;
+    /* Hide the extra on-road movement arrows on mobile; keep only bottom controls */
   }
 
   .arrow-key {

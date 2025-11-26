@@ -54,9 +54,10 @@ const MarioGame = () => {
   const lastJumpTimeRef = useRef(0); // Track when last jump occurred to prevent double jumps
 
   // Game constants - tuned for authentic Mario Bros feel
-  const GRAVITY = 0.9;
-  const JUMP_POWER = -7; // Reduced jump power for slower jump
-  const MAX_JUMP_HEIGHT = 120; // Maximum jump height (slightly above coin boxes)
+  // Make vertical movement slower and jumps more readable in the air
+  const GRAVITY = 0.45;          // Lower gravity = slower fall
+  const JUMP_POWER = -7;         // Slightly softer jump start
+  const MAX_JUMP_HEIGHT = 150;   // Allow a bit more vertical travel for a clear arc
   const MOVE_SPEED = 0.4; // Character movement speed (pixels per millisecond for smooth movement)
   const ACCELERATION = 0.003; // Acceleration rate for smooth start (higher = faster acceleration)
   const DECELERATION = 0.004; // Deceleration rate for smooth stop (higher = faster stop)
@@ -94,7 +95,7 @@ const MarioGame = () => {
       { 
         id: 'about',
         left: windowSize.width * 0.1,
-        top: baseHeight - 260, // Raise boxes higher above Mario
+        top: baseHeight - (isMobile ? 220 : 260), // Slightly lower on mobile to avoid overlap with resume panel
         width: boxSize,
         height: boxSize,
         label: 'ABOUT',
@@ -103,7 +104,7 @@ const MarioGame = () => {
       { 
         id: 'education',
         left: windowSize.width * 0.4 + extraSpacing,
-        top: baseHeight - 260,
+        top: baseHeight - (isMobile ? 220 : 260),
         width: boxSize,
         height: boxSize,
         label: 'EDUCATION',
@@ -112,7 +113,7 @@ const MarioGame = () => {
       { 
         id: 'experience',
         left: windowSize.width * 0.7 + (extraSpacing * 2),
-        top: baseHeight - 240,
+        top: baseHeight - (isMobile ? 200 : 240),
         width: boxSize,
         height: boxSize,
         label: 'WORK EXP',
@@ -121,7 +122,7 @@ const MarioGame = () => {
       { 
         id: 'projects',
         left: windowSize.width * 1.0 + (extraSpacing * 3),
-        top: baseHeight - 260,
+        top: baseHeight - (isMobile ? 220 : 260),
         width: boxSize,
         height: boxSize,
         label: 'PROJECTS',
@@ -130,7 +131,7 @@ const MarioGame = () => {
       { 
         id: 'skills',
         left: windowSize.width * 1.3 + (extraSpacing * 4),
-        top: baseHeight - 240,
+        top: baseHeight - (isMobile ? 200 : 240),
         width: boxSize,
         height: boxSize,
         label: 'SKILLS',
@@ -139,7 +140,7 @@ const MarioGame = () => {
       { 
         id: 'contact',
         left: windowSize.width * 1.6 + (extraSpacing * 5),
-        top: baseHeight - 260,
+        top: baseHeight - (isMobile ? 220 : 260),
         width: boxSize,
         height: boxSize,
         label: 'CONTACT',
