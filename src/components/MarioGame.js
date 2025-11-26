@@ -21,7 +21,7 @@ const MarioGame = () => {
     return typeof window !== 'undefined' ? Math.floor(window.innerHeight * 0.80) : 864;
   });
   const [velocity, setVelocity] = useState({ x: 0, y: 0 });
-  const [isJumping, setIsJumping] = useState(false);
+  const [isJumping] = useState(false);
   const [facingRight, setFacingRight] = useState(true);
   const [brokenBoxes, setBrokenBoxes] = useState(new Set());
   const [activeContent, setActiveContent] = useState(null);
@@ -157,7 +157,6 @@ const MarioGame = () => {
   // Parallax scroll speeds
   const cloudScrollSpeed = 0.25;
   const groundScrollSpeed = 1.0;
-  const platformScrollSpeed = 1.0;
   const boxScrollSpeed = 1.0;
 
   // Pipe position - place after the last box ("contact"), with some extra spacing
@@ -637,8 +636,6 @@ const MarioGame = () => {
     const marioLeft = x;
     const marioRight = x + MARIO_WIDTH;
     const marioBottom = y; // Y is bottom position (top of road)
-    const marioTop = y - MARIO_HEIGHT; // Top is above bottom
-
     for (const platform of platforms) {
       if (marioRight > platform.left && marioLeft < platform.right) {
         // Mario's bottom lands on platform top
@@ -918,7 +915,26 @@ const MarioGame = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [keys, worldWidth, platforms, boxes, isKeyPressed, checkBoxCollision, checkPlatformCollision, brokenBoxes, activeContent, windowSize.width, hasStarted, touchControls]);
+  }, [
+    keys,
+    worldWidth,
+    platforms,
+    boxes,
+    isKeyPressed,
+    checkBoxCollision,
+    checkPlatformCollision,
+    brokenBoxes,
+    activeContent,
+    windowSize.width,
+    windowSize.height,
+    hasStarted,
+    touchControls,
+    JUMP_POWER,
+    GRAVITY,
+    MAX_JUMP_HEIGHT,
+    groundLevel,
+    soundEnabled,
+  ]);
 
   // Memoize cloud positions with random vertical and horizontal positions,
   // ensuring some clouds are visible when the game first starts.
@@ -981,8 +997,6 @@ const MarioGame = () => {
               top: `${position.top}px`,
               position: 'absolute',
               imageRendering: 'pixelated',
-              imageRendering: '-moz-crisp-edges',
-              imageRendering: 'crisp-edges',
             }}
             aria-hidden="true"
           />
@@ -1341,19 +1355,17 @@ const MarioGame = () => {
             >
               {!isBroken && (
                 <>
-                  <img
-                    src={`${process.env.PUBLIC_URL || ''}/coin.png`}
-                    alt=""
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      imageRendering: 'pixelated',
-                      imageRendering: '-moz-crisp-edges',
-                      imageRendering: 'crisp-edges',
-                    }}
-                    aria-hidden="true"
-                  />
+                    <img
+                      src={`${process.env.PUBLIC_URL || ''}/coin.png`}
+                      alt=""
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        imageRendering: 'pixelated',
+                      }}
+                      aria-hidden="true"
+                    />
                   <div className="box-label">{box.label}</div>
                 </>
               )}
