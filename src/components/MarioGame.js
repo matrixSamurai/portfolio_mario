@@ -54,10 +54,10 @@ const MarioGame = () => {
   const lastJumpTimeRef = useRef(0); // Track when last jump occurred to prevent double jumps
 
   // Game constants - tuned for authentic Mario Bros feel
-  // Re‑introduce stronger gravity so jumps don't feel "floaty"
-  const GRAVITY = 0.65;          // Faster fall for more natural gravity
-  const JUMP_POWER = -7.5;       // Slightly stronger jump to keep a clear arc
-  const MAX_JUMP_HEIGHT = 135;   // Limit height so jump is snappy but visible
+  // Make gravity noticeably stronger so jumps feel weighty but still readable
+  const GRAVITY = 0.9;           // Higher gravity = quicker fall
+  const JUMP_POWER = -8;         // Strong jump to reach the boxes cleanly
+  const MAX_JUMP_HEIGHT = 130;   // Moderate apex to keep jump snappy
   const MOVE_SPEED = 0.4; // Character movement speed (pixels per millisecond for smooth movement)
   const ACCELERATION = 0.003; // Acceleration rate for smooth start (higher = faster acceleration)
   const DECELERATION = 0.004; // Deceleration rate for smooth stop (higher = faster stop)
