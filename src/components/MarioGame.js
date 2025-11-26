@@ -94,7 +94,7 @@ const MarioGame = () => {
       { 
         id: 'about',
         left: windowSize.width * 0.1,
-        top: baseHeight - 240, // Raise boxes higher above Mario
+        top: baseHeight - 260, // Raise boxes higher above Mario
         width: boxSize,
         height: boxSize,
         label: 'ABOUT',
@@ -103,7 +103,7 @@ const MarioGame = () => {
       { 
         id: 'education',
         left: windowSize.width * 0.4 + extraSpacing,
-        top: baseHeight - 240,
+        top: baseHeight - 260,
         width: boxSize,
         height: boxSize,
         label: 'EDUCATION',
@@ -112,7 +112,7 @@ const MarioGame = () => {
       { 
         id: 'experience',
         left: windowSize.width * 0.7 + (extraSpacing * 2),
-        top: baseHeight - 220,
+        top: baseHeight - 240,
         width: boxSize,
         height: boxSize,
         label: 'WORK EXP',
@@ -121,7 +121,7 @@ const MarioGame = () => {
       { 
         id: 'projects',
         left: windowSize.width * 1.0 + (extraSpacing * 3),
-        top: baseHeight - 240,
+        top: baseHeight - 260,
         width: boxSize,
         height: boxSize,
         label: 'PROJECTS',
@@ -130,7 +130,7 @@ const MarioGame = () => {
       { 
         id: 'skills',
         left: windowSize.width * 1.3 + (extraSpacing * 4),
-        top: baseHeight - 220,
+        top: baseHeight - 240,
         width: boxSize,
         height: boxSize,
         label: 'SKILLS',
@@ -139,7 +139,7 @@ const MarioGame = () => {
       { 
         id: 'contact',
         left: windowSize.width * 1.6 + (extraSpacing * 5),
-        top: baseHeight - 240,
+        top: baseHeight - 260,
         width: boxSize,
         height: boxSize,
         label: 'CONTACT',
@@ -176,6 +176,36 @@ const MarioGame = () => {
     // More negative so the pipe sits almost at the extreme left of the screen
     return -140;
   }, []);
+
+  // Grass patches on the road after the 2nd box (education) and 5th box (skills)
+  const grassWorldXs = useMemo(() => {
+    const positions = [];
+    const secondBox = boxes[1]; // education
+    const fifthBox = boxes[4];  // skills
+
+    if (secondBox) {
+      positions.push(secondBox.left + secondBox.width * 0.8);
+    }
+    if (fifthBox) {
+      positions.push(fifthBox.left + fifthBox.width * 0.8);
+    }
+    return positions;
+  }, [boxes]);
+
+  // Grass2 patches on the road after the 1st box (about) and just before the 4th box (projects)
+  const grass2WorldXs = useMemo(() => {
+    const positions = [];
+    const firstBox = boxes[0]; // about
+    const fourthBox = boxes[3]; // projects
+
+    if (firstBox) {
+      positions.push(firstBox.left + firstBox.width * 0.8);
+    }
+    if (fourthBox) {
+      positions.push(fourthBox.left - fourthBox.width * 0.8);
+    }
+    return positions;
+  }, [boxes]);
 
   // Initialize Mario position
   useEffect(() => {
@@ -977,6 +1007,7 @@ const MarioGame = () => {
       />
 
       {/* Starting pipe sitting on the road near the beginning */}
+      {/* Starting pipe sitting on the road near the beginning */}
       <div
         className="pipe-wrapper"
         style={{
@@ -993,6 +1024,48 @@ const MarioGame = () => {
           className="pipe"
         />
       </div>
+
+      {/* Grass patches attached to the road after specific boxes */}
+      {grassWorldXs.map((x, index) => (
+        <div
+          key={`grass-${index}`}
+          className="grass-wrapper"
+          style={{
+            transform: `translate3d(${scrollOffset * groundScrollSpeed}px, 0, 0)`,
+            left: `${x}px`,
+            bottom: `${windowSize.height - groundLevel}px`,
+            position: 'absolute',
+            zIndex: 120,
+          }}
+        >
+          <img
+            src={`${process.env.PUBLIC_URL || ''}/grass.png`}
+            alt="Grass"
+            className="grass"
+          />
+        </div>
+      ))}
+
+      {/* Grass2 patches attached to the road after box 1 and before box 4 */}
+      {grass2WorldXs.map((x, index) => (
+        <div
+          key={`grass2-${index}`}
+          className="grass-wrapper"
+          style={{
+            transform: `translate3d(${scrollOffset * groundScrollSpeed}px, 0, 0)`,
+            left: `${x}px`,
+            bottom: `${windowSize.height - groundLevel}px`,
+            position: 'absolute',
+            zIndex: 120,
+          }}
+        >
+          <img
+            src={`${process.env.PUBLIC_URL || ''}/grass2.png`}
+            alt="Grass"
+            className="grass2"
+          />
+        </div>
+      ))}
 
       {/* End pipe sitting on the road, after the last box */}
       <div

@@ -32,16 +32,30 @@ const PortfolioSection = ({ section, onClose }) => {
             <div className="section-content">
               <div className="education-list">
                 <div className="education-item">
-                  <h3>Master of Business and Technology</h3>
-                  <p><strong>Purdue University, Daniels School of Business</strong></p>
-                  <p>West Lafayette, IN</p>
-                  <p>Dec 2026 &mdash; Fellowship Awarded</p>
+                  <img
+                    className="education-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/purdue.png`}
+                    alt="Purdue University logo"
+                  />
+                  <div className="education-text">
+                    <h3>Master of Business and Technology - AI</h3>
+                    <p><strong>Purdue University, Daniels School of Business</strong></p>
+                    <p>West Lafayette, IN</p>
+                    <p>Dec 2026 &mdash; Fellowship Awarded</p>
+                  </div>
                 </div>
                 <div className="education-item">
-                  <h3>Bachelor of Technology in Information Technology</h3>
-                  <p><strong>Guru Gobind Singh Indraprastha University</strong></p>
-                  <p>Delhi, India</p>
-                  <p>2015 &mdash; 2019</p>
+                  <img
+                    className="education-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/ggsipu.png`}
+                    alt="GGSIPU logo"
+                  />
+                  <div className="education-text">
+                    <h3>Bachelor of Technology in Information Technology</h3>
+                    <p><strong>Guru Gobind Singh Indraprastha University</strong></p>
+                    <p>Delhi, India</p>
+                    <p>2015 &mdash; 2019</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -55,18 +69,32 @@ const PortfolioSection = ({ section, onClose }) => {
             <div className="section-content">
               <div className="experience-list">
                 <div className="experience-item">
-                  <h3>Teaching Assistant &amp; Python Programming Tutor</h3>
-                  <p><strong>Purdue University</strong> &mdash; West Lafayette, IN</p>
-                  <p>Oct 2025 &mdash; Present</p>
+                  <img
+                    className="experience-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/purdue.png`}
+                    alt="Purdue University logo"
+                  />
+                  <div className="experience-text">
+                    <h3>Teaching Assistant &amp; Python Programming Tutor</h3>
+                    <p><strong>Purdue University</strong> &mdash; West Lafayette, IN</p>
+                    <p>Oct 2025 &mdash; Present</p>
+                  </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
                     <li>Conduct weekly tutoring sessions focused on Python, data structures, algorithms, and OOP.</li>
                     <li>Guide students in debugging, code optimisation, modular design, and unit testing.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
-                  <h3>Engineering Lead (Founder Role)</h3>
-                  <p><strong>Starportal Software LLP</strong> &mdash; Noida, India</p>
-                  <p>Dec 2023 &mdash; July 2025</p>
+                  <img
+                    className="experience-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/starportal.png`}
+                    alt="Starportal Software logo"
+                  />
+                  <div className="experience-text">
+                    <h3>Engineering Lead (Founder Role)</h3>
+                    <p><strong>Starportal Software LLP</strong> &mdash; Noida, India</p>
+                    <p>Dec 2023 &mdash; July 2025</p>
+                  </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
                     <li>Designed and implemented distributed transaction infrastructure across 10+ networks.</li>
                     <li>Delivered high‑performance messaging and APIs that processed 1M+ messages per day.</li>
@@ -76,9 +104,16 @@ const PortfolioSection = ({ section, onClose }) => {
                   </ul>
                 </div>
                 <div className="experience-item">
-                  <h3>Engineering Manager</h3>
-                  <p><strong>Intract Software Pvt Ltd</strong> &mdash; Singapore</p>
-                  <p>Nov 2022 &mdash; Dec 2023</p>
+                  <img
+                    className="experience-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/Intract.png`}
+                    alt="Intract Software logo"
+                  />
+                  <div className="experience-text">
+                    <h3>Engineering Manager</h3>
+                    <p><strong>Intract Software Pvt Ltd</strong> &mdash; Singapore</p>
+                    <p>Nov 2022 &mdash; Dec 2023</p>
+                  </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
                     <li>Architected core backend using Node.js, Redis, Docker, and Kafka, reducing database load by 40%.</li>
                     <li>Built onboarding pipelines for 50+ B2B partners and supported a campaign with 1M users and $3M in revenue.</li>
@@ -86,18 +121,32 @@ const PortfolioSection = ({ section, onClose }) => {
                   </ul>
                 </div>
                 <div className="experience-item">
-                  <h3>Senior Software Developer</h3>
-                  <p><strong>Syndr LLC</strong> &mdash; Delhi, India</p>
-                  <p>Oct 2021 &mdash; Nov 2022</p>
+                  <img
+                    className="experience-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/syndr.png`}
+                    alt="Syndr logo"
+                  />
+                  <div className="experience-text">
+                    <h3>Senior Software Developer</h3>
+                    <p><strong>Syndr LLC</strong> &mdash; Delhi, India</p>
+                    <p>Oct 2021 &mdash; Nov 2022</p>
+                  </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
                     <li>Built distributed backend systems in Python and Java with Kubernetes orchestration and gRPC communication.</li>
                     <li>Implemented event‑driven automation using cron jobs, WebSockets, and cloud functions, increasing user engagement by 50%+.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
-                  <h3>Software Developer</h3>
-                  <p><strong>ION Group</strong> &mdash; Noida, India</p>
-                  <p>2019 &mdash; 2021</p>
+                  <img
+                    className="experience-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/ion-group.png`}
+                    alt="ION Group logo"
+                  />
+                  <div className="experience-text">
+                    <h3>Software Developer</h3>
+                    <p><strong>ION Group</strong> &mdash; Noida, India</p>
+                    <p>2019 &mdash; 2021</p>
+                  </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
                     <li>Developed React and TypeScript dashboards for system health and real‑time trader metrics.</li>
                     <li>Built a Linux benchmarking tool with multithreading that reduced manual testing time by 80%.</li>
@@ -116,20 +165,43 @@ const PortfolioSection = ({ section, onClose }) => {
             <div className="section-content">
               <div className="project-grid">
                 <div className="project-card">
+                  <img
+                    className="project-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/Pulss.png`}
+                    alt="Pulse project logo"
+                  />
                   <h3>Pulse &mdash; AI Healthcare Assistant</h3>
                   <p>Developed an AI health assistant using OpenAI LLMs for virtual consultations, symptom triage, and
                     medical report analysis, integrated with HIPAA‑compliant storage and piloted with 5K+ users.</p>
                 </div>
                 <div className="project-card">
+                  <img
+                    className="project-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/ThunderWallet.png`}
+                    alt="Thunder Wallet logo"
+                  />
                   <h3>Thunder Wallet &mdash; Unified Digital Payments</h3>
                   <p>Built a non‑custodial wallet supporting multi‑rail payments with an award‑winning UI/UX experience.</p>
                 </div>
                 <div className="project-card">
-                  <h3>Distributed Trading Infrastructure</h3>
-                  <p>High‑performance messaging layer processing 1M+ messages/day with sub‑100&nbsp;ms latency via WebSocket
-                    streaming for real‑time trading data.</p>
+                  <img
+                    className="project-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/Acquisense.png`}
+                    alt="Acquisense platform logo"
+                  />
+                  <h3>Acquisense &mdash; AI Deal Intelligence Platform</h3>
+                  <p>
+                    AI‑powered due diligence and automated deal‑sourcing platform for mergers and acquisitions. Surfaces
+                    high‑fit targets from large datasets, scores opportunities using financial and strategic signals, and
+                    generates explainable risk summaries so deal teams can focus on the most promising transactions.
+                  </p>
                 </div>
                 <div className="project-card">
+                  <img
+                    className="project-logo"
+                    src={`${process.env.PUBLIC_URL || ''}/workAssets/benchmark.png`}
+                    alt="Benchmarking tool logo"
+                  />
                   <h3>Automated Benchmarking Tool</h3>
                   <p>Linux benchmarking tool with multithreaded parallel parsing that reduced release validation and manual
                     analysis time by 80% for trading systems.</p>

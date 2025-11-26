@@ -507,6 +507,32 @@
   display: block;
 }
 
+/* Grass patches attached to the road */
+.grass-wrapper {
+  position: absolute;
+}
+
+.grass {
+  width: 260px;
+  height: 100px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+/* Slightly smaller variant for grass2.png (about 40% smaller area) */
+.grass2 {
+  width: 156px;
+  height: 60px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
 /* End Wall - Prevents character from going forward */
 .end-wall {
   position: absolute;
