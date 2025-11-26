@@ -3,7 +3,7 @@
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(to bottom, #87CEEB 0%, #5C94FC 50%, #4A7BC8 100%);
+  background: linear-gradient(to bottom, #4facfe 0%, #5C94FC 100%);
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
@@ -17,8 +17,10 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  -webkit-touch-callout: none; /* Disable iOS callout menu */
-  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+  -webkit-touch-callout: none;
+  /* Disable iOS callout menu */
+  -webkit-tap-highlight-color: transparent;
+  /* Remove tap highlight on mobile */
   /* Add subtle animated gradient overlay */
   position: relative;
 }
@@ -41,23 +43,20 @@
     opacity: 0.3;
     transform: scale(1);
   }
+
   100% {
     opacity: 0.6;
     transform: scale(1.1);
   }
 }
 
-/* Alternative Link Button - Bottom of road next to sound button on Desktop, Top Center on Mobile */
+/* Alternative Link Button */
 .alternative-link {
-  position: fixed;
-  bottom: 30px; /* On the road, same as sound button */
-  left: 90px; /* Next to sound button (sound button is 50px wide + 30px left + 10px gap) */
-  transform: none; /* No transform on desktop */
-  z-index: 250; /* Above score (200) and welcome text (100), but portfolio section (300) will be above when open */
-  background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+  /* Base styles shared by desktop and mobile */
+  background: rgba(20, 20, 20, 0.8);
   color: #FFD700;
-  border: 3px solid #FFD700;
-  border-radius: 0;
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  border-radius: 30px;
   padding: 12px 24px;
   font-size: 14px;
   font-weight: 900;
@@ -65,7 +64,7 @@
   font-family: 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  box-shadow: 
+  box-shadow:
     inset -2px -2px 0 #E6C200,
     inset 2px 2px 0 #FFE44D,
     0 0 0 2px #000,
@@ -75,13 +74,42 @@
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  pointer-events: auto; /* Ensure it's clickable */
-  display: inline-block; /* Inline-block for proper sizing */
-  width: auto; /* Auto width based on content */
-  max-width: none; /* No max-width on desktop */
-  text-align: center; /* Center text inside button */
+  pointer-events: auto;
+  /* Ensure it's clickable */
+  display: inline-block;
+  /* Inline-block for proper sizing */
+  width: auto;
+  /* Auto width based on content */
+  max-width: none;
+  /* No max-width on desktop */
+  text-align: center;
+  /* Center text inside button */
   position: relative;
   overflow: hidden;
+}
+
+.alternative-link.desktop-only {
+  position: fixed;
+  bottom: 30px;
+  /* On the road, same as sound button */
+  left: 90px;
+  /* Next to sound button */
+  z-index: 250;
+  display: inline-block;
+}
+
+.alternative-link.mobile-only {
+  position: relative;
+  top: auto;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  z-index: auto;
+  display: none;
+  /* Hidden by default on desktop */
+  margin-top: 5px;
+  font-size: 12px;
+  padding: 8px 16px;
 }
 
 .alternative-link::before {
@@ -102,7 +130,7 @@
 .alternative-link:hover {
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     inset -2px -2px 0 #CC9900,
     inset 2px 2px 0 #FFCC00,
     0 0 0 2px #000,
@@ -114,30 +142,60 @@
 .alternative-link:active {
   background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
   transform: translateY(0);
-  box-shadow: 
+  box-shadow:
     inset 2px 2px 0 #CC9900,
     inset -2px -2px 0 #FFCC00,
     0 0 0 2px #000,
     0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* Score Display - Top Center */
-.score-display {
+/* UI Layer - Top Container (Flexbox for score and welcome) */
+.ui-layer-top {
   position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 15px;
+  padding-top: 15px;
+  padding-right: 20px;
   z-index: 200;
   pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.ui-layer-top .welcome-text {
+  position: fixed !important;
+  /* Override flex positioning for welcome text */
+  /* Remove any flex influence */
+  align-self: auto !important;
+  margin: 0 !important;
+}
+
+.ui-layer-top.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Score Display - Inside Flex Container */
+.score-display {
+  position: relative;
+  /* Changed from fixed */
+  pointer-events: none;
   text-align: center;
+  margin-bottom: 5px;
+  animation: fadeInDown 0.8s ease-out;
 }
 
 .score-text {
   font-family: 'Courier New', monospace;
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 900;
   color: #FFD700;
-  text-shadow: 
+  text-shadow:
     4px 4px 0 #000,
     -2px -2px 0 #000,
     2px -2px 0 #000,
@@ -146,36 +204,36 @@
     0 0 30px rgba(255, 215, 0, 0.4);
   text-transform: uppercase;
   letter-spacing: 3px;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.9) 100%);
-  padding: 12px 24px;
-  border: 4px solid #FFD700;
-  border-radius: 0;
-  box-shadow: 
-    inset -3px -3px 0 #E6C200,
-    inset 3px 3px 0 #FFE44D,
-    0 0 0 2px #000,
-    0 6px 12px rgba(0, 0, 0, 0.6),
-    0 0 20px rgba(255, 215, 0, 0.3);
-  image-rendering: pixelated;
+  background: rgba(20, 20, 20, 0.6);
+  padding: 8px 18px;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  image-rendering: auto;
   white-space: nowrap;
   position: relative;
   animation: scorePulse 2s ease-in-out infinite;
-  backdrop-filter: blur(5px);
 }
 
 @keyframes scorePulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
-    box-shadow: 
+    box-shadow:
       inset -3px -3px 0 #E6C200,
       inset 3px 3px 0 #FFE44D,
       0 0 0 2px #000,
       0 6px 12px rgba(0, 0, 0, 0.6),
       0 0 20px rgba(255, 215, 0, 0.3);
   }
+
   50% {
     transform: scale(1.02);
-    box-shadow: 
+    box-shadow:
       inset -3px -3px 0 #E6C200,
       inset 3px 3px 0 #FFE44D,
       0 0 0 2px #000,
@@ -184,16 +242,40 @@
   }
 }
 
-/* Welcome Text - Mario Style */
+/* Welcome Text - Inside Flex Container */
 .welcome-text {
   position: fixed;
-  top: 60px; /* Position below score display (score is at top: 10px with padding) */
-  right: 20px;
-  z-index: 100; /* Behind score display (z-index 200) and info boxes (z-index 150) */
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
   pointer-events: none;
   width: auto;
-  max-width: calc(35% - 40px); /* Reduced width to leave more space for controls box on left */
-  text-align: right;
+  max-width: 90%;
+  /* Responsive width */
+  text-align: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  transition:
+    transform 2s cubic-bezier(0.33, 0, 0.2, 1),
+    left 2s cubic-bezier(0.33, 0, 0.2, 1),
+    top 2s cubic-bezier(0.33, 0, 0.2, 1),
+    opacity 0.8s ease-out;
+  /* Smooth, slower transition for movement when it moves left after box break.
+     No entry animation so it starts centered without sliding in. */
+}
+
+.welcome-text.game-started {
+  position: fixed;
+  top: 13% !important;
+  left: 4% !important;
+  transform: translate(0, 0) !important;
+  /* Move to the left side when game starts, maintaining original width */
+  opacity: 0.85;
+  width: 520px;
+  max-width: 520px;
+  /* Larger square-style card on the left */
+  text-align: center;
 }
 
 .mario-welcome {
@@ -201,56 +283,161 @@
   font-size: 48px;
   font-weight: 900;
   color: #FFD700;
-  text-shadow: 
-    4px 4px 0 #000,
-    -2px -2px 0 #000,
-    2px -2px 0 #000,
-    -2px 2px 0 #000,
-    0 0 15px rgba(255, 215, 0, 0.8),
-    0 0 30px rgba(255, 215, 0, 0.4),
-    0 0 45px rgba(255, 215, 0, 0.2);
-  text-align: left;
-  margin: 0;
+  text-shadow:
+    4px 4px 0 rgba(0, 0, 0, 0.8),
+    -2px -2px 0 rgba(0, 0, 0, 0.8),
+    2px -2px 0 rgba(0, 0, 0, 0.8),
+    -2px 2px 0 rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(255, 215, 0, 1),
+    0 0 40px rgba(255, 215, 0, 0.6),
+    0 0 60px rgba(255, 215, 0, 0.3);
+  text-align: center;
+  margin: 0 0 15px 0;
   text-transform: uppercase;
   letter-spacing: 4px;
-  white-space: normal; /* Allow text to wrap if needed */
+  white-space: normal;
+  /* Allow text to wrap if needed */
   word-wrap: break-word;
-  animation: welcomePulse 3s ease-in-out infinite;
+  animation: welcomePulse 3s ease-in-out infinite, textGlow 3s ease-in-out infinite;
   image-rendering: pixelated;
   display: block;
   line-height: 1.2;
   position: relative;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
-  padding: 10px 15px;
-  border: 3px solid rgba(255, 215, 0, 0.3);
-  backdrop-filter: blur(3px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+  padding: 30px 40px;
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 24px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.25),
+    0 0 40px rgba(255, 215, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   /* Allow text to display fully, spacing handled by controls box positioning */
 }
 
+.welcome-text.game-started .mario-welcome {
+  font-size: 46px;
+  /* Even larger title for bigger box */
+  padding: 32px 34px;
+  letter-spacing: 3px;
+  text-align: center;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.mario-subtitle {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 255, 255, 0.5);
+  text-align: center;
+  margin: 0;
+  letter-spacing: 2px;
+  animation: subtitleBlink 2s ease-in-out infinite;
+  position: relative;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: opacity 0.5s ease;
+}
+
+.welcome-text.game-started .mario-subtitle {
+  display: none;
+  /* Hide subtitle when game starts */
+}
+
 @keyframes welcomePulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
-    text-shadow: 
-      4px 4px 0 #000,
-      -2px -2px 0 #000,
-      2px -2px 0 #000,
-      -2px 2px 0 #000,
-      0 0 15px rgba(255, 215, 0, 0.8),
-      0 0 30px rgba(255, 215, 0, 0.4),
-      0 0 45px rgba(255, 215, 0, 0.2);
+    box-shadow: 
+      0 8px 32px 0 rgba(31, 38, 135, 0.25),
+      0 0 40px rgba(255, 215, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
+
   50% {
-    transform: scale(1.03);
-    opacity: 0.98;
-    text-shadow: 
-      4px 4px 0 #000,
-      -2px -2px 0 #000,
-      2px -2px 0 #000,
-      -2px 2px 0 #000,
+    transform: scale(1.02);
+    opacity: 1;
+    box-shadow: 
+      0 12px 40px 0 rgba(31, 38, 135, 0.35),
+      0 0 60px rgba(255, 215, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 0.8),
+      -2px -2px 0 rgba(0, 0, 0, 0.8),
+      2px -2px 0 rgba(0, 0, 0, 0.8),
+      -2px 2px 0 rgba(0, 0, 0, 0.8),
       0 0 20px rgba(255, 215, 0, 1),
       0 0 40px rgba(255, 215, 0, 0.6),
       0 0 60px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 0.8),
+      -2px -2px 0 rgba(0, 0, 0, 0.8),
+      2px -2px 0 rgba(0, 0, 0, 0.8),
+      -2px 2px 0 rgba(0, 0, 0, 0.8),
+      0 0 30px rgba(255, 215, 0, 1.2),
+      0 0 60px rgba(255, 215, 0, 0.8),
+      0 0 90px rgba(255, 215, 0, 0.5);
+  }
+}
+
+@keyframes subtitleBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -260,8 +447,8 @@
   top: 0;
   left: 0;
   width: 400vw;
-  height: 80%;
-  background: linear-gradient(to bottom, #87CEEB 0%, #5C94FC 100%);
+  height: 100%;
+  background: linear-gradient(to bottom, #4facfe 0%, #5C94FC 100%);
   overflow: hidden;
   will-change: transform;
   transform: translateZ(0);
@@ -284,6 +471,7 @@
   0% {
     transform: translateX(-100px);
   }
+
   100% {
     transform: translateX(calc(400vw + 100px));
   }
@@ -304,6 +492,21 @@
   -ms-interpolation-mode: nearest-neighbor;
 }
 
+/* Pipe sitting on the road near the end */
+.pipe-wrapper {
+  position: absolute;
+}
+
+.pipe {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
 /* End Wall - Prevents character from going forward */
 .end-wall {
   position: absolute;
@@ -314,40 +517,41 @@
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
   /* Brick pattern using CSS */
-  background-image: 
-    repeating-linear-gradient(
-      90deg,
+  background-image:
+    repeating-linear-gradient(90deg,
       transparent 0px,
       transparent 7px,
       rgba(0, 0, 0, 0.15) 7px,
-      rgba(0, 0, 0, 0.15) 8px
-    ),
-    repeating-linear-gradient(
-      0deg,
+      rgba(0, 0, 0, 0.15) 8px),
+    repeating-linear-gradient(0deg,
       transparent 0px,
       transparent 7px,
       rgba(0, 0, 0, 0.1) 7px,
-      rgba(0, 0, 0, 0.1) 8px
-    );
+      rgba(0, 0, 0, 0.1) 8px);
 }
 
-/* Sound Toggle Button - On the road, left side, below left arrow */
+/* Sound Toggle Button - Top Left */
 .sound-toggle {
   position: fixed;
-  bottom: 30px; /* Position on the road, above the bottom edge */
-  left: 30px; /* Match the left arrow position */
+  top: 20px;
+  left: 20px;
+  bottom: auto;
+  right: auto;
   width: 50px;
   height: 50px;
+  min-width: 50px;
+  min-height: 50px;
   background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
-  border: 4px solid #FFD700;
-  border-radius: 0; /* Sharp corners for pixelated look */
+  border: 2px solid #FFD700;
+  border-radius: 50%;
+  /* Round button */
   font-size: 24px;
   cursor: pointer;
-  z-index: 200;
+  z-index: 1001;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
+  box-shadow:
     inset -3px -3px 0 #E6C200,
     inset 3px 3px 0 #FFE44D,
     0 0 0 2px #000,
@@ -356,8 +560,8 @@
   image-rendering: pixelated;
   font-family: 'Courier New', monospace;
   transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
+  overflow: visible;
+  /* Ensure button is fully visible */
 }
 
 .sound-toggle::before {
@@ -381,7 +585,7 @@
 .sound-toggle:hover {
   background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 
+  box-shadow:
     inset -3px -3px 0 #CC9900,
     inset 3px 3px 0 #FFCC00,
     0 0 0 2px #000,
@@ -393,7 +597,7 @@
 .sound-toggle:active {
   background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
   transform: translateY(0) scale(1);
-  box-shadow: 
+  box-shadow:
     inset 3px 3px 0 #CC9900,
     inset -3px -3px 0 #FFCC00,
     0 0 0 2px #000,
@@ -403,35 +607,49 @@
 /* Controls Instructions Box - Mario Bros Style */
 .instructions-overlay {
   position: fixed;
-  top: 240px; /* Position well below welcome text (60px top + ~150px for text height) and score display */
+  top: 20.5%;
+  transform: translateY(-50%);
+  /* Vertically align with welcome text (which is centered at 35% with translateY(-50%)) */
   left: 20px;
   pointer-events: none;
   z-index: 100;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  max-width: 300px; /* Fixed max-width to prevent overlap */
+  max-width: 300px;
+  /* Fixed max-width to prevent overlap */
+  animation: fadeInLeft 1.2s ease-out 0.3s both;
 }
 
 .instructions {
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(20, 20, 20, 0.85) 100%);
   color: #FFD700;
-  padding: 15px 20px;
-  border: 4px solid #FFD700;
-  border-radius: 0; /* Sharp corners for pixelated look */
+  padding: 24px;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 20px;
+  /* Rounded corners for modern look */
   font-size: 14px;
   box-shadow: 
-    inset -3px -3px 0 #E6C200,
-    inset 3px 3px 0 #FFE44D,
-    0 0 0 2px #000,
-    0 6px 12px rgba(0, 0, 0, 0.6),
-    0 0 20px rgba(255, 215, 0, 0.3);
+    0 8px 32px 0 rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   max-width: 280px;
-  image-rendering: pixelated;
-  font-family: 'Courier New', monospace;
+  image-rendering: auto;
+  font-family: 'Outfit', sans-serif;
+  /* Modern font */
   pointer-events: auto;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.instructions:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(255, 215, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .instructions::before {
@@ -446,46 +664,61 @@
   z-index: 0;
 }
 
-.instructions > * {
+.instructions>* {
   position: relative;
   z-index: 1;
 }
 
 .instructions h3 {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   color: #FFD700;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 900;
   text-align: center;
-  text-shadow: 
-    2px 2px 0 #000,
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000;
+  text-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.8),
+    -1px -1px 0 rgba(0, 0, 0, 0.8),
+    1px -1px 0 rgba(0, 0, 0, 0.8),
+    -1px 1px 0 rgba(0, 0, 0, 0.8),
+    0 0 15px rgba(255, 215, 0, 0.6);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .instructions p {
-  margin: 8px 0;
-  line-height: 1.5;
-  font-size: 12px;
-  font-weight: bold;
-  color: #FFF;
-  text-shadow: 1px 1px 0 #000;
+  margin: 10px 0;
+  line-height: 1.6;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 5px rgba(255, 255, 255, 0.2);
+  transition: color 0.3s ease;
+}
+
+.instructions p:hover {
+  color: #FFD700;
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 /* Arrow key indicators */
 .arrow-indicators {
   position: absolute;
-  pointer-events: none;
-  z-index: 100;
+  pointer-events: auto;
+  z-index: 400;
 }
 
 .arrow-key {
   font-size: 48px;
   color: #FFD700;
-  text-shadow: 
+  text-shadow:
     3px 3px 0 #000,
     -1px -1px 0 #000,
     1px -1px 0 #000,
@@ -511,10 +744,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.6;
     transform: scale(1);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.1);
@@ -524,7 +760,8 @@
 /* Mario Character - Using sprite images */
 .mario {
   position: absolute;
-  z-index: 250; /* Above all other elements including jump button (z-index 150) */
+  z-index: 250;
+  /* Above all other elements including jump button (z-index 150) */
   transition: none;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -558,7 +795,7 @@
   font-size: 18px;
   font-weight: 900;
   color: #FFFFFF;
-  text-shadow: 
+  text-shadow:
     3px 3px 0 #000,
     -1px -1px 0 #000,
     1px -1px 0 #000,
@@ -571,25 +808,31 @@
   line-height: 1.2;
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%);
   border: 3px solid #FFD700;
-  border-radius: 0; /* Sharp corners for pixelated look */
+  border-radius: 0;
+  /* Sharp corners for pixelated look */
   margin-top: -8px;
   letter-spacing: 1px;
   display: block;
-  min-width: max-content; /* Allow label to be as wide as needed */
+  min-width: max-content;
+  /* Allow label to be as wide as needed */
   width: auto;
   box-sizing: border-box;
   text-transform: uppercase;
   image-rendering: pixelated;
   flex-shrink: 0;
   white-space: nowrap;
-  overflow: visible; /* Show full text */
-  text-overflow: clip; /* Don't use ellipsis */
+  overflow: visible;
+  /* Show full text */
+  text-overflow: clip;
+  /* Don't use ellipsis */
   position: absolute;
-  bottom: -25px; /* Move further down to show full text */
+  bottom: -25px;
+  /* Move further down to show full text */
   left: 50%;
   transform: translateX(-50%);
-  clip-path: none; /* Remove clipping to show full text */
-  box-shadow: 
+  clip-path: none;
+  /* Remove clipping to show full text */
+  box-shadow:
     inset -2px -2px 0 #E6C200,
     inset 2px 2px 0 #FFE44D,
     0 0 0 1px #000,
@@ -632,7 +875,8 @@
 .mario-box.broken {
   animation: breakBox 0.5s ease-out forwards;
   pointer-events: none;
-  overflow: hidden; /* Contain the blast animation within the box */
+  overflow: hidden;
+  /* Contain the blast animation within the box */
 }
 
 @keyframes breakBox {
@@ -641,26 +885,31 @@
     opacity: 1;
     filter: brightness(1) blur(0px);
   }
+
   15% {
     transform: scale(1.5) translateY(-15px) rotate(-15deg);
     opacity: 1;
     filter: brightness(2) blur(2px);
   }
+
   30% {
     transform: scale(1.2) translateY(-5px) rotate(20deg);
     opacity: 0.9;
     filter: brightness(1.8) blur(3px);
   }
+
   50% {
     transform: scale(0.6) translateY(10px) rotate(-30deg);
     opacity: 0.5;
     filter: brightness(1.2) blur(5px);
   }
+
   70% {
     transform: scale(0.3) translateY(25px) rotate(45deg);
     opacity: 0.2;
     filter: brightness(0.6) blur(8px);
   }
+
   100% {
     transform: scale(0) translateY(50px) rotate(60deg);
     opacity: 0;
@@ -690,11 +939,13 @@
     height: 0;
     opacity: 1;
   }
+
   50% {
     width: 100%;
     height: 100%;
     opacity: 0.8;
   }
+
   100% {
     width: 100%;
     height: 100%;
@@ -711,7 +962,8 @@
   left: 0;
   pointer-events: none;
   z-index: 10;
-  overflow: hidden; /* Contain particles within box */
+  overflow: hidden;
+  /* Contain particles within box */
 }
 
 .box-particles::before,
@@ -722,7 +974,7 @@
   height: 6px;
   background: #FFD700;
   border-radius: 50%;
-  box-shadow: 
+  box-shadow:
     -15px -10px 0 #FFA500,
     15px -10px 0 #FFD700,
     -20px 5px 0 #FF8C00,
@@ -743,7 +995,7 @@
 
 .box-particles::after {
   animation-delay: 0.1s;
-  box-shadow: 
+  box-shadow:
     -12px -8px 0 #FF8C00,
     12px -8px 0 #FFD700,
     -18px 8px 0 #FFA500,
@@ -763,9 +1015,11 @@
     transform: translate(-50%, -50%) scale(0) rotate(0deg);
     opacity: 1;
   }
+
   20% {
     opacity: 1;
   }
+
   100% {
     transform: translate(-50%, -50%) scale(2.5) rotate(720deg);
     opacity: 0;
@@ -774,7 +1028,7 @@
 
 /* Additional particle elements for more dramatic effect */
 .mario-box.broken .box-particles {
-  background: 
+  background:
     radial-gradient(circle at 20% 20%, #FFD700 6px, transparent 6px),
     radial-gradient(circle at 80% 20%, #FFA500 6px, transparent 6px),
     radial-gradient(circle at 20% 80%, #FFD700 6px, transparent 6px),
@@ -794,16 +1048,19 @@
     opacity: 1;
     filter: brightness(1);
   }
+
   30% {
     transform: scale(1.2) rotate(180deg);
     opacity: 0.9;
     filter: brightness(1.5);
   }
+
   60% {
     transform: scale(1.5) rotate(360deg);
     opacity: 0.5;
     filter: brightness(1.2);
   }
+
   100% {
     transform: scale(1.8) rotate(540deg);
     opacity: 0;
@@ -818,7 +1075,8 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  display: none; /* Hidden on desktop, shown on mobile */
+  display: none;
+  /* Hidden on desktop, shown on mobile */
   gap: 15px;
   z-index: 200;
   flex-direction: row;
@@ -828,7 +1086,8 @@
 .mobile-button {
   width: 60px;
   height: 60px;
-  min-width: 60px; /* Ensure minimum touch target size (44px recommended, using 60px) */
+  min-width: 60px;
+  /* Ensure minimum touch target size (44px recommended, using 60px) */
   min-height: 60px;
   background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
   border: 4px solid #FFD700;
@@ -840,7 +1099,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
+  box-shadow:
     inset -3px -3px 0 #E6C200,
     inset 3px 3px 0 #FFE44D,
     0 0 0 2px #000,
@@ -879,7 +1138,7 @@
 
 .mobile-button:active {
   background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
-  box-shadow: 
+  box-shadow:
     inset 3px 3px 0 #CC9900,
     inset -3px -3px 0 #FFCC00,
     0 0 0 2px #000,
@@ -888,7 +1147,8 @@
 }
 
 .mobile-jump {
-  order: 2; /* Jump button in the middle */
+  order: 2;
+  /* Jump button in the middle */
 }
 
 .mobile-left {
@@ -903,7 +1163,8 @@
 /* iPad and Tablet Responsive design */
 @media (min-width: 769px) and (max-width: 1024px) {
   .mario {
-    width: 90px !important; /* Slightly larger than mobile but smaller than desktop */
+    width: 90px !important;
+    /* Slightly larger than mobile but smaller than desktop */
     height: 90px !important;
   }
 
@@ -930,11 +1191,24 @@
     text-align: center !important;
   }
 
+  .welcome-text.game-started {
+    top: 60px !important;
+    left: 15px !important;
+    transform: translate(0, 0) !important;
+    max-width: 200px !important;
+    text-align: left !important;
+  }
+
   .mario-welcome {
     font-size: 36px;
     letter-spacing: 3px;
     line-height: 1.2;
     text-align: center !important;
+  }
+
+  .welcome-text.game-started .mario-welcome {
+    font-size: 24px !important;
+    text-align: left !important;
   }
 
   .instructions-overlay {
@@ -943,7 +1217,8 @@
     transform: translateX(-50%) !important;
     right: auto !important;
     bottom: auto !important;
-    margin-top: 150px !important; /* Position further down below welcome text */
+    margin-top: 150px !important;
+    /* Position further down below welcome text */
     width: 100% !important;
     justify-content: center !important;
     align-items: flex-start !important;
@@ -961,8 +1236,10 @@
 
   .alternative-link {
     top: auto !important;
-    bottom: 30px !important; /* On the road, same as sound button */
-    left: 100px !important; /* Next to sound button (sound button is 50px wide + 20px left + 10px gap) */
+    bottom: 30px !important;
+    /* On the road, same as sound button */
+    left: 100px !important;
+    /* Next to sound button (sound button is 50px wide + 20px left + 10px gap) */
     transform: none !important;
     font-size: 14px;
     padding: 10px 20px;
@@ -974,17 +1251,24 @@
   .sound-toggle {
     width: 50px;
     height: 50px;
+    min-width: 50px;
+    min-height: 50px;
     font-size: 22px;
-    bottom: 25px;
+    top: 20px;
     left: 20px;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
   }
 
   .mobile-controls {
-    display: none !important; /* Hide mobile controls on iPad - use keyboard/touch zones */
+    display: none !important;
+    /* Hide mobile controls on iPad - use keyboard/touch zones */
   }
 
   .arrow-indicators {
-    display: none !important; /* Hide arrow indicators on iPad */
+    display: none !important;
+    /* Hide arrow indicators on iPad */
   }
 }
 
@@ -992,8 +1276,10 @@
 @media (max-width: 768px) {
   .mario-game {
     font-size: 14px;
-    touch-action: pan-y; /* Allow vertical scrolling but prevent horizontal */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    touch-action: pan-y;
+    /* Allow vertical scrolling but prevent horizontal */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
     /* Disable all selection on mobile */
     -webkit-user-select: none !important;
     -moz-user-select: none !important;
@@ -1014,7 +1300,8 @@
   }
 
   .mario {
-    width: 80px !important; /* Increased from 64px - bigger than boxes */
+    width: 80px !important;
+    /* Increased from 64px - bigger than boxes */
     height: 80px !important;
   }
 
@@ -1029,7 +1316,8 @@
   }
 
   .mario-box-wrapper {
-    width: 60px !important; /* Keep boxes smaller than Mario */
+    width: 60px !important;
+    /* Keep boxes smaller than Mario */
     height: 60px !important;
   }
 
@@ -1043,45 +1331,56 @@
   }
 
   .instructions-overlay {
-    top: auto !important; /* Remove vertical centering */
-    left: 50% !important; /* Center horizontally */
-    transform: translateX(-50%) !important; /* Center horizontally only */
-    right: auto !important; /* Override any right positioning */
-    bottom: auto !important; /* Override any bottom positioning */
-    margin-top: 140px !important; /* Position below welcome text and alternative link with more spacing */
-    width: 100% !important; /* Full width to allow centering */
-    justify-content: center !important; /* Center the instructions box */
-    align-items: flex-start !important; /* Align to top */
+    top: auto !important;
+    /* Remove vertical centering */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translateX(-50%) !important;
+    /* Center horizontally only */
+    right: auto !important;
+    /* Override any right positioning */
+    bottom: auto !important;
+    /* Override any bottom positioning */
+    margin-top: 140px !important;
+    /* Position below welcome text and alternative link with more spacing */
+    width: 100% !important;
+    /* Full width to allow centering */
+    justify-content: center !important;
+    /* Center the instructions box */
+    align-items: flex-start !important;
+    /* Align to top */
   }
 
   .instructions {
     max-width: 220px;
     font-size: 12px;
     padding: 15px;
-    margin: 0 auto !important; /* Center the box within overlay */
-    position: relative !important; /* Reset any absolute positioning */
-    left: auto !important; /* Reset left positioning */
-    right: auto !important; /* Reset right positioning */
+    margin: 0 auto !important;
+    /* Center the box within overlay */
+    position: relative !important;
+    /* Reset any absolute positioning */
+    left: auto !important;
+    /* Reset left positioning */
+    right: auto !important;
+    /* Reset right positioning */
   }
 
-  .alternative-link {
-    top: 50px !important; /* Position below score and welcome text on mobile */
-    bottom: auto !important; /* Override desktop bottom positioning */
-    left: 50% !important; /* Center horizontally on mobile */
-    transform: translateX(-50%) !important; /* Center the element on mobile */
-    font-size: 12px;
-    padding: 8px 16px;
-    max-width: 200px; /* Limit width on mobile */
-    width: auto; /* Auto width based on content */
-    text-align: center; /* Center text inside button */
-    z-index: 250; /* Above score (200) and welcome text (100), but portfolio section (300) will be above when open */
+  .alternative-link.mobile-only {
+    display: inline-block;
+    /* Show on mobile */
+  }
+
+  .alternative-link.desktop-only {
+    display: none;
+    /* Hide desktop version on mobile */
   }
 
   .score-display {
     top: 5px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    z-index: 200; /* Above welcome text */
+    z-index: 200;
+    /* Above welcome text */
   }
 
   .score-text {
@@ -1091,29 +1390,55 @@
   }
 
   .welcome-text {
-    top: 35px !important; /* Position below score display */
-    left: 50% !important; /* Center horizontally */
-    transform: translateX(-50%) !important; /* Center the element */
-    right: auto !important; /* Override right positioning */
+    top: 35px !important;
+    /* Position below score display */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translateX(-50%) !important;
+    /* Center the element */
+    right: auto !important;
+    /* Override right positioning */
     padding-top: 5px;
-    max-width: calc(90% - 20px); /* Wider on mobile for centering */
-    z-index: 100; /* Below score display */
-    text-align: center !important; /* Center align text */
+    max-width: calc(90% - 20px);
+    /* Wider on mobile for centering */
+    z-index: 100;
+    /* Below score display */
+    text-align: center !important;
+    /* Center align text */
+  }
+
+  .welcome-text.game-started {
+    top: 50px !important;
+    left: 10px !important;
+    transform: translate(0, 0) !important;
+    max-width: 160px !important;
+    text-align: left !important;
   }
 
   .mario-welcome {
     font-size: 20px;
     letter-spacing: 1.5px;
     line-height: 1.2;
-    text-align: center !important; /* Center align text */
+    text-align: center !important;
+    /* Center align text */
+  }
+
+  .welcome-text.game-started .mario-welcome {
+    font-size: 16px !important;
+    text-align: left !important;
   }
 
   .sound-toggle {
     width: 45px;
     height: 45px;
+    min-width: 45px;
+    min-height: 45px;
     font-size: 20px;
-    bottom: 20px;
-    left: 10px;
+    top: 15px;
+    left: 15px;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
   }
 
   .mobile-controls {
@@ -1125,22 +1450,26 @@
 
 
   .arrow-indicators {
-    display: flex !important; /* Show arrow indicators on mobile */
+    display: flex !important;
+    /* Show arrow indicators on mobile */
     pointer-events: none;
   }
 
   .arrow-key {
-    font-size: 36px; /* Smaller on mobile */
+    font-size: 36px;
+    /* Smaller on mobile */
   }
 
   .mobile-jump-arrow {
-    pointer-events: auto !important; /* Make up arrow clickable on mobile */
+    pointer-events: auto !important;
+    /* Make up arrow clickable on mobile */
   }
 }
 
 @media (max-width: 480px) {
   .mario {
-    width: 70px !important; /* Increased from 56px - bigger than boxes */
+    width: 70px !important;
+    /* Increased from 56px - bigger than boxes */
     height: 70px !important;
   }
 
@@ -1151,7 +1480,8 @@
   }
 
   .mario-box-wrapper {
-    width: 50px !important; /* Keep boxes smaller than Mario */
+    width: 50px !important;
+    /* Keep boxes smaller than Mario */
     height: 50px !important;
   }
 
@@ -1165,43 +1495,46 @@
   }
 
   .instructions-overlay {
-    top: auto !important; /* Remove vertical centering */
-    left: 50% !important; /* Center horizontally */
-    transform: translateX(-50%) !important; /* Center horizontally only */
-    right: auto !important; /* Override any right positioning */
-    bottom: auto !important; /* Override any bottom positioning */
-    margin-top: 120px !important; /* Position below welcome text and alternative link with more spacing */
-    width: 100% !important; /* Full width to allow centering */
-    justify-content: center !important; /* Center the instructions box */
-    align-items: flex-start !important; /* Align to top */
+    top: auto !important;
+    /* Remove vertical centering */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translateX(-50%) !important;
+    /* Center horizontally only */
+    right: auto !important;
+    /* Override any right positioning */
+    bottom: auto !important;
+    /* Override any bottom positioning */
+    margin-top: 120px !important;
+    /* Position below welcome text and alternative link with more spacing */
+    width: 100% !important;
+    /* Full width to allow centering */
+    justify-content: center !important;
+    /* Center the instructions box */
+    align-items: flex-start !important;
+    /* Align to top */
   }
 
   .instructions {
     max-width: 180px;
     font-size: 11px;
     padding: 12px;
-    margin: 0 auto !important; /* Center the box within overlay */
-    position: relative !important; /* Reset any absolute positioning */
-    left: auto !important; /* Reset left positioning */
-    right: auto !important; /* Reset right positioning */
+    margin: 0 auto !important;
+    /* Center the box within overlay */
+    position: relative !important;
+    /* Reset any absolute positioning */
+    left: auto !important;
+    /* Reset left positioning */
+    right: auto !important;
+    /* Reset right positioning */
   }
 
-  .alternative-link {
-    top: 45px !important; /* Position below score and welcome text on small mobile */
-    bottom: auto !important; /* Override desktop bottom positioning */
-    left: 50% !important; /* Center horizontally on mobile */
-    transform: translateX(-50%) !important; /* Center the element on mobile */
-    font-size: 11px;
-    padding: 6px 12px;
-    max-width: 180px; /* Limit width on small mobile */
-    width: auto; /* Auto width based on content */
-    text-align: center; /* Center text inside button */
-    z-index: 250; /* Above score (200) and welcome text (100), but portfolio section (300) will be above when open */
-  }
+  /* No specific overrides needed for small screens as flexbox handles it */
 
   .score-display {
     top: 3px !important;
-    z-index: 200; /* Above welcome text */
+    z-index: 200;
+    /* Above welcome text */
   }
 
   .score-text {
@@ -1211,29 +1544,55 @@
   }
 
   .welcome-text {
-    top: 28px !important; /* Position below score display */
-    left: 50% !important; /* Center horizontally */
-    transform: translateX(-50%) !important; /* Center the element */
-    right: auto !important; /* Override right positioning */
+    top: 28px !important;
+    /* Position below score display */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translateX(-50%) !important;
+    /* Center the element */
+    right: auto !important;
+    /* Override right positioning */
     padding-top: 3px;
-    max-width: calc(95% - 16px); /* Wider on mobile for centering */
-    z-index: 100; /* Below score display */
-    text-align: center !important; /* Center align text */
+    max-width: calc(95% - 16px);
+    /* Wider on mobile for centering */
+    z-index: 100;
+    /* Below score display */
+    text-align: center !important;
+    /* Center align text */
+  }
+
+  .welcome-text.game-started {
+    top: 45px !important;
+    left: 8px !important;
+    transform: translate(0, 0) !important;
+    max-width: 140px !important;
+    text-align: left !important;
   }
 
   .mario-welcome {
     font-size: 16px;
     letter-spacing: 1px;
     line-height: 1.1;
-    text-align: center !important; /* Center align text */
+    text-align: center !important;
+    /* Center align text */
+  }
+
+  .welcome-text.game-started .mario-welcome {
+    font-size: 14px !important;
+    text-align: left !important;
   }
 
   .sound-toggle {
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     font-size: 18px;
-    bottom: 15px;
-    left: 8px;
+    top: 15px;
+    left: 15px;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
   }
 
   .mobile-button {
@@ -1251,7 +1610,8 @@
   }
 
   .arrow-key {
-    font-size: 32px; /* Even smaller on very small screens */
+    font-size: 32px;
+    /* Even smaller on very small screens */
   }
 
 }

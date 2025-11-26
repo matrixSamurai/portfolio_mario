@@ -10,13 +10,15 @@ const PortfolioSection = ({ section, onClose }) => {
           icon: '👤',
           content: (
             <div className="section-content">
-              <h2>About</h2>
               <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <p style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '20px', lineHeight: '1.6' }}>
-                  Software Engineer from West Lafayette, USA
+                  Software Engineer · Backend & Distributed Systems
                 </p>
                 <p style={{ fontSize: '14px', lineHeight: '1.8', marginBottom: '15px' }}>
-                  6+ years building distributed systems and cloud-native applications. I specialize in low-latency, high-throughput backend services delivering platforms used by 2M+ users with 99.9% reliability ⚡
+                  Software Engineer with experience designing scalable backend systems and cloud‑native distributed
+                  services. Skilled in building low‑latency, high‑throughput applications and real‑time data pipelines.
+                  Currently pursuing a Master of Business and Technology at Purdue and seeking a Summer 2026 Software
+                  Engineering internship.
                 </p>
               </div>
             </div>
@@ -28,19 +30,18 @@ const PortfolioSection = ({ section, onClose }) => {
           icon: '🎓',
           content: (
             <div className="section-content">
-              <h2>Education</h2>
               <div className="education-list">
                 <div className="education-item">
                   <h3>Master of Business and Technology</h3>
                   <p><strong>Purdue University, Daniels School of Business</strong></p>
                   <p>West Lafayette, IN</p>
-                  <p>December 2026 (Awarded Fellowship)</p>
+                  <p>Dec 2026 &mdash; Fellowship Awarded</p>
                 </div>
                 <div className="education-item">
                   <h3>Bachelor of Technology in Information Technology</h3>
                   <p><strong>Guru Gobind Singh Indraprastha University</strong></p>
                   <p>Delhi, India</p>
-                  <p>June 2015 - May 2019 | GPA: 3.57</p>
+                  <p>2015 &mdash; 2019</p>
                 </div>
               </div>
             </div>
@@ -52,55 +53,55 @@ const PortfolioSection = ({ section, onClose }) => {
           icon: '💼',
           content: (
             <div className="section-content">
-              <h2>Work Experience</h2>
               <div className="experience-list">
                 <div className="experience-item">
-                  <h3>Python Programming Tutor</h3>
-                  <p><strong>Purdue University</strong> | West Lafayette, IN</p>
-                  <p>Oct 2025 - Present</p>
+                  <h3>Teaching Assistant &amp; Python Programming Tutor</h3>
+                  <p><strong>Purdue University</strong> &mdash; West Lafayette, IN</p>
+                  <p>Oct 2025 &mdash; Present</p>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Conduct weekly tutoring sessions for students, reinforcing core Python programming concepts including data structures, algorithms, and object-oriented design.</li>
-                    <li>Guide students in debugging, optimizing code, and implementing clean, modular solutions aligned with best practices in software development.</li>
+                    <li>Conduct weekly tutoring sessions focused on Python, data structures, algorithms, and OOP.</li>
+                    <li>Guide students in debugging, code optimisation, modular design, and unit testing.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
                   <h3>Engineering Lead (Founder Role)</h3>
-                  <p><strong>Starportal Software LLP</strong> | Noida, India</p>
-                  <p>Dec 2023 - July 2025</p>
+                  <p><strong>Starportal Software LLP</strong> &mdash; Noida, India</p>
+                  <p>Dec 2023 &mdash; July 2025</p>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Designed and implemented distributed transaction infrastructure across 10+ networks, leveraging JavaScript for high-performance messaging and high-throughput APIs that processed 1M+ msgs/day.</li>
-                    <li>Achieved sub-100ms latency and 4× throughput efficiency by engineering a WebSocket-based streaming layer for high-frequency trading data, enabling traders to execute orders faster and improve profitability.</li>
-                    <li>Implemented secure authentication and platform hardening, 2FA/TOTP, short-lived JWTs with RBAC, encrypted secrets, audit trails, and rate limits protecting trading actions and APIs end-to-end.</li>
-                    <li>Architected cloud-native microservices on AWS, scaling to 250K+ and 50K+ MAU users, with real-time data pipelines.</li>
+                    <li>Designed and implemented distributed transaction infrastructure across 10+ networks.</li>
+                    <li>Delivered high‑performance messaging and APIs that processed 1M+ messages per day.</li>
+                    <li>Achieved sub‑100&nbsp;ms latency and 4× throughput using a WebSocket streaming layer for trading data.</li>
+                    <li>Implemented 2FA, TOTP, JWTs with RBAC, encrypted secrets, audit logs, and rate limits for secure operations.</li>
+                    <li>Built cloud‑native microservices on AWS and scaled products to 250K+ MAU.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
                   <h3>Engineering Manager</h3>
-                  <p><strong>Intract Software Pvt Ltd</strong> | Singapore</p>
-                  <p>Nov 2022 - Dec 2023</p>
+                  <p><strong>Intract Software Pvt Ltd</strong> &mdash; Singapore</p>
+                  <p>Nov 2022 &mdash; Dec 2023</p>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Worked cross-functionally with B2B partners and product managers to design scalable integration pipelines.</li>
-                    <li>Engineered scalable onboarding flows and integration pipelines for 50+ apps as B2B partner, enabling a 6-week campaign that onboarded 1M+ users and drove $3M+ in quarterly revenue through fault-tolerant pipelines.</li>
-                    <li>Built a rewards engine with checks, fraud prevention, rate limits, and auditable payouts to drive quest retention.</li>
+                    <li>Architected core backend using Node.js, Redis, Docker, and Kafka, reducing database load by 40%.</li>
+                    <li>Built onboarding pipelines for 50+ B2B partners and supported a campaign with 1M users and $3M in revenue.</li>
+                    <li>Designed a rewards engine with fraud prevention, rate limits, checks, and auditable payout workflows.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
                   <h3>Senior Software Developer</h3>
-                  <p><strong>Syndr LLC</strong> | Delhi, India</p>
-                  <p>Oct 2021 - Nov 2022</p>
+                  <p><strong>Syndr LLC</strong> &mdash; Delhi, India</p>
+                  <p>Oct 2021 &mdash; Nov 2022</p>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Architected distributed backend systems in Python and Java, implementing service orchestration with Kubernetes, gRPC-based inter-service communication, and load balancing to support large concurrent users with high availability.</li>
-                    <li>Implemented event-driven automation services using cron jobs, WebSockets, and cloud functions, engaging 50K+ users and boosting participation by 52%, while documenting API specs/design decisions.</li>
+                    <li>Built distributed backend systems in Python and Java with Kubernetes orchestration and gRPC communication.</li>
+                    <li>Implemented event‑driven automation using cron jobs, WebSockets, and cloud functions, increasing user engagement by 50%+.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
                   <h3>Software Developer</h3>
-                  <p><strong>Ion Group</strong> | Noida, India</p>
-                  <p>June 2019 - Oct 2021</p>
+                  <p><strong>ION Group</strong> &mdash; Noida, India</p>
+                  <p>2019 &mdash; 2021</p>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Enhanced financial services trading systems for global banks, driving measurable industry impact.</li>
-                    <li>Built an automated Linux benchmarking tool to compare and validate new system releases against previous versions by feeding high-volume log data, leveraging multithreading for parallel parsing, reducing manual analysis time by 80%.</li>
-                    <li>Delivered 100+ CI/CD releases and automated pipelines for global banks, cutting incident response time by 60%.</li>
+                    <li>Developed React and TypeScript dashboards for system health and real‑time trader metrics.</li>
+                    <li>Built a Linux benchmarking tool with multithreading that reduced manual testing time by 80%.</li>
+                    <li>Delivered 100+ CI/CD pipelines that reduced incident response time by 60%.</li>
                   </ul>
                 </div>
               </div>
@@ -113,23 +114,25 @@ const PortfolioSection = ({ section, onClose }) => {
           icon: '🚀',
           content: (
             <div className="section-content">
-              <h2>Projects</h2>
               <div className="project-grid">
                 <div className="project-card">
+                  <h3>Pulse &mdash; AI Healthcare Assistant</h3>
+                  <p>Developed an AI health assistant using OpenAI LLMs for virtual consultations, symptom triage, and
+                    medical report analysis, integrated with HIPAA‑compliant storage and piloted with 5K+ users.</p>
+                </div>
+                <div className="project-card">
+                  <h3>Thunder Wallet &mdash; Unified Digital Payments</h3>
+                  <p>Built a non‑custodial wallet supporting multi‑rail payments with an award‑winning UI/UX experience.</p>
+                </div>
+                <div className="project-card">
                   <h3>Distributed Trading Infrastructure</h3>
-                  <p>Built high-performance messaging system processing 1M+ messages/day with sub-100ms latency using WebSocket streaming for real-time trading data</p>
-                </div>
-                <div className="project-card">
-                  <h3>Cloud-Native Microservices</h3>
-                  <p>Architected scalable AWS microservices supporting 250K+ users with real-time data pipelines and distributed transaction infrastructure</p>
-                </div>
-                <div className="project-card">
-                  <h3>B2B Integration Platform</h3>
-                  <p>Engineered onboarding flows for 50+ apps, enabling 1M+ user onboarding in 6 weeks and driving $3M+ quarterly revenue</p>
+                  <p>High‑performance messaging layer processing 1M+ messages/day with sub‑100&nbsp;ms latency via WebSocket
+                    streaming for real‑time trading data.</p>
                 </div>
                 <div className="project-card">
                   <h3>Automated Benchmarking Tool</h3>
-                  <p>Developed Linux benchmarking system with multithreaded parallel parsing, reducing manual analysis time by 80% for financial trading systems</p>
+                  <p>Linux benchmarking tool with multithreaded parallel parsing that reduced release validation and manual
+                    analysis time by 80% for trading systems.</p>
                 </div>
               </div>
             </div>
@@ -141,19 +144,16 @@ const PortfolioSection = ({ section, onClose }) => {
           icon: '⚡',
           content: (
             <div className="section-content">
-              <h2>Skills</h2>
               <div className="skills-container">
                 <div className="skill-category">
                   <h3>Programming Languages</h3>
                   <div className="skill-tags">
                     <span className="skill-tag">Python</span>
                     <span className="skill-tag">Java</span>
-                    <span className="skill-tag">C/C++</span>
+                    <span className="skill-tag">C</span>
+                    <span className="skill-tag">C++</span>
                     <span className="skill-tag">JavaScript</span>
                     <span className="skill-tag">TypeScript</span>
-                    <span className="skill-tag">Go</span>
-                    <span className="skill-tag">Rust</span>
-                    <span className="skill-tag">Bash</span>
                   </div>
                 </div>
                 <div className="skill-category">
@@ -181,6 +181,7 @@ const PortfolioSection = ({ section, onClose }) => {
                   <h3>Cloud & Infrastructure</h3>
                   <div className="skill-tags">
                     <span className="skill-tag">AWS</span>
+                    <span className="skill-tag">Azure</span>
                     <span className="skill-tag">Kubernetes</span>
                     <span className="skill-tag">Microservices</span>
                     <span className="skill-tag">gRPC</span>
@@ -197,6 +198,34 @@ const PortfolioSection = ({ section, onClose }) => {
                     <span className="skill-tag">REST APIs</span>
                   </div>
                 </div>
+                <div className="skill-category">
+                  <h3>Messaging & Queues</h3>
+                  <div className="skill-tags">
+                    <span className="skill-tag">RabbitMQ</span>
+                    <span className="skill-tag">Kafka</span>
+                    <span className="skill-tag">SQS</span>
+                  </div>
+                </div>
+                <div className="skill-category">
+                  <h3>AI & ML</h3>
+                  <div className="skill-tags">
+                    <span className="skill-tag">LLMs</span>
+                    <span className="skill-tag">Applied AI</span>
+                    <span className="skill-tag">Machine Learning</span>
+                  </div>
+                </div>
+                <div className="skill-category">
+                  <h3>Certifications & Honors</h3>
+                  <div className="skill-tags">
+                    <span className="skill-tag">AWS Certified Cloud Practitioner</span>
+                    <span className="skill-tag">Google PM Certificate</span>
+                    <span className="skill-tag">ACM ICPC Regional Qualifier (2016, 2018)</span>
+                    <span className="skill-tag">Teaching Assistant &mdash; Programming and DSA</span>
+                    <span className="skill-tag">Vice President &mdash; Toastmasters International (2018)</span>
+                    <span className="skill-tag">Certified Yoga Teacher (2018)</span>
+                    <span className="skill-tag">Club Head &mdash; AI &amp; Blockchain, GGSIPU</span>
+                  </div>
+                </div>
               </div>
             </div>
           )
@@ -207,7 +236,6 @@ const PortfolioSection = ({ section, onClose }) => {
           icon: '📧',
           content: (
             <div className="section-content">
-              <h2>Contact</h2>
               <div className="contact-info">
                 <div className="contact-item">
                   <span className="contact-icon">📧</span>

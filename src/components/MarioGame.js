@@ -36,6 +36,7 @@ const MarioGame = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [audioUnlocked, setAudioUnlocked] = useState(false); // Track if audio is unlocked for mobile
   const [score, setScore] = useState(0); // Score counter
+  const [hasStarted, setHasStarted] = useState(false); // Track if game has started (player moved)
 
   // Refs for stable values across renders
   const gameRef = useRef(null);
@@ -50,6 +51,7 @@ const MarioGame = () => {
   const keyPressTimeRef = useRef({}); // Track when keys were first pressed
   const touchStartRef = useRef({ x: 0, y: 0, time: 0 }); // Track touch start for swipe gestures
   const currentVelocityXRef = useRef(0); // Current horizontal velocity for smooth acceleration
+  const lastJumpTimeRef = useRef(0); // Track when last jump occurred to prevent double jumps
 
   // Game constants - tuned for authentic Mario Bros feel
   const GRAVITY = 0.9;
@@ -61,12 +63,13 @@ const MarioGame = () => {
   const MARIO_WIDTH = 96; // Larger Mario sprite
   const MARIO_HEIGHT = 96;
   const MARIO_SCREEN_X = 150;
+  const JUMP_COOLDOWN = 300; // Minimum time between jumps in milliseconds
   
   // Calculate ground level - top of the road where Mario stands
   const groundLevel = useMemo(() => {
-    // Ground should be at bottom 20% of screen (80% from top)
+    // Ground should be at bottom 15% of screen (85% from top)
     // This makes the road smaller and gives more space for gameplay
-    return Math.floor(windowSize.height * 0.80);
+    return Math.floor(windowSize.height * 0.85);
   }, [windowSize.height]);
 
   // Calculate world width to end right after the last box (contact)
@@ -91,7 +94,7 @@ const MarioGame = () => {
       { 
         id: 'about',
         left: windowSize.width * 0.1,
-        top: baseHeight - 200,
+        top: baseHeight - 240, // Raise boxes higher above Mario
         width: boxSize,
         height: boxSize,
         label: 'ABOUT',
@@ -100,7 +103,7 @@ const MarioGame = () => {
       { 
         id: 'education',
         left: windowSize.width * 0.4 + extraSpacing,
-        top: baseHeight - 200,
+        top: baseHeight - 240,
         width: boxSize,
         height: boxSize,
         label: 'EDUCATION',
@@ -109,7 +112,7 @@ const MarioGame = () => {
       { 
         id: 'experience',
         left: windowSize.width * 0.7 + (extraSpacing * 2),
-        top: baseHeight - 180,
+        top: baseHeight - 220,
         width: boxSize,
         height: boxSize,
         label: 'WORK EXP',
@@ -118,7 +121,7 @@ const MarioGame = () => {
       { 
         id: 'projects',
         left: windowSize.width * 1.0 + (extraSpacing * 3),
-        top: baseHeight - 200,
+        top: baseHeight - 240,
         width: boxSize,
         height: boxSize,
         label: 'PROJECTS',
@@ -127,7 +130,7 @@ const MarioGame = () => {
       { 
         id: 'skills',
         left: windowSize.width * 1.3 + (extraSpacing * 4),
-        top: baseHeight - 180,
+        top: baseHeight - 220,
         width: boxSize,
         height: boxSize,
         label: 'SKILLS',
@@ -136,7 +139,7 @@ const MarioGame = () => {
       { 
         id: 'contact',
         left: windowSize.width * 1.6 + (extraSpacing * 5),
-        top: baseHeight - 200,
+        top: baseHeight - 240,
         width: boxSize,
         height: boxSize,
         label: 'CONTACT',
@@ -155,6 +158,24 @@ const MarioGame = () => {
   const groundScrollSpeed = 1.0;
   const platformScrollSpeed = 1.0;
   const boxScrollSpeed = 1.0;
+
+  // Pipe position - place after the last box ("contact"), with some extra spacing
+  const pipeWorldX = useMemo(() => {
+    const contactBox = boxes.find(box => box.id === 'contact');
+    if (!contactBox) {
+      // Fallback: near the end of the world
+      const marginFromEnd = 200;
+      return Math.max(0, worldWidth - marginFromEnd);
+    }
+    const extraGap = windowSize.width * 0.1; // 10% of screen width after the contact box
+    return contactBox.left + contactBox.width + extraGap;
+  }, [boxes, worldWidth, windowSize.width]);
+
+  // Starting pipe near the very beginning of the world, sitting on the road
+  const startingPipeWorldX = useMemo(() => {
+    // More negative so the pipe sits almost at the extreme left of the screen
+    return -140;
+  }, []);
 
   // Initialize Mario position
   useEffect(() => {
@@ -512,8 +533,17 @@ const MarioGame = () => {
       });
     }
     
+    // Handle jump with cooldown to prevent double jumps
     if (touchControls.jump) {
-      setKeys(prev => ({ ...prev, ' ': true }));
+      const currentTime = Date.now();
+      if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
+        setKeys(prev => ({ ...prev, ' ': true }));
+        lastJumpTimeRef.current = currentTime;
+        // Clear jump state immediately after setting it to prevent multiple triggers
+        setTimeout(() => {
+          setTouchControls(prev => ({ ...prev, jump: false }));
+        }, 50);
+      }
     } else {
       setKeys(prev => {
         const newKeys = { ...prev };
@@ -527,6 +557,19 @@ const MarioGame = () => {
   const isKeyPressed = useCallback((key) => {
     return keys[key] === true;
   }, [keys]);
+
+  // Helper to trigger a single jump from on-screen buttons (independent of touchControls)
+  // We just simulate a brief Space key press; the main game loop already enforces jump cooldown.
+  const triggerJump = useCallback(() => {
+    setKeys(prev => ({ ...prev, ' ': true }));
+    setTimeout(() => {
+      setKeys(prev => {
+        const newKeys = { ...prev };
+        delete newKeys[' '];
+        return newKeys;
+      });
+    }, 120);
+  }, []);
 
   // Check box collision and break
   const checkBoxCollision = useCallback((x, y, boxes) => {
@@ -641,6 +684,11 @@ const MarioGame = () => {
         newWorldX += currentVelocityX * deltaTime;
         newWorldX = Math.max(0, Math.min(worldWidth - MARIO_WIDTH, newWorldX));
         
+        // Mark game as started when player first moves
+        if (Math.abs(currentVelocityX) > 0.01 && !hasStarted) {
+          setHasStarted(true);
+        }
+        
         // Store current velocity for next frame
         currentVelocityXRef.current = currentVelocityX;
 
@@ -731,10 +779,24 @@ const MarioGame = () => {
                              isKeyPressed(' ') || 
                              isKeyPressed('Spacebar');
           
-          if (jumpPressed && canJump) {
+          // Add cooldown check to prevent double jumps
+          const currentTime = Date.now();
+          const canJumpWithCooldown = canJump && (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN);
+          
+          if (jumpPressed && canJumpWithCooldown) {
             newVelocityY = JUMP_POWER; // Negative = jump up (Y decreases)
             isJumpingRef.current = true;
             velocityRef.current.y = JUMP_POWER; // Update ref immediately
+            lastJumpTimeRef.current = currentTime; // Update last jump time
+            // Clear jump key immediately to prevent multiple jumps
+            setKeys(prev => {
+              const newKeys = { ...prev };
+              delete newKeys[' '];
+              delete newKeys['ArrowUp'];
+              delete newKeys['w'];
+              delete newKeys['W'];
+              return newKeys;
+            });
           }
 
           // Apply gravity - Always apply when in the air (not on ground/platform)
@@ -825,24 +887,34 @@ const MarioGame = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [keys, worldWidth, platforms, boxes, isKeyPressed, checkBoxCollision, checkPlatformCollision, brokenBoxes, activeContent, windowSize.width]);
+  }, [keys, worldWidth, platforms, boxes, isKeyPressed, checkBoxCollision, checkPlatformCollision, brokenBoxes, activeContent, windowSize.width, hasStarted, touchControls]);
 
-  // Memoize cloud positions with random vertical and horizontal positions
+  // Memoize cloud positions with random vertical and horizontal positions,
+  // ensuring some clouds are visible when the game first starts.
   const cloudPositions = useMemo(() => {
-    const numClouds = 24; // Increased from 12 to 24 for more frequent clouds
+    // Number of clouds scales with world width so they keep appearing as you move
+    const basePerScreen = 8; // target clouds per screen-width of world
+    const screensInWorld = Math.max(1, worldWidth / Math.max(1, windowSize.width));
+    const numClouds = Math.round(basePerScreen * screensInWorld);
     const positions = [];
-    
-    // Generate random positions for clouds
-    for (let i = 0; i < numClouds; i++) {
-      // Random horizontal position (spread across world width)
-      const randomX = Math.random() * worldWidth;
-      // Random vertical position (between 10% and 50% from top, not stuck at top)
+
+    // Ensure a few clouds appear within the initial viewport when the game loads
+    const guaranteedCloudXs = [
+      windowSize.width * 0.2,
+      windowSize.width * 0.5,
+      windowSize.width * 0.8,
+    ];
+
+    guaranteedCloudXs.forEach(x => {
+      const y = windowSize.height * (0.15 + Math.random() * 0.25);
+      positions.push({ left: x, top: y });
+    });
+
+    // Generate remaining clouds across the entire world width
+    for (let i = positions.length; i < numClouds; i++) {
+      const randomX = Math.random() * worldWidth; // spread across world
       const randomY = windowSize.height * (0.10 + Math.random() * 0.40);
-      
-      positions.push({
-        left: randomX,
-        top: randomY,
-      });
+      positions.push({ left: randomX, top: randomY });
     }
     
     // Sort by X position to ensure they scroll naturally
@@ -886,56 +958,88 @@ const MarioGame = () => {
         ))}
       </div>
 
-      {/* Ground with road sprite - Smaller road */}
+      {/* Ground with coin pattern - Multiple coins placed together */}
       <div 
-        className="ground road-container" 
+        className="ground coin-container" 
         style={{ 
           transform: `translate3d(${scrollOffset * groundScrollSpeed}px, 0, 0)`,
-          width: `${worldWidth + windowSize.width + Math.abs(scrollOffset * groundScrollSpeed)}px`, // Extend road to always cover screen
-          left: `${-Math.abs(scrollOffset * groundScrollSpeed)}px`, // Extend left to ensure road starts from screen edge at x=0
+          width: `${worldWidth + windowSize.width + Math.abs(scrollOffset * groundScrollSpeed)}px`, // Extend to always cover screen
+          left: `${-Math.abs(scrollOffset * groundScrollSpeed)}px`, // Extend left to ensure coins start from screen edge at x=0
           bottom: 0,
-          height: `${windowSize.height - groundLevel}px`, // Road height is now 20% of screen
-          backgroundImage: `url(${process.env.PUBLIC_URL || ''}/road.png)`,
-          backgroundRepeat: 'repeat-x',
-          backgroundSize: 'auto 100%',
-          backgroundPosition: `${Math.abs(scrollOffset * groundScrollSpeed)}px bottom`, // Adjust background position to keep road pattern aligned
-          backgroundColor: '#5C94FC', // Match sky color to prevent brown showing through
+          height: `${windowSize.height - groundLevel}px`, // Height is now 15% of screen
+          backgroundImage: `url(${process.env.PUBLIC_URL || ''}/coin.png)`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '60px 60px', // Size of each coin
+          backgroundPosition: `${Math.abs(scrollOffset * groundScrollSpeed) % 60}px 0`, // Adjust background position to keep coin pattern aligned
+          backgroundColor: '#8B4513', // Brown ground color
         }}
         aria-hidden="true"
       />
 
-
-      {/* Score Display - Top Center */}
-      <div 
-        className="score-display"
+      {/* Starting pipe sitting on the road near the beginning */}
+      <div
+        className="pipe-wrapper"
         style={{
-          position: 'fixed',
-          top: '10px',
-          left: windowSize.width <= 768 ? '50%' : '50%', // Center on both mobile and desktop
-          transform: 'translateX(-50%)', // Center horizontally
-          zIndex: 200,
-          pointerEvents: 'none',
+          transform: `translate3d(${scrollOffset * groundScrollSpeed}px, 0, 0)`,
+          left: `${startingPipeWorldX}px`,
+          bottom: `${windowSize.height - groundLevel}px`,
+          position: 'absolute',
+          zIndex: 150,
         }}
-        aria-label={`Score: ${score}`}
       >
-        <div className="score-text">SCORE: {score}</div>
+        <img
+          src={`${process.env.PUBLIC_URL || ''}/pipe.png`}
+          alt="Warp pipe at start"
+          className="pipe"
+        />
       </div>
 
-      {/* Welcome Text - Static, centered on mobile */}
-      <div 
-        className="welcome-text"
+      {/* End pipe sitting on the road, after the last box */}
+      <div
+        className="pipe-wrapper"
         style={{
-          position: 'fixed',
-          top: '5%',
-          left: windowSize.width <= 768 ? '50%' : '20px', // Center on mobile, left on desktop
-          transform: windowSize.width <= 768 ? 'translateX(-50%)' : 'none', // Center on mobile
-          right: windowSize.width <= 768 ? 'auto' : '20px', // Override right on mobile
-          zIndex: 100,
-          pointerEvents: 'none',
+          transform: `translate3d(${scrollOffset * groundScrollSpeed}px, 0, 0)`,
+          left: `${pipeWorldX}px`,
+          bottom: `${windowSize.height - groundLevel}px`,
+          position: 'absolute',
+          zIndex: 150,
         }}
-        aria-label="Welcome to UJJWAL's DEN"
       >
-        <h1 className="mario-welcome">WELCOME TO UJJWAL's DEN</h1>
+        <img
+          src={`${process.env.PUBLIC_URL || ''}/pipe.png`}
+          alt="Warp pipe"
+          className="pipe"
+        />
+      </div>
+
+
+      {/* UI Layer - Top Container for Score and Welcome */}
+      <div className="ui-layer-top">
+        {/* Score Display */}
+        <div 
+          className="score-display"
+          aria-label={`Score: ${score}`}
+        >
+          <div className="score-text">SCORE: {score}</div>
+        </div>
+
+        {/* Welcome Text - always visible; moves left when a box is broken and info dialog appears */}
+        <div 
+          className={`welcome-text ${activeContent ? 'game-started' : ''}`}
+        >
+          <h1 className="mario-welcome">WELCOME TO UJJWAL'S DEN</h1>
+          <p className="mario-subtitle">
+            {activeContent ? (
+              <>
+                Jump into boxes
+                <br />
+                to break them!
+              </>
+            ) : (
+              'Jump into boxes to break them!'
+            )}
+          </p>
+        </div>
       </div>
 
       {/* Arrow key indicators on the road */}
@@ -949,31 +1053,66 @@ const MarioGame = () => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          pointerEvents: 'none',
-          zIndex: 100,
+          pointerEvents: 'auto',
+          zIndex: 400,
         }}
         aria-hidden="true"
       >
-        <div className="arrow-key left-arrow">
-          ←
-        </div>
         <div 
-          className="arrow-key up-arrow mobile-jump-arrow"
-          onClick={async () => {
+          className="arrow-key left-arrow mobile-jump-arrow"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
             // Unlock audio on button press
             if (!audioUnlocked && audioRef.current) {
               try {
-                await audioRef.current.play();
+                audioRef.current.play().catch(() => {});
                 audioRef.current.pause();
                 audioRef.current.currentTime = 0;
                 setAudioUnlocked(true);
               } catch (error) {}
             }
-            setTouchControls(prev => ({ ...prev, jump: true }));
-            setTimeout(() => {
-              setTouchControls(prev => ({ ...prev, jump: false }));
-            }, 100);
+            setTouchControls(prev => ({ ...prev, left: true }));
           }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, left: false }));
+          }}
+          onTouchCancel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, left: false }));
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Unlock audio on button press
+            if (!audioUnlocked && audioRef.current) {
+              try {
+                audioRef.current.play().catch(() => {});
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+                setAudioUnlocked(true);
+              } catch (error) {}
+            }
+            setTouchControls(prev => ({ ...prev, left: true }));
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, left: false }));
+          }}
+          onMouseLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, left: false }));
+          }}
+        >
+          ←
+        </div>
+        <div 
+          className="arrow-key up-arrow mobile-jump-arrow"
           onTouchStart={async (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -986,17 +1125,92 @@ const MarioGame = () => {
                 setAudioUnlocked(true);
               } catch (error) {}
             }
-            setTouchControls(prev => ({ ...prev, jump: true }));
+            triggerJump();
           }}
           onTouchEnd={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setTouchControls(prev => ({ ...prev, jump: false }));
+          }}
+          onTouchCancel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onMouseDown={async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Unlock audio on button press
+            if (!audioUnlocked && audioRef.current) {
+              try {
+                await audioRef.current.play();
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+                setAudioUnlocked(true);
+              } catch (error) {}
+            }
+            triggerJump();
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          onMouseLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
           }}
         >
           ↑
         </div>
-        <div className="arrow-key right-arrow">
+        <div 
+          className="arrow-key right-arrow mobile-jump-arrow"
+          onTouchStart={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Unlock audio on button press
+            if (!audioUnlocked && audioRef.current) {
+              try {
+                audioRef.current.play().catch(() => {});
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+                setAudioUnlocked(true);
+              } catch (error) {}
+            }
+            setTouchControls(prev => ({ ...prev, right: true }));
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, right: false }));
+          }}
+          onTouchCancel={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, right: false }));
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Unlock audio on button press
+            if (!audioUnlocked && audioRef.current) {
+              try {
+                audioRef.current.play().catch(() => {});
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+                setAudioUnlocked(true);
+              } catch (error) {}
+            }
+            setTouchControls(prev => ({ ...prev, right: true }));
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, right: false }));
+          }}
+          onMouseLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setTouchControls(prev => ({ ...prev, right: false }));
+          }}
+        >
           →
         </div>
       </div>
@@ -1126,17 +1340,6 @@ const MarioGame = () => {
         ) : null;
       })()}
 
-      {/* Don't Love Mario Button - Top Center */}
-      <a
-        href="https://ujworks.xyz"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="alternative-link"
-        aria-label="Visit alternative portfolio site"
-      >
-        Don't Love Mario ?
-      </a>
-
       {/* Sound Toggle Button - Top Right */}
       <button
         className="sound-toggle"
@@ -1151,12 +1354,13 @@ const MarioGame = () => {
       <div className="mobile-controls">
         <button
           className="mobile-button mobile-left"
-          onTouchStart={async (e) => {
-            e.preventDefault();
+          onTouchStart={(e) => {
+            e.preventDefault(); // Prevent default touch behavior
+            e.stopPropagation();
             // Unlock audio on button press
             if (!audioUnlocked && audioRef.current) {
               try {
-                await audioRef.current.play();
+                audioRef.current.play().catch(() => {});
                 audioRef.current.pause();
                 audioRef.current.currentTime = 0;
                 setAudioUnlocked(true);
@@ -1166,11 +1370,20 @@ const MarioGame = () => {
           }}
           onTouchEnd={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             setTouchControls(prev => ({ ...prev, left: false }));
           }}
-          onMouseDown={() => setTouchControls(prev => ({ ...prev, left: true }))}
-          onMouseUp={() => setTouchControls(prev => ({ ...prev, left: false }))}
-          onMouseLeave={() => setTouchControls(prev => ({ ...prev, left: false }))}
+          onMouseDown={(e) => {
+            if (e.type === 'mousedown') { // Only handle if not triggered by touch
+               setTouchControls(prev => ({ ...prev, left: true }));
+            }
+          }}
+          onMouseUp={(e) => {
+             setTouchControls(prev => ({ ...prev, left: false }));
+          }}
+          onMouseLeave={(e) => {
+             setTouchControls(prev => ({ ...prev, left: false }));
+          }}
           aria-label="Move left"
         >
           ←
@@ -1188,27 +1401,30 @@ const MarioGame = () => {
                 setAudioUnlocked(true);
               } catch (error) {}
             }
-            setTouchControls(prev => ({ ...prev, jump: true }));
+            triggerJump();
           }}
           onTouchEnd={(e) => {
             e.preventDefault();
-            setTouchControls(prev => ({ ...prev, jump: false }));
           }}
-          onMouseDown={() => setTouchControls(prev => ({ ...prev, jump: true }))}
-          onMouseUp={() => setTouchControls(prev => ({ ...prev, jump: false }))}
-          onMouseLeave={() => setTouchControls(prev => ({ ...prev, jump: false }))}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            triggerJump();
+          }}
+          onMouseUp={() => {}}
+          onMouseLeave={() => {}}
           aria-label="Jump"
         >
           ↑
         </button>
         <button
           className="mobile-button mobile-right"
-          onTouchStart={async (e) => {
-            e.preventDefault();
+          onTouchStart={(e) => {
+            e.preventDefault(); // Prevent default touch behavior
+            e.stopPropagation();
             // Unlock audio on button press
             if (!audioUnlocked && audioRef.current) {
               try {
-                await audioRef.current.play();
+                audioRef.current.play().catch(() => {});
                 audioRef.current.pause();
                 audioRef.current.currentTime = 0;
                 setAudioUnlocked(true);
@@ -1218,11 +1434,20 @@ const MarioGame = () => {
           }}
           onTouchEnd={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             setTouchControls(prev => ({ ...prev, right: false }));
           }}
-          onMouseDown={() => setTouchControls(prev => ({ ...prev, right: true }))}
-          onMouseUp={() => setTouchControls(prev => ({ ...prev, right: false }))}
-          onMouseLeave={() => setTouchControls(prev => ({ ...prev, right: false }))}
+          onMouseDown={(e) => {
+            if (e.type === 'mousedown') { // Only handle if not triggered by touch
+               setTouchControls(prev => ({ ...prev, right: true }));
+            }
+          }}
+          onMouseUp={(e) => {
+             setTouchControls(prev => ({ ...prev, right: false }));
+          }}
+          onMouseLeave={(e) => {
+             setTouchControls(prev => ({ ...prev, right: false }));
+          }}
           aria-label="Move right"
         >
           →
