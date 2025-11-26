@@ -1379,7 +1379,7 @@
   }
 
   .instructions-overlay {
-    top: 230px !important;
+    top: 30% !important;
     /* Brought even further below the welcome banner on mobile */
     left: 50% !important;
     /* Center horizontally */
@@ -1394,12 +1394,12 @@
   }
 
   .instructions {
-    max-width: 100%;
-    width: 100%;
-    /* Full-width horizontal card on mobile */
+    max-width: 96%;
+    width: 96%;
+    /* Wide, shallow rectangle on mobile */
     font-size: 12px;
-    padding: 8px 16px;
-    /* Tighter vertical padding to keep it short */
+    padding: 6px 18px;
+    /* Reduced vertical padding to keep it short */
     margin: 0 auto !important;
     position: relative !important;
     left: auto !important;
@@ -1428,7 +1428,8 @@
   }
 
   .score-display {
-    top: 5px !important;
+    top: 10% !important;
+    /* Align vertically with sound button */
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 200;
@@ -1463,7 +1464,7 @@
   .welcome-text.game-started {
     /* On mobile, keep the welcome card centered even after game starts */
     top: 10px !important;
-    left: 50% !important;
+    left: 30% !important;
     transform: translate(-50%, 0) !important;
     width: calc(100% - 40px);
     max-width: none !important;
@@ -1491,8 +1492,9 @@
     min-width: 45px;
     min-height: 45px;
     font-size: 20px;
-    top: 15px;
-    left: 15px;
+    top: 10% !important;
+    /* Same vertical line as score-display */
+    left: 4% !important;
     bottom: auto;
     right: auto;
     overflow: visible;
@@ -1551,44 +1553,38 @@
   }
 
   .instructions-overlay {
-    top: auto !important;
-    /* Remove vertical centering */
+    top: 35% !important;
+    /* Vertically around the middle of the screen */
     left: 50% !important;
     /* Center horizontally */
-    transform: translateX(-50%) !important;
-    /* Center horizontally only */
+    transform: translate(-50%, -50%) !important;
+    /* Center both horizontally and vertically */
     right: auto !important;
-    /* Override any right positioning */
     bottom: auto !important;
-    /* Override any bottom positioning */
-    margin-top: 120px !important;
-    /* Position below welcome text and alternative link with more spacing */
+    margin-top: 0 !important;
     width: 100% !important;
-    /* Full width to allow centering */
     justify-content: center !important;
-    /* Center the instructions box */
-    align-items: flex-start !important;
-    /* Align to top */
+    align-items: center !important;
   }
 
   .instructions {
-    max-width: 180px;
+    max-width: 95%;
+    width: 100%;
+    /* Wide horizontal rectangle */
     font-size: 11px;
-    padding: 12px;
+    padding: 8px 14px;
     margin: 0 auto !important;
     /* Center the box within overlay */
     position: relative !important;
-    /* Reset any absolute positioning */
     left: auto !important;
-    /* Reset left positioning */
     right: auto !important;
-    /* Reset right positioning */
   }
 
   /* No specific overrides needed for small screens as flexbox handles it */
 
   .score-display {
-    top: 3px !important;
+    top: 10% !important;
+    align-items: center;
     z-index: 200;
     /* Above welcome text */
   }
@@ -1600,9 +1596,9 @@
   }
 
   .welcome-text {
-    top: 28px !important;
+    top: 7% !important;
     /* Position below score display */
-    left: 50% !important;
+    /* left: 50% !important; */
     /* Center horizontally */
     transform: translateX(-50%) !important;
     /* Center the element */
@@ -1618,11 +1614,11 @@
   }
 
   .welcome-text.game-started {
-    top: 45px !important;
-    left: 8px !important;
-    transform: translate(0, 0) !important;
-    max-width: 140px !important;
-    text-align: left !important;
+    top: 7% !important;
+    /* left: 8px !important; */
+    /* transform: translate(0, 0) !important; */
+    max-width: 75% !important;
+    text-align: center !important;
   }
 
   .mario-welcome {
@@ -1635,7 +1631,7 @@
 
   .welcome-text.game-started .mario-welcome {
     font-size: 14px !important;
-    text-align: left !important;
+    text-align: center !important;
   }
 
   .sound-toggle {
@@ -1644,7 +1640,8 @@
     min-width: 40px;
     min-height: 40px;
     font-size: 18px;
-    top: 15px;
+    top: 10% !important;
+    /* Align vertically with the score card on very small screens */
     left: 15px;
     bottom: auto;
     right: auto;

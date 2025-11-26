@@ -369,8 +369,8 @@ const MarioGame = () => {
       // Unlock audio on first touch
       unlockAudioOnTouch();
       
-      // Don't interfere with button clicks or dialog box
-      if (e.target.closest('.mobile-button, .sound-toggle, .portfolio-section, .section-panel, .panel-body')) {
+      // Don't interfere with button clicks
+      if (e.target.closest('.mobile-button, .sound-toggle')) {
         return;
       }
 
@@ -387,17 +387,22 @@ const MarioGame = () => {
       const screenHeight = window.innerHeight;
       const touchX = touch.clientX;
       const touchY = touch.clientY;
+      const isOnDialog = e.target.closest('.portfolio-section, .section-panel, .panel-body');
       
+      // Always record touch start so swipe up can be detected anywhere
       touchStartRef.current = { x: touchX, y: touchY, time: Date.now() };
       
-      // Only activate touch zones in the middle area (not near buttons)
-      // Left side of screen (first 30%) - move left
-      if (touchX < screenWidth * 0.3 && touchY > screenHeight * 0.3) {
-        setTouchControls(prev => ({ ...prev, left: true }));
-      }
-      // Right side of screen (last 30%) - move right
-      else if (touchX > screenWidth * 0.7 && touchY > screenHeight * 0.3) {
-        setTouchControls(prev => ({ ...prev, right: true }));
+      // Only trigger left/right movement when not starting on the dialog
+      if (!isOnDialog) {
+        // Only activate touch zones in the middle area (not near buttons)
+        // Left side of screen (first 30%) - move left
+        if (touchX < screenWidth * 0.3 && touchY > screenHeight * 0.3) {
+          setTouchControls(prev => ({ ...prev, left: true }));
+        }
+        // Right side of screen (last 30%) - move right
+        else if (touchX > screenWidth * 0.7 && touchY > screenHeight * 0.3) {
+          setTouchControls(prev => ({ ...prev, right: true }));
+        }
       }
     };
 
@@ -422,12 +427,18 @@ const MarioGame = () => {
       const touch = e.changedTouches[0];
       if (!touch) return;
       
+      // If for some reason we never recorded a touch start, bail out safely
+      if (!touchStartRef.current) return;
+
       const deltaX = touch.clientX - touchStartRef.current.x;
       const deltaY = touchStartRef.current.y - touch.clientY; // Negative because Y increases downward
       const deltaTime = Date.now() - touchStartRef.current.time;
       
-      // Detect swipe up gesture (more forgiving: distance only, up to ~0.8s)
-      if (deltaY > 30 && deltaTime < 800 && Math.abs(deltaX) < 120) {
+      // Detect swipe up gesture (very forgiving for real devices)
+      // - At least 20px upward
+      // - Within 1 second
+      // - Not too diagonal (limit horizontal drift)
+      if (deltaY > 20 && deltaTime < 1000 && Math.abs(deltaX) < 150) {
         // Trigger jump via touchControls so it reuses the same logic
         setTouchControls(prev => ({ ...prev, jump: true }));
         setTimeout(() => {
