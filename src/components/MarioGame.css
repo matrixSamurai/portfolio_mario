@@ -25,6 +25,13 @@
   position: relative;
 }
 
+/* Disable selection / drag for all images in the game to improve long-press UX */
+.mario-game img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
 .mario-game::before {
   content: '';
   position: absolute;

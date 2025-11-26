@@ -426,13 +426,9 @@ const MarioGame = () => {
       const deltaY = touchStartRef.current.y - touch.clientY; // Negative because Y increases downward
       const deltaTime = Date.now() - touchStartRef.current.time;
       
-      // Detect swipe up gesture (slightly more forgiving on distance and time)
-      if (deltaY > 30 && deltaTime < 400 && Math.abs(deltaX) < 120) {
-        // Trigger jump
-        setTouchControls(prev => ({ ...prev, jump: true }));
-        setTimeout(() => {
-          setTouchControls(prev => ({ ...prev, jump: false }));
-        }, 100);
+      // Detect swipe up gesture (more forgiving: distance only, up to ~0.8s)
+      if (deltaY > 30 && deltaTime < 800 && Math.abs(deltaX) < 120) {
+        triggerJump();
       }
       
       // Clear touch zone controls
