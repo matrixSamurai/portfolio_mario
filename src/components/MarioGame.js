@@ -58,9 +58,10 @@ const MarioGame = () => {
   const GRAVITY = 2;           // Higher gravity = quicker fall
   const JUMP_POWER = -8;         // Strong jump to reach the boxes cleanly
   const MAX_JUMP_HEIGHT = 130;   // Moderate apex to keep jump snappy
-  const MOVE_SPEED = 0.4; // Character movement speed (pixels per millisecond for smooth movement)
-  const ACCELERATION = 0.003; // Acceleration rate for smooth start (higher = faster acceleration)
-  const DECELERATION = 0.004; // Deceleration rate for smooth stop (higher = faster stop)
+  const MOVE_SPEED = 0.38; // Character movement speed (pixels per millisecond for smooth movement)
+  // Slightly stronger acceleration/deceleration so Mario doesn't feel like he's sliding
+  const ACCELERATION = 0.0045; // Acceleration rate for smooth start (higher = faster acceleration)
+  const DECELERATION = 0.012; // Deceleration rate for quick stop (higher = faster stop)
   const MARIO_WIDTH = 96; // Larger Mario sprite
   const MARIO_HEIGHT = 96;
   const MARIO_SCREEN_X = 150;
