@@ -1322,6 +1322,34 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  /* Disable ALL transitions on welcome-text for mobile to prevent ANY animation */
+  .welcome-text,
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text,
+  .ui-layer-top .welcome-text.game-started {
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+  }
+
+  /* Explicitly prevent base .welcome-text.game-started from applying on mobile - MUST STAY CENTERED */
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text.game-started {
+    position: fixed !important;
+    top: 70px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 40px) !important;
+    max-width: 90% !important;
+    opacity: 1 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
   .mario-game {
     font-size: 14px;
     touch-action: pan-y;
@@ -1428,12 +1456,13 @@
   }
 
   .score-display {
-    top: 10% !important;
-    /* Align vertically with sound button */
+    top: 10px !important;
+    /* Position at top */
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 200;
     /* Above welcome text */
+    position: fixed !important;
   }
 
   .score-text {
@@ -1443,32 +1472,47 @@
   }
 
   .welcome-text {
-    top: 10px !important;
-    /* Stick close to the top so panels have more room */
+    position: fixed !important;
+    top: 70px !important;
+    /* Position below score display to avoid overlap */
     left: 50% !important;
     /* Center horizontally */
-    transform: translate(-50%, 0) !important;
-    /* Center the element without vertical shift */
+    transform: translateX(-50%) !important;
+    /* Center the element horizontally */
     right: auto !important;
     /* Override right positioning */
     padding-top: 4px;
     width: calc(100% - 40px);
-    max-width: none;
+    max-width: 90%;
     /* Full-width card with equal margins on both sides */
     z-index: 100;
     /* Below score display */
     text-align: center !important;
     /* Center align text */
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   .welcome-text.game-started {
-    /* On mobile, keep the welcome card centered even after game starts */
-    top: 10px !important;
-    left: 30% !important;
-    transform: translate(-50%, 0) !important;
-    width: calc(100% - 40px);
-    max-width: none !important;
+    /* On mobile, keep the welcome card centered even after game starts - STRICTLY NO LEFT SHIFT */
+    position: fixed !important;
+    top: 70px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 40px) !important;
+    max-width: 90% !important;
+    min-width: auto !important;
+    opacity: 1 !important;
     text-align: center !important;
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .mario-welcome {
@@ -1483,7 +1527,7 @@
 
   .welcome-text.game-started .mario-welcome {
     font-size: 16px !important;
-    text-align: left !important;
+    text-align: center !important;
   }
 
   .sound-toggle {
@@ -1492,9 +1536,10 @@
     min-width: 45px;
     min-height: 45px;
     font-size: 20px;
-    top: 10% !important;
-    /* Same vertical line as score-display */
-    left: 4% !important;
+    top: 10px !important;
+    /* Position at top, same as score display */
+    left: 10px !important;
+    /* Small margin from left edge */
     bottom: auto;
     right: auto;
     overflow: visible;
@@ -1525,6 +1570,34 @@
 }
 
 @media (max-width: 480px) {
+  /* Disable ALL transitions on welcome-text for very small mobile to prevent ANY animation */
+  .welcome-text,
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text,
+  .ui-layer-top .welcome-text.game-started {
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+  }
+
+  /* Explicitly prevent base .welcome-text.game-started from applying on very small mobile - MUST STAY CENTERED */
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text.game-started {
+    position: fixed !important;
+    top: 60px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 90% !important;
+    opacity: 1 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
   .mario {
     width: 70px !important;
     /* Increased from 56px - bigger than boxes */
@@ -1583,10 +1656,14 @@
   /* No specific overrides needed for small screens as flexbox handles it */
 
   .score-display {
-    top: 10% !important;
+    top: 8px !important;
+    /* Position at top */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
     align-items: center;
     z-index: 200;
     /* Above welcome text */
+    position: fixed !important;
   }
 
   .score-text {
@@ -1596,29 +1673,47 @@
   }
 
   .welcome-text {
-    top: 7% !important;
-    /* Position below score display */
-    /* left: 50% !important; */
+    position: fixed !important;
+    top: 60px !important;
+    /* Position below score display to avoid overlap */
+    left: 50% !important;
     /* Center horizontally */
     transform: translateX(-50%) !important;
-    /* Center the element */
+    /* Center the element horizontally */
     right: auto !important;
     /* Override right positioning */
     padding-top: 3px;
-    max-width: calc(95% - 16px);
+    width: calc(100% - 32px);
+    max-width: 90%;
     /* Wider on mobile for centering */
     z-index: 100;
     /* Below score display */
     text-align: center !important;
     /* Center align text */
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   .welcome-text.game-started {
-    top: 7% !important;
-    /* left: 8px !important; */
-    /* transform: translate(0, 0) !important; */
-    max-width: 75% !important;
+    /* On very small mobile, keep the welcome card centered even after game starts - STRICTLY NO LEFT SHIFT */
+    position: fixed !important;
+    top: 60px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 90% !important;
+    min-width: auto !important;
+    opacity: 1 !important;
     text-align: center !important;
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .mario-welcome {
@@ -1640,9 +1735,10 @@
     min-width: 40px;
     min-height: 40px;
     font-size: 18px;
-    top: 10% !important;
-    /* Align vertically with the score card on very small screens */
-    left: 15px;
+    top: 8px !important;
+    /* Position at top, same as score display */
+    left: 8px;
+    /* Small margin from left edge */
     bottom: auto;
     right: auto;
     overflow: visible;
