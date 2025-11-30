@@ -425,22 +425,24 @@ const MarioGame = () => {
         const deltaTime = Date.now() - touchStartRef.current.time;
         
         // Detect swipe up during move (very forgiving thresholds for mobile)
-        // - At least 15px upward movement (reduced for easier detection)
+        // - At least 10px upward movement (reduced for faster detection)
         // - Within 2 seconds (more time)
         // - Allow significant horizontal drift (up to 300px for diagonal swipes)
-        if (deltaY > 15 && deltaTime < 2000 && Math.abs(deltaX) < 300) {
+        if (deltaY > 10 && deltaTime < 2000 && Math.abs(deltaX) < 300) {
           // Trigger jump immediately when swipe up is detected
           const currentTime = Date.now();
           if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
-            // Set jump state and also directly set the space key for immediate response
-            setTouchControls(prev => ({ ...prev, jump: true }));
-            setKeys(prev => ({ ...prev, ' ': true }));
+            // Set space key immediately in both state and ref for fastest response
+            keysRef.current[' '] = true; // Update ref immediately for game loop
+            setKeys(prev => ({ ...prev, ' ': true })); // Update state
             lastJumpTimeRef.current = currentTime;
             swipeJumpTriggeredRef.current = true; // Mark as triggered to prevent duplicate
-            // Keep jump state active longer to ensure game loop processes it
+            // Also set touchControls for consistency
+            setTouchControls(prev => ({ ...prev, jump: true }));
+            // Clear jump state after a short delay (just for cleanup)
             setTimeout(() => {
               setTouchControls(prev => ({ ...prev, jump: false }));
-            }, 200);
+            }, 100);
           }
         }
       }
@@ -472,23 +474,25 @@ const MarioGame = () => {
       const deltaTime = Date.now() - touchStartRef.current.time;
       
       // Detect swipe up gesture (very forgiving for real devices)
-      // - At least 15px upward (reduced threshold for easier detection)
+      // - At least 10px upward (reduced threshold for faster detection)
       // - Within 2 seconds (more time for slow swipes)
       // - Allow significant horizontal drift (up to 300px for diagonal swipes)
       // - Only trigger if not already triggered during move
-      if (!swipeJumpTriggeredRef.current && deltaY > 15 && deltaTime < 2000 && Math.abs(deltaX) < 300) {
+      if (!swipeJumpTriggeredRef.current && deltaY > 10 && deltaTime < 2000 && Math.abs(deltaX) < 300) {
         // Trigger jump via touchControls and also directly set space key
         const currentTime = Date.now();
         if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
-          // Set jump state and also directly set the space key for immediate response
-          setTouchControls(prev => ({ ...prev, jump: true }));
-          setKeys(prev => ({ ...prev, ' ': true }));
+          // Set space key immediately in both state and ref for fastest response
+          keysRef.current[' '] = true; // Update ref immediately for game loop
+          setKeys(prev => ({ ...prev, ' ': true })); // Update state
           lastJumpTimeRef.current = currentTime;
           swipeJumpTriggeredRef.current = true;
-          // Keep jump state active longer to ensure game loop processes it
+          // Also set touchControls for consistency
+          setTouchControls(prev => ({ ...prev, jump: true }));
+          // Clear jump state after a short delay (just for cleanup)
           setTimeout(() => {
             setTouchControls(prev => ({ ...prev, jump: false }));
-          }, 200);
+          }, 100);
         }
       }
       
