@@ -413,6 +413,32 @@ const MarioGame = () => {
         return; // Allow natural scrolling
       }
       
+      // Track swipe during move to detect upward swipes even if interrupted
+      if (touchStartRef.current && e.touches && e.touches.length > 0) {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - touchStartRef.current.x;
+        const deltaY = touchStartRef.current.y - touch.clientY; // Positive = upward swipe
+        const deltaTime = Date.now() - touchStartRef.current.time;
+        
+        // Detect swipe up during move (more forgiving thresholds)
+        // - At least 25px upward movement (reduced threshold for easier detection)
+        // - Within 1.5 seconds
+        // - Allow more horizontal drift (up to 250px for diagonal swipes)
+        if (deltaY > 25 && deltaTime < 1500 && Math.abs(deltaX) < 250) {
+          // Trigger jump immediately when swipe up is detected
+          const currentTime = Date.now();
+          if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
+            setTouchControls(prev => ({ ...prev, jump: true }));
+            lastJumpTimeRef.current = currentTime;
+            setTimeout(() => {
+              setTouchControls(prev => ({ ...prev, jump: false }));
+            }, 120);
+            // Reset touch start to prevent multiple triggers from same swipe
+            touchStartRef.current = null;
+          }
+        }
+      }
+      
       // Prevent default to avoid scrolling only if not on buttons or dialog
       if (!e.target.closest('.mobile-button, .sound-toggle')) {
         e.preventDefault();
@@ -432,23 +458,29 @@ const MarioGame = () => {
       if (!touchStartRef.current) return;
 
       const deltaX = touch.clientX - touchStartRef.current.x;
-      const deltaY = touchStartRef.current.y - touch.clientY; // Negative because Y increases downward
+      const deltaY = touchStartRef.current.y - touch.clientY; // Positive = upward swipe
       const deltaTime = Date.now() - touchStartRef.current.time;
       
-      // Detect swipe up gesture (very forgiving for real devices)
-      // - At least 20px upward
-      // - Within 1 second
-      // - Not too diagonal (limit horizontal drift)
-      if (deltaY > 20 && deltaTime < 1000 && Math.abs(deltaX) < 150) {
+      // Detect swipe up gesture (more forgiving for real devices)
+      // - At least 20px upward (reasonable threshold)
+      // - Within 1.5 seconds (increased from 1 second)
+      // - Allow more horizontal drift (increased to 250px for diagonal swipes)
+      if (deltaY > 20 && deltaTime < 1500 && Math.abs(deltaX) < 250) {
         // Trigger jump via touchControls so it reuses the same logic
-        setTouchControls(prev => ({ ...prev, jump: true }));
-        setTimeout(() => {
-          setTouchControls(prev => ({ ...prev, jump: false }));
-        }, 120);
+        const currentTime = Date.now();
+        if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
+          setTouchControls(prev => ({ ...prev, jump: true }));
+          lastJumpTimeRef.current = currentTime;
+          setTimeout(() => {
+            setTouchControls(prev => ({ ...prev, jump: false }));
+          }, 120);
+        }
       }
       
       // Clear touch zone controls
       setTouchControls(prev => ({ ...prev, left: false, right: false }));
+      // Reset touch start
+      touchStartRef.current = null;
     };
 
     const gameElement = gameRef.current;
@@ -1438,9 +1470,9 @@ const MarioGame = () => {
               <h3>🎮 Controls</h3>
               {isMobile ? (
                 <>
-                  <p>Touch right side of the screen to move forward</p>
-                  <p>Touch left side of the screen to move backward</p>
-                  <p>Swipe up anywhere on the screen to jump and break boxes</p>
+                  <p>Touch right → to move forward</p>
+                  <p>Touch left ← to move backward</p>
+                  <p>Swipe up ↑ to jump and break boxes</p>
                 </>
               ) : (
                 <>
