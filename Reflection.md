@@ -2,7 +2,7 @@
 [https://ujjwaljain-369911771043.europe-west1.run.app/](https://ujjwaljain-369911771043.europe-west1.run.app/)
 
 ## Development Details
-I used **Cursor** to develop this **interactive personal website**.
+I used **Cursor** to develop this **interactive personal website**
 
 
 # Reflection on AI-Assisted Portfolio Development
