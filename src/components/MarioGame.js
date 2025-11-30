@@ -50,6 +50,7 @@ const MarioGame = () => {
   const breakSoundRef = useRef(null);
   const keyPressTimeRef = useRef({}); // Track when keys were first pressed
   const touchStartRef = useRef({ x: 0, y: 0, time: 0 }); // Track touch start for swipe gestures
+  const swipeJumpTriggeredRef = useRef(false); // Track if jump was already triggered for this swipe
   const currentVelocityXRef = useRef(0); // Current horizontal velocity for smooth acceleration
   const lastJumpTimeRef = useRef(0); // Track when last jump occurred to prevent double jumps
 
@@ -384,6 +385,8 @@ const MarioGame = () => {
       }
 
       const touch = e.touches[0];
+      if (!touch) return;
+      
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
       const touchX = touch.clientX;
@@ -392,6 +395,7 @@ const MarioGame = () => {
       
       // Always record touch start so swipe up can be detected anywhere
       touchStartRef.current = { x: touchX, y: touchY, time: Date.now() };
+      swipeJumpTriggeredRef.current = false; // Reset jump trigger flag for new touch
       
       // Only trigger left/right movement when not starting on the dialog
       if (!isOnDialog) {
@@ -414,27 +418,26 @@ const MarioGame = () => {
       }
       
       // Track swipe during move to detect upward swipes even if interrupted
-      if (touchStartRef.current && e.touches && e.touches.length > 0) {
+      if (touchStartRef.current && e.touches && e.touches.length > 0 && !swipeJumpTriggeredRef.current) {
         const touch = e.touches[0];
         const deltaX = touch.clientX - touchStartRef.current.x;
         const deltaY = touchStartRef.current.y - touch.clientY; // Positive = upward swipe
         const deltaTime = Date.now() - touchStartRef.current.time;
         
-        // Detect swipe up during move (more forgiving thresholds)
-        // - At least 25px upward movement (reduced threshold for easier detection)
-        // - Within 1.5 seconds
-        // - Allow more horizontal drift (up to 250px for diagonal swipes)
-        if (deltaY > 25 && deltaTime < 1500 && Math.abs(deltaX) < 250) {
+        // Detect swipe up during move (very forgiving thresholds for mobile)
+        // - At least 15px upward movement (reduced for easier detection)
+        // - Within 2 seconds (more time)
+        // - Allow significant horizontal drift (up to 300px for diagonal swipes)
+        if (deltaY > 15 && deltaTime < 2000 && Math.abs(deltaX) < 300) {
           // Trigger jump immediately when swipe up is detected
           const currentTime = Date.now();
           if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
             setTouchControls(prev => ({ ...prev, jump: true }));
             lastJumpTimeRef.current = currentTime;
+            swipeJumpTriggeredRef.current = true; // Mark as triggered to prevent duplicate
             setTimeout(() => {
               setTouchControls(prev => ({ ...prev, jump: false }));
-            }, 120);
-            // Reset touch start to prevent multiple triggers from same swipe
-            touchStartRef.current = null;
+            }, 150);
           }
         }
       }
@@ -455,32 +458,39 @@ const MarioGame = () => {
       if (!touch) return;
       
       // If for some reason we never recorded a touch start, bail out safely
-      if (!touchStartRef.current) return;
+      if (!touchStartRef.current) {
+        // Clear touch zone controls anyway
+        setTouchControls(prev => ({ ...prev, left: false, right: false }));
+        return;
+      }
 
       const deltaX = touch.clientX - touchStartRef.current.x;
       const deltaY = touchStartRef.current.y - touch.clientY; // Positive = upward swipe
       const deltaTime = Date.now() - touchStartRef.current.time;
       
-      // Detect swipe up gesture (more forgiving for real devices)
-      // - At least 20px upward (reasonable threshold)
-      // - Within 1.5 seconds (increased from 1 second)
-      // - Allow more horizontal drift (increased to 250px for diagonal swipes)
-      if (deltaY > 20 && deltaTime < 1500 && Math.abs(deltaX) < 250) {
+      // Detect swipe up gesture (very forgiving for real devices)
+      // - At least 15px upward (reduced threshold for easier detection)
+      // - Within 2 seconds (more time for slow swipes)
+      // - Allow significant horizontal drift (up to 300px for diagonal swipes)
+      // - Only trigger if not already triggered during move
+      if (!swipeJumpTriggeredRef.current && deltaY > 15 && deltaTime < 2000 && Math.abs(deltaX) < 300) {
         // Trigger jump via touchControls so it reuses the same logic
         const currentTime = Date.now();
         if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
           setTouchControls(prev => ({ ...prev, jump: true }));
           lastJumpTimeRef.current = currentTime;
+          swipeJumpTriggeredRef.current = true;
           setTimeout(() => {
             setTouchControls(prev => ({ ...prev, jump: false }));
-          }, 120);
+          }, 150);
         }
       }
       
       // Clear touch zone controls
       setTouchControls(prev => ({ ...prev, left: false, right: false }));
-      // Reset touch start
+      // Reset touch start and jump trigger flag
       touchStartRef.current = null;
+      swipeJumpTriggeredRef.current = false;
     };
 
     const gameElement = gameRef.current;
@@ -611,14 +621,21 @@ const MarioGame = () => {
     if (touchControls.jump) {
       const currentTime = Date.now();
       if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
+        // Set space key to trigger jump in game loop
         setKeys(prev => ({ ...prev, ' ': true }));
         lastJumpTimeRef.current = currentTime;
-        // Clear jump state immediately after setting it to prevent multiple triggers
+        // Keep jump state active for a bit longer to ensure game loop processes it
+        // The handlers will clear it, but this is a backup
         setTimeout(() => {
-          setTouchControls(prev => ({ ...prev, jump: false }));
-        }, 50);
+          setKeys(prev => {
+            const newKeys = { ...prev };
+            delete newKeys[' '];
+            return newKeys;
+          });
+        }, 100);
       }
     } else {
+      // Only clear space key if jump is not active
       setKeys(prev => {
         const newKeys = { ...prev };
         delete newKeys[' '];
