@@ -75,7 +75,7 @@ const PortfolioSection = ({ section, onClose }) => {
                     alt="Purdue University logo"
                   />
                   <div className="experience-text">
-                    <h3>Teaching Assistant &amp; Python Programming Tutor</h3>
+                    <h3>Python Programming Tutor</h3>
                     <p><strong>Purdue University</strong> &mdash; West Lafayette, IN</p>
                     <p>Oct 2025 &mdash; Present</p>
                   </div>
