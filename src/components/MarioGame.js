@@ -432,12 +432,15 @@ const MarioGame = () => {
           // Trigger jump immediately when swipe up is detected
           const currentTime = Date.now();
           if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
+            // Set jump state and also directly set the space key for immediate response
             setTouchControls(prev => ({ ...prev, jump: true }));
+            setKeys(prev => ({ ...prev, ' ': true }));
             lastJumpTimeRef.current = currentTime;
             swipeJumpTriggeredRef.current = true; // Mark as triggered to prevent duplicate
+            // Keep jump state active longer to ensure game loop processes it
             setTimeout(() => {
               setTouchControls(prev => ({ ...prev, jump: false }));
-            }, 150);
+            }, 200);
           }
         }
       }
@@ -474,15 +477,18 @@ const MarioGame = () => {
       // - Allow significant horizontal drift (up to 300px for diagonal swipes)
       // - Only trigger if not already triggered during move
       if (!swipeJumpTriggeredRef.current && deltaY > 15 && deltaTime < 2000 && Math.abs(deltaX) < 300) {
-        // Trigger jump via touchControls so it reuses the same logic
+        // Trigger jump via touchControls and also directly set space key
         const currentTime = Date.now();
         if (currentTime - lastJumpTimeRef.current >= JUMP_COOLDOWN) {
+          // Set jump state and also directly set the space key for immediate response
           setTouchControls(prev => ({ ...prev, jump: true }));
+          setKeys(prev => ({ ...prev, ' ': true }));
           lastJumpTimeRef.current = currentTime;
           swipeJumpTriggeredRef.current = true;
+          // Keep jump state active longer to ensure game loop processes it
           setTimeout(() => {
             setTouchControls(prev => ({ ...prev, jump: false }));
-          }, 150);
+          }, 200);
         }
       }
       
@@ -624,24 +630,14 @@ const MarioGame = () => {
         // Set space key to trigger jump in game loop
         setKeys(prev => ({ ...prev, ' ': true }));
         lastJumpTimeRef.current = currentTime;
-        // Keep jump state active for a bit longer to ensure game loop processes it
-        // The handlers will clear it, but this is a backup
-        setTimeout(() => {
-          setKeys(prev => {
-            const newKeys = { ...prev };
-            delete newKeys[' '];
-            return newKeys;
-          });
-        }, 100);
+        // Don't clear immediately - let the game loop process it first
+        // The game loop will clear it after processing the jump
       }
-    } else {
-      // Only clear space key if jump is not active
-      setKeys(prev => {
-        const newKeys = { ...prev };
-        delete newKeys[' '];
-        return newKeys;
-      });
     }
+    // Note: We don't clear the space key in the else branch here
+    // because the game loop handles clearing it after the jump is processed
+    // This ensures the jump is properly registered even if touchControls.jump
+    // becomes false before the game loop runs
   }, [touchControls]);
 
   // Check if a key is pressed
