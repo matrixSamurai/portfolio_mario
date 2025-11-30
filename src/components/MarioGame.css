@@ -1582,8 +1582,8 @@
   .mobile-controls {
     display: flex;
     position: fixed;
-    bottom: calc(15% - 40px - 6px);
-    /* Position with space below road surface (road surface is at 15% from bottom, 6px gap) */
+    bottom: calc(15% - 40px - 12px);
+    /* Position with more space below road surface (road surface is at 15% from bottom, 12px gap) */
     left: 0;
     right: 0;
     width: 100%;
@@ -1869,8 +1869,8 @@
 
   .mobile-controls {
     position: fixed;
-    bottom: calc(15% - 36px - 6px);
-    /* Position with space below road surface (road surface is at 15% from bottom, 6px gap) */
+    bottom: calc(15% - 36px - 12px);
+    /* Position with more space below road surface (road surface is at 15% from bottom, 12px gap) */
     left: 0;
     right: 0;
     width: 100%;
