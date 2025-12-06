@@ -4,7 +4,7 @@ An interactive portfolio website designed as a classic Super Mario Bros. game wh
 
 ## 🎯 Overview
 
-This is a unique portfolio website that combines the nostalgia of classic Mario games with modern web development. Instead of a traditional portfolio layout, visitors navigate through a Mario-style game world, breaking boxes to reveal information about education, work experience, projects, skills, and contact details.
+This is a unique portfolio website that combines the nostalgia of classic Mario games with modern web development. Instead of a traditional portfolio layout, visitors navigate through a Mario-style game world, breaking boxes to reveal information about education, work experience, projects, skills, and contact details
 
 ## ✨ Features
 
