@@ -1,7 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './PortfolioSection.css';
 
 const PortfolioSection = ({ section, onClose }) => {
+  const panelBodyRef = useRef(null);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+
+  useEffect(() => {
+    const checkScrollable = () => {
+      if (panelBodyRef.current) {
+        const { scrollHeight, clientHeight, scrollTop } = panelBodyRef.current;
+        const isScrollable = scrollHeight > clientHeight;
+        // Only show if scrollable and at the top (not scrolled yet)
+        setShowScrollIndicator(isScrollable && scrollTop === 0);
+      }
+    };
+
+    // Check initially and after content loads
+    checkScrollable();
+    const timeoutId = setTimeout(checkScrollable, 100);
+
+    // Hide indicator as soon as user starts scrolling
+    const handleScroll = () => {
+      if (panelBodyRef.current) {
+        const { scrollTop } = panelBodyRef.current;
+        if (scrollTop > 0) {
+          setShowScrollIndicator(false);
+        }
+      }
+    };
+
+    if (panelBodyRef.current) {
+      panelBodyRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    // Check on resize
+    window.addEventListener('resize', checkScrollable);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (panelBodyRef.current) {
+        panelBodyRef.current.removeEventListener('scroll', handleScroll);
+      }
+      window.removeEventListener('resize', checkScrollable);
+    };
+  }, [section]);
   const getSectionData = () => {
     switch (section) {
       case 'about':
@@ -240,6 +282,16 @@ const PortfolioSection = ({ section, onClose }) => {
                   </div>
                 </div>
                 <div className="skill-category">
+                  <h3>AI & ML</h3>
+                  <div className="skill-tags">
+                    <span className="skill-tag">LLMs</span>
+                    <span className="skill-tag">Applied AI</span>
+                    <span className="skill-tag">Machine Learning</span>
+                    <span className="skill-tag">Artificial Intelligence</span>
+                    <span className="skill-tag">RAG pipelines</span>
+                  </div>
+                </div>
+                <div className="skill-category">
                   <h3>Databases & Storage</h3>
                   <div className="skill-tags">
                     <span className="skill-tag">MySQL</span>
@@ -276,14 +328,6 @@ const PortfolioSection = ({ section, onClose }) => {
                     <span className="skill-tag">RabbitMQ</span>
                     <span className="skill-tag">Kafka</span>
                     <span className="skill-tag">SQS</span>
-                  </div>
-                </div>
-                <div className="skill-category">
-                  <h3>AI & ML</h3>
-                  <div className="skill-tags">
-                    <span className="skill-tag">LLMs</span>
-                    <span className="skill-tag">Applied AI</span>
-                    <span className="skill-tag">Machine Learning</span>
                   </div>
                 </div>
                 <div className="skill-category">
@@ -372,8 +416,13 @@ const PortfolioSection = ({ section, onClose }) => {
             </button>
           </div>
         </div>
-        <div className="panel-body">
+        <div className="panel-body" ref={panelBodyRef}>
           {sectionData.content}
+          {showScrollIndicator && (
+            <div className="scroll-indicator">
+              <div className="scroll-arrow">↓</div>
+            </div>
+          )}
         </div>
       </div>
     </div>
