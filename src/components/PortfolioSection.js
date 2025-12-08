@@ -6,6 +6,9 @@ const PortfolioSection = ({ section, onClose }) => {
   const [showScrollIndicator, setShowScrollIndicator] = useState(false);
 
   useEffect(() => {
+    // Capture the ref value to use in cleanup
+    const panelBodyElement = panelBodyRef.current;
+
     const checkScrollable = () => {
       if (panelBodyRef.current) {
         const { scrollHeight, clientHeight, scrollTop } = panelBodyRef.current;
@@ -29,8 +32,8 @@ const PortfolioSection = ({ section, onClose }) => {
       }
     };
 
-    if (panelBodyRef.current) {
-      panelBodyRef.current.addEventListener('scroll', handleScroll);
+    if (panelBodyElement) {
+      panelBodyElement.addEventListener('scroll', handleScroll);
     }
 
     // Check on resize
@@ -38,8 +41,8 @@ const PortfolioSection = ({ section, onClose }) => {
 
     return () => {
       clearTimeout(timeoutId);
-      if (panelBodyRef.current) {
-        panelBodyRef.current.removeEventListener('scroll', handleScroll);
+      if (panelBodyElement) {
+        panelBodyElement.removeEventListener('scroll', handleScroll);
       }
       window.removeEventListener('resize', checkScrollable);
     };
