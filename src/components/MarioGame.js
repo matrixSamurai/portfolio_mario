@@ -49,6 +49,7 @@ const MarioGame = () => {
   const lastTimeRef = useRef(0);
   const audioRef = useRef(null);
   const isPlayingRef = useRef(false);
+  const wasPlayingBeforeHiddenRef = useRef(false); // Track if audio was playing before page was hidden
   const breakSoundRef = useRef(null);
   const keyPressTimeRef = useRef({}); // Track when keys were first pressed
   const touchStartRef = useRef({ x: 0, y: 0, time: 0 }); // Track touch start for swipe gestures
@@ -340,6 +341,100 @@ const MarioGame = () => {
       }
     }
   }, [soundEnabled]);
+
+  // Pause audio when page becomes hidden (phone locked, app backgrounded)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (audioRef.current) {
+        if (document.hidden) {
+          // Page is hidden - pause audio and remember if it was playing
+          if (!audioRef.current.paused) {
+            wasPlayingBeforeHiddenRef.current = true;
+            audioRef.current.pause();
+            isPlayingRef.current = false;
+          } else {
+            wasPlayingBeforeHiddenRef.current = false;
+          }
+        } else {
+          // Page is visible again - resume audio if it was playing and sound is enabled
+          if (soundEnabled && audioUnlocked && wasPlayingBeforeHiddenRef.current) {
+            audioRef.current.play()
+              .then(() => {
+                isPlayingRef.current = true;
+              })
+              .catch(() => {
+                // If play fails, try to unlock audio again
+                if (!audioUnlocked) {
+                  audioRef.current.play().then(() => {
+                    setAudioUnlocked(true);
+                    isPlayingRef.current = true;
+                  }).catch(() => {});
+                }
+              });
+          }
+        }
+      }
+    };
+
+    // Handle page visibility changes (mobile sleep, app backgrounding)
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Handle window blur/focus for additional mobile support
+    const handleBlur = () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        wasPlayingBeforeHiddenRef.current = true;
+        audioRef.current.pause();
+        isPlayingRef.current = false;
+      } else {
+        wasPlayingBeforeHiddenRef.current = false;
+      }
+    };
+
+    const handleFocus = () => {
+      if (audioRef.current && soundEnabled && audioUnlocked && wasPlayingBeforeHiddenRef.current) {
+        audioRef.current.play()
+          .then(() => {
+            isPlayingRef.current = true;
+          })
+          .catch(() => {});
+      }
+    };
+
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+
+    // Handle mobile app lifecycle events
+    const handlePageHide = () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        wasPlayingBeforeHiddenRef.current = true;
+        audioRef.current.pause();
+        isPlayingRef.current = false;
+      } else {
+        wasPlayingBeforeHiddenRef.current = false;
+      }
+    };
+
+    const handlePageShow = () => {
+      if (audioRef.current && soundEnabled && audioUnlocked && wasPlayingBeforeHiddenRef.current) {
+        audioRef.current.play()
+          .then(() => {
+            isPlayingRef.current = true;
+          })
+          .catch(() => {});
+      }
+    };
+
+    window.addEventListener('pagehide', handlePageHide);
+    window.addEventListener('pageshow', handlePageShow);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('pagehide', handlePageHide);
+      window.removeEventListener('pageshow', handlePageShow);
+    };
+  }, [soundEnabled, audioUnlocked]);
 
   // Handle window resize
   useEffect(() => {

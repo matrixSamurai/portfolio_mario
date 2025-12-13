@@ -679,62 +679,16 @@ body.night-mode .chatbot-toggle {
   cursor: not-allowed;
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Hide chatbot on mobile */
 @media (max-width: 768px) {
   .mario-chatbot {
-    bottom: 100px; /* Above mobile controls (60px button + 20px bottom + 20px gap) */
-    right: 10px;
-  }
-
-  .chatbot-window {
-    width: calc(100vw - 20px);
-    height: calc(100vh - 100px);
-    max-height: 600px;
-  }
-
-  .chatbot-toggle {
-    width: 60px;
-    height: 60px;
-  }
-
-  .chatbot-toggle-avatar {
-    width: 42px;
-    height: 42px;
+    display: none !important;
   }
 }
 
 @media (max-width: 480px) {
   .mario-chatbot {
-    bottom: 100px; /* Above mobile controls */
-    right: 10px;
-  }
-
-  .chatbot-window {
-    width: calc(100vw - 20px);
-    height: calc(100vh - 90px);
-    max-height: 500px;
-    border-radius: 16px;
-  }
-
-  .chatbot-header {
-    padding: 12px 16px;
-  }
-
-  .chatbot-header-info h3 {
-    font-size: 16px;
-  }
-
-  .chatbot-header-info p {
-    font-size: 11px;
-  }
-
-  .chatbot-messages {
-    padding: 16px;
-  }
-
-  .message-text {
-    font-size: 13px;
-    padding: 10px 14px;
+    display: none !important;
   }
 }
 
