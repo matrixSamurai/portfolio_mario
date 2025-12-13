@@ -23,6 +23,13 @@
   /* Remove tap highlight on mobile */
   /* Add subtle animated gradient overlay */
   position: relative;
+  transition: background 0.5s ease;
+}
+
+/* Night Mode - Mario Second Level (Underground) Dark Theme */
+.mario-game.night-mode {
+  background: linear-gradient(to bottom, #1a2d33 0%, #0d1a1f 100%);
+  background-attachment: fixed;
 }
 
 /* Disable selection / drag for all images in the game to improve long-press UX */
@@ -43,6 +50,11 @@
   pointer-events: none;
   z-index: 1;
   animation: skyGlow 8s ease-in-out infinite alternate;
+  transition: background 0.5s ease;
+}
+
+.mario-game.night-mode::before {
+  background: radial-gradient(ellipse at top, rgba(53, 122, 138, 0.2) 0%, transparent 50%);
 }
 
 @keyframes skyGlow {
@@ -223,6 +235,20 @@
   white-space: nowrap;
   position: relative;
   animation: scorePulse 2s ease-in-out infinite;
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+.mario-game.night-mode .score-text {
+  background: rgba(10, 20, 25, 0.8);
+  border-color: rgba(53, 122, 138, 0.6);
+  color: #357A8A;
+  text-shadow:
+    4px 4px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0 15px rgba(53, 122, 138, 0.8),
+    0 0 30px rgba(53, 122, 138, 0.4);
 }
 
 @keyframes scorePulse {
@@ -321,6 +347,29 @@
     0 0 40px rgba(255, 215, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   /* Allow text to display fully, spacing handled by controls box positioning */
+  transition: background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+}
+
+.mario-game.night-mode .mario-welcome {
+  color: #5FB0C5;
+  background: linear-gradient(135deg, rgba(26, 45, 51, 0.95) 0%, rgba(10, 20, 25, 0.95) 100%);
+  border-color: #5FB0C5;
+  border-width: 3px;
+  text-shadow:
+    4px 4px 0 rgba(0, 0, 0, 1),
+    -2px -2px 0 rgba(0, 0, 0, 1),
+    2px -2px 0 rgba(0, 0, 0, 1),
+    -2px 2px 0 rgba(0, 0, 0, 1),
+    0 0 25px rgba(95, 176, 197, 1),
+    0 0 50px rgba(95, 176, 197, 0.8),
+    0 0 75px rgba(95, 176, 197, 0.5),
+    0 0 100px rgba(95, 176, 197, 0.3);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.7),
+    0 0 50px rgba(95, 176, 197, 0.5),
+    0 0 80px rgba(95, 176, 197, 0.3),
+    inset 0 2px 0 rgba(95, 176, 197, 0.3),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .welcome-text.game-started .mario-welcome {
@@ -352,7 +401,16 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, background 0.5s ease, border-color 0.5s ease;
+}
+
+.mario-game.night-mode .mario-subtitle {
+  background: rgba(10, 20, 25, 0.5);
+  border-color: rgba(53, 122, 138, 0.3);
+  color: #4A9FB0;
+  text-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(53, 122, 138, 0.6);
 }
 
 .welcome-text.game-started .mario-subtitle {
@@ -381,6 +439,33 @@
   }
 }
 
+/* Night mode version of welcomePulse - teal instead of yellow */
+@keyframes welcomePulseNight {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 
+      0 8px 32px 0 rgba(0, 0, 0, 0.7),
+      0 0 50px rgba(95, 176, 197, 0.5),
+      0 0 80px rgba(95, 176, 197, 0.3),
+      inset 0 2px 0 rgba(95, 176, 197, 0.3),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+    box-shadow: 
+      0 12px 40px 0 rgba(0, 0, 0, 0.8),
+      0 0 70px rgba(95, 176, 197, 0.7),
+      0 0 100px rgba(95, 176, 197, 0.5),
+      0 0 120px rgba(95, 176, 197, 0.3),
+      inset 0 2px 0 rgba(95, 176, 197, 0.4),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.6);
+  }
+}
+
 @keyframes textGlow {
   0%, 100% {
     text-shadow:
@@ -401,6 +486,36 @@
       0 0 30px rgba(255, 215, 0, 1.2),
       0 0 60px rgba(255, 215, 0, 0.8),
       0 0 90px rgba(255, 215, 0, 0.5);
+  }
+}
+
+/* Night mode text glow - teal instead of yellow */
+.mario-game.night-mode .mario-welcome {
+  animation: welcomePulseNight 3s ease-in-out infinite, textGlowNight 3s ease-in-out infinite;
+}
+
+@keyframes textGlowNight {
+  0%, 100% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 1),
+      -2px -2px 0 rgba(0, 0, 0, 1),
+      2px -2px 0 rgba(0, 0, 0, 1),
+      -2px 2px 0 rgba(0, 0, 0, 1),
+      0 0 25px rgba(95, 176, 197, 1),
+      0 0 50px rgba(95, 176, 197, 0.8),
+      0 0 75px rgba(95, 176, 197, 0.5),
+      0 0 100px rgba(95, 176, 197, 0.3);
+  }
+  50% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 1),
+      -2px -2px 0 rgba(0, 0, 0, 1),
+      2px -2px 0 rgba(0, 0, 0, 1),
+      -2px 2px 0 rgba(0, 0, 0, 1),
+      0 0 35px rgba(95, 176, 197, 1.2),
+      0 0 70px rgba(95, 176, 197, 1),
+      0 0 100px rgba(95, 176, 197, 0.7),
+      0 0 130px rgba(95, 176, 197, 0.5);
   }
 }
 
@@ -460,6 +575,18 @@
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
+  transition: background 0.5s ease;
+  z-index: 0;
+}
+
+/* Night Mode Sky - Dark Underground */
+.mario-game.night-mode .sky {
+  background: linear-gradient(to bottom, #1a2d33 0%, #0d1a1f 100%);
+}
+
+.mario-game.night-mode .cloud {
+  opacity: 0.3;
+  filter: brightness(0.4) hue-rotate(180deg);
 }
 
 .cloud {
@@ -497,6 +624,11 @@
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
   -ms-interpolation-mode: nearest-neighbor;
+  transition: background-color 0.5s ease;
+}
+
+.mario-game.night-mode .ground {
+  filter: brightness(0.5) contrast(1.2) hue-rotate(180deg) saturate(0.8);
 }
 
 /* Pipe sitting on the road near the end */
@@ -542,6 +674,18 @@
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
   display: block;
+  transition: filter 0.5s ease;
+}
+
+/* Night mode: Change thanks banner color to teal (#357A8A) */
+.thanks.night-mode {
+  filter: 
+    hue-rotate(200deg) 
+    saturate(1.3) 
+    brightness(0.85)
+    contrast(1.15)
+    sepia(0.3);
+  /* This shifts the colors to teal/cyan (#357A8A range) */
 }
 
 /* Slightly smaller variant for grass2.png (about 40% smaller area) */
@@ -610,6 +754,78 @@
   transition: all 0.2s ease;
   overflow: visible;
   /* Ensure button is fully visible */
+}
+
+/* Night Mode Toggle Button - Next to Sound Toggle */
+.night-mode-toggle {
+  position: fixed;
+  top: 20px;
+  left: 80px;
+  bottom: auto;
+  right: auto;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  min-height: 50px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+  border: 2px solid #FFD700;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset -3px -3px 0 #E6C200,
+    inset 3px 3px 0 #FFE44D,
+    0 0 0 2px #000,
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(255, 215, 0, 0.2);
+  image-rendering: pixelated;
+  font-family: 'Courier New', monospace;
+  transition: all 0.2s ease;
+  overflow: visible;
+}
+
+.night-mode-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.night-mode-toggle:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.night-mode-toggle:hover {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    inset -3px -3px 0 #CC9900,
+    inset 3px 3px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 8px 16px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(255, 215, 0, 0.4);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.night-mode-toggle:active {
+  background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
+  transform: translateY(0) scale(1);
+  box-shadow:
+    inset 3px 3px 0 #CC9900,
+    inset -3px -3px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .sound-toggle::before {
@@ -689,7 +905,17 @@
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+}
+
+.mario-game.night-mode .instructions {
+  background: linear-gradient(135deg, rgba(10, 20, 25, 0.9) 0%, rgba(26, 45, 51, 0.9) 100%);
+  color: #357A8A;
+  border-color: rgba(53, 122, 138, 0.6);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(53, 122, 138, 0.3),
+    inset 0 1px 0 rgba(53, 122, 138, 0.2);
 }
 
 .instructions:hover {
@@ -698,6 +924,13 @@
     0 12px 40px 0 rgba(0, 0, 0, 0.6),
     0 0 40px rgba(255, 215, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.mario-game.night-mode .instructions:hover {
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(53, 122, 138, 0.4),
+    inset 0 1px 0 rgba(74, 159, 176, 0.2);
 }
 
 .instructions::before {
@@ -710,6 +943,11 @@
   background: linear-gradient(180deg, rgba(255, 215, 0, 0.05) 0%, transparent 100%);
   pointer-events: none;
   z-index: 0;
+  transition: background 0.5s ease;
+}
+
+.mario-game.night-mode .instructions::before {
+  background: linear-gradient(180deg, rgba(53, 122, 138, 0.05) 0%, transparent 100%);
 }
 
 .instructions>* {
@@ -735,6 +973,17 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.mario-game.night-mode .instructions h3 {
+  color: #357A8A;
+  text-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.9),
+    -1px -1px 0 rgba(0, 0, 0, 0.9),
+    1px -1px 0 rgba(0, 0, 0, 0.9),
+    -1px 1px 0 rgba(0, 0, 0, 0.9),
+    0 0 15px rgba(53, 122, 138, 0.7);
 }
 
 .instructions p {
@@ -754,6 +1003,13 @@
   text-shadow: 
     1px 1px 2px rgba(0, 0, 0, 0.8),
     0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.mario-game.night-mode .instructions p:hover {
+  color: #357A8A;
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(53, 122, 138, 0.6);
 }
 
 /* Arrow key indicators */
@@ -776,6 +1032,19 @@
   animation: pulse 2s infinite;
   font-weight: bold;
   filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+  transition: color 0.5s ease, filter 0.5s ease;
+}
+
+.mario-game.night-mode .arrow-key {
+  color: #357A8A;
+  filter: drop-shadow(0 0 5px rgba(53, 122, 138, 0.6));
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    0 0 10px rgba(53, 122, 138, 0.7),
+    0 0 20px rgba(53, 122, 138, 0.4);
 }
 
 /* Up arrow for mobile - make it clickable */
@@ -887,6 +1156,25 @@
     0 4px 8px rgba(0, 0, 0, 0.6),
     0 0 15px rgba(255, 215, 0, 0.3);
   backdrop-filter: blur(3px);
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+.mario-game.night-mode .box-label {
+  background: linear-gradient(135deg, rgba(10, 20, 25, 0.95) 0%, rgba(26, 45, 51, 0.95) 100%);
+  border-color: #4A9FB0;
+  color: #FFFFFF;
+  box-shadow:
+    inset -2px -2px 0 #357A8A,
+    inset 2px 2px 0 #5FB0C5,
+    0 0 0 1px #000,
+    0 4px 8px rgba(0, 0, 0, 0.7),
+    0 0 15px rgba(74, 159, 176, 0.5);
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    0 0 8px rgba(74, 159, 176, 0.6);
 }
 
 /* Box wrapper for scroll positioning */
@@ -917,6 +1205,22 @@
   /* Prevent any distortion */
   object-fit: contain;
   overflow: visible;
+}
+
+/* Coin image in boxes */
+.box-coin-image {
+  transition: filter 0.5s ease;
+}
+
+/* Night mode: Change coin color to teal (#357A8A) */
+.mario-game.night-mode .box-coin-image {
+  filter: 
+    hue-rotate(200deg) 
+    saturate(1.3) 
+    brightness(0.85)
+    contrast(1.15)
+    sepia(0.3);
+  /* This shifts gold/yellow coins to teal/cyan (#357A8A range) */
 }
 
 /* Broken box animation */
@@ -1166,6 +1470,17 @@
   overflow: hidden;
 }
 
+.mario-game.night-mode .mobile-button {
+  border-color: #357A8A;
+  color: #357A8A;
+  box-shadow:
+    inset -3px -3px 0 #2a5f6b,
+    inset 3px 3px 0 #4A9FB0,
+    0 0 0 2px #000,
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(53, 122, 138, 0.3);
+}
+
 .mobile-button::before {
   content: '';
   position: absolute;
@@ -1304,6 +1619,19 @@
     font-size: 22px;
     top: 20px;
     left: 20px;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .night-mode-toggle {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: 22px;
+    top: 20px;
+    left: 80px;
     bottom: auto;
     right: auto;
     overflow: visible;
@@ -1574,6 +1902,19 @@
     /* Position at top, same as score display */
     left: 10px !important;
     /* Small margin from left edge */
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .night-mode-toggle {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    min-height: 45px;
+    font-size: 20px;
+    top: 10px !important;
+    left: 65px !important;
     bottom: auto;
     right: auto;
     overflow: visible;
@@ -1854,6 +2195,19 @@
     /* Position at top, same as score display */
     left: 8px;
     /* Small margin from left edge */
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .night-mode-toggle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 18px;
+    top: 8px !important;
+    left: 58px;
     bottom: auto;
     right: auto;
     overflow: visible;

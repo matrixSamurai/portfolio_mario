@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './PortfolioSection.css';
 
-const PortfolioSection = ({ section, onClose }) => {
+const PortfolioSection = ({ section, onClose, nightMode = false }) => {
   const panelBodyRef = useRef(null);
   const [showScrollIndicator, setShowScrollIndicator] = useState(false);
 
@@ -397,7 +397,7 @@ const PortfolioSection = ({ section, onClose }) => {
   const sectionData = getSectionData();
 
   return (
-    <div className="portfolio-section">
+    <div className={`portfolio-section ${nightMode ? 'night-mode' : ''}`}>
       <div className="section-panel">
         <div 
           className="panel-header"

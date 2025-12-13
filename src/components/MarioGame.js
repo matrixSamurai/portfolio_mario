@@ -37,6 +37,7 @@ const MarioGame = () => {
   const [audioUnlocked, setAudioUnlocked] = useState(false); // Track if audio is unlocked for mobile
   const [score, setScore] = useState(0); // Score counter
   const [hasStarted, setHasStarted] = useState(false); // Track if game has started (player moved)
+  const [nightMode, setNightMode] = useState(false); // Night mode (Mario second level dark theme)
 
   // Refs for stable values across renders
   const gameRef = useRef(null);
@@ -351,6 +352,18 @@ const MarioGame = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Apply night mode to body element
+  useEffect(() => {
+    if (nightMode) {
+      document.body.classList.add('night-mode');
+    } else {
+      document.body.classList.remove('night-mode');
+    }
+    return () => {
+      document.body.classList.remove('night-mode');
+    };
+  }, [nightMode]);
 
   // Touch zone and swipe gesture handling
   useEffect(() => {
@@ -1031,7 +1044,7 @@ const MarioGame = () => {
 
   return (
     <div 
-      className="mario-game" 
+      className={`mario-game ${nightMode ? 'night-mode' : ''}`}
       ref={gameRef}
       role="application"
       aria-label="Ujjwal Portfolio Game"
@@ -1042,8 +1055,8 @@ const MarioGame = () => {
         className="sky" 
         style={{ 
           transform: `translate3d(${scrollOffset * cloudScrollSpeed}px, 0, 0)`,
-          width: `${worldWidth + windowSize.width}px`, // Extend sky to always cover screen
-          left: '0px', // Always start from left edge
+          width: `${worldWidth + windowSize.width + Math.abs(scrollOffset * cloudScrollSpeed)}px`, // Extend sky to always cover screen
+          left: `${-Math.abs(scrollOffset * cloudScrollSpeed)}px`, // Extend left to ensure no gap
         }}
         aria-hidden="true"
       >
@@ -1066,7 +1079,7 @@ const MarioGame = () => {
 
       {/* Ground with coin pattern - Multiple coins placed together */}
       <div 
-        className="ground coin-container" 
+        className={`ground coin-container ${nightMode ? 'night-mode' : ''}`}
         style={{ 
           transform: `translate3d(${scrollOffset * groundScrollSpeed}px, 0, 0)`,
           width: `${worldWidth + windowSize.width + Math.abs(scrollOffset * groundScrollSpeed)}px`, // Extend to always cover screen
@@ -1077,7 +1090,7 @@ const MarioGame = () => {
           backgroundRepeat: 'repeat',
           backgroundSize: '60px 60px', // Size of each coin
           backgroundPosition: `${Math.abs(scrollOffset * groundScrollSpeed) % 60}px 0`, // Adjust background position to keep coin pattern aligned
-          backgroundColor: '#8B4513', // Brown ground color
+          backgroundColor: nightMode ? '#2a4a55' : '#8B4513', // Teal/dark blue for night mode
         }}
         aria-hidden="true"
       />
@@ -1175,7 +1188,7 @@ const MarioGame = () => {
         <img
           src={`${process.env.PUBLIC_URL || ''}/thanks.png`}
           alt="Thanks for playing"
-          className="thanks"
+          className={`thanks ${nightMode ? 'night-mode' : ''}`}
         />
       </div>
 
@@ -1419,6 +1432,7 @@ const MarioGame = () => {
                     <img
                       src={`${process.env.PUBLIC_URL || ''}/coin.png`}
                       alt=""
+                      className="box-coin-image"
                       style={{
                         width: '100%',
                         height: '100%',
@@ -1466,6 +1480,7 @@ const MarioGame = () => {
         <PortfolioSection 
           section={activeContent} 
           onClose={() => setActiveContent(null)}
+          nightMode={nightMode}
         />
       )}
 
@@ -1511,6 +1526,16 @@ const MarioGame = () => {
         title={soundEnabled ? 'Mute sound' : 'Unmute sound'}
       >
         {soundEnabled ? '🔊' : '🔇'}
+      </button>
+
+      {/* Night Mode Toggle Button - Next to Sound Toggle */}
+      <button
+        className="night-mode-toggle"
+        onClick={() => setNightMode(!nightMode)}
+        aria-label={nightMode ? 'Switch to day mode' : 'Switch to night mode'}
+        title={nightMode ? 'Switch to day mode' : 'Switch to night mode'}
+      >
+        {nightMode ? '☀️' : '🌙'}
       </button>
 
       {/* Mobile Touch Controls - Bottom Right */}

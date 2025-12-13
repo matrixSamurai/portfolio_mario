@@ -16,6 +16,12 @@ body {
   overflow: hidden;
   background: #4facfe;
   color: #333;
+  transition: background 0.5s ease;
+}
+
+body.night-mode {
+  background: #1a2d33;
+  color: #E0E0E0;
 }
 
 code {
