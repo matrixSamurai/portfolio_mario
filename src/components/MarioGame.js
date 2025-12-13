@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import './MarioGame.css';
 import PortfolioSection from './PortfolioSection';
+import MarioChatbot from './MarioChatbot';
 
 // Mario sprite images for walking animation
 const MARIO_SPRITES = ['/1.png', '/2.png', '/3.png'];
@@ -1641,6 +1642,9 @@ const MarioGame = () => {
           →
         </button>
       </div>
+
+      {/* Mario Chatbot - Bottom Right */}
+      <MarioChatbot nightMode={nightMode} />
     </div>
   );
 };
