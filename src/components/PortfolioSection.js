@@ -155,7 +155,7 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     alt="Intract Software logo"
                   />
                   <div className="experience-text">
-                    <h3>Engineering Manager</h3>
+                    <h3>Lead Software Engineer</h3>
                     <p><strong>Intract Software Pvt Ltd</strong> &mdash; Singapore</p>
                     <p>Nov 2022 &mdash; Dec 2023</p>
                   </div>

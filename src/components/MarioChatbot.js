@@ -242,7 +242,7 @@ const resumeData = {
       ]
     },
     {
-      role: "Engineering Manager",
+      role: "Lead Software Engineer",
       company: "Intract Software Pvt Ltd",
       location: "Singapore",
       period: "Nov 2022 — Dec 2023",
