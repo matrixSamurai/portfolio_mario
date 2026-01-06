@@ -84,7 +84,11 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     <p><strong>Purdue University</strong></p>
                     <p>West Lafayette, IN</p>
                     <p>Dec 2026</p>
-                    <p><em>Teaching Assistant & Python Programming Tutor</em></p>
+                    <p style={{ marginTop: '12px', marginBottom: '8px' }}><strong><em>Teaching Assistant & Python Programming Tutor</em></strong></p>
+                    <ul style={{ marginTop: '8px', paddingLeft: '20px', textAlign: 'left' }}>
+                      <li>Conduct weekly tutoring sessions focused on Python programming, data structures, algorithms, and object-oriented design</li>
+                      <li>Mentor students in debugging techniques, code optimization, and building modular solutions with test-driven development (TDD)</li>
+                    </ul>
                   </div>
                 </div>
                 <div className="education-item">
