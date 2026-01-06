@@ -511,7 +511,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 15px;
   margin-top: 15px;
 }
@@ -519,6 +519,9 @@
 .project-card {
   flex: 1 1 320px;
   max-width: 420px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 12px;
@@ -540,6 +543,12 @@
   height: 56px;
   object-fit: contain;
   margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.project-card h3 {
+  flex-shrink: 0;
+  margin-bottom: 8px;
 }
 
 .project-card:hover {
@@ -555,7 +564,6 @@
 
 .project-card h3 {
   color: #0056b3;
-  margin-bottom: 8px;
   font-size: 16px;
   font-weight: 600;
   text-shadow: none;
@@ -566,13 +574,14 @@
   color: #4A9FB0;
 }
 
-.project-card p {
+.project-card > p {
   color: #555;
   font-size: 13px;
-  margin: 0;
+  margin: 0 0 8px 0;
   line-height: 1.5;
   font-weight: 400;
   transition: color 0.5s ease;
+  flex-grow: 1;
 }
 
 .portfolio-section.night-mode .project-card p {
@@ -649,6 +658,96 @@
 .portfolio-section.night-mode .skill-tag:hover {
   background: linear-gradient(135deg, #4A9FB0 0%, #357A8A 100%);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Certifications Section */
+.certifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.certification-item {
+  position: relative;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  image-rendering: auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.5s ease, border-color 0.5s ease;
+}
+
+.portfolio-section.night-mode .certification-item {
+  background: rgba(42, 74, 85, 0.6);
+  border-color: rgba(74, 159, 176, 0.3);
+}
+
+.certification-item:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-section.night-mode .certification-item:hover {
+  background: rgba(53, 122, 138, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.certification-item h3 {
+  color: #e65100;
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  text-shadow: none;
+  transition: color 0.5s ease;
+}
+
+.portfolio-section.night-mode .certification-item h3 {
+  color: #4A9FB0;
+}
+
+.certification-item ul {
+  margin: 4px 0;
+  color: #555;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.8;
+  font-weight: 400;
+  transition: color 0.5s ease;
+}
+
+.portfolio-section.night-mode .certification-item ul {
+  color: #D0D0D0;
+}
+
+.certification-item li {
+  margin-bottom: 6px;
+  transition: color 0.5s ease;
+}
+
+.portfolio-section.night-mode .certification-item li {
+  color: #D0D0D0;
+}
+
+.certification-item a {
+  color: #ff6b6b;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.portfolio-section.night-mode .certification-item a {
+  color: #4A9FB0;
+}
+
+.certification-item a:hover {
+  color: #e65100;
+  text-decoration: underline;
+}
+
+.portfolio-section.night-mode .certification-item a:hover {
+  color: #6BC5D8;
 }
 
 /* Contact Section */

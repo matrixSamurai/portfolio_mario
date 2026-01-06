@@ -201,14 +201,15 @@ const MarkdownText = ({ text, nightMode = false }) => {
 const resumeData = {
   about: {
     title: "Software Engineer · Backend & Distributed Systems",
-    description: "Software Engineer with experience designing scalable backend systems and cloud‑native distributed services. Skilled in building low‑latency, high‑throughput applications and real‑time data pipelines. Currently pursuing a Master of Business and Technology at Purdue and seeking a Summer 2026 Software Engineering internship."
+    description: "Software Engineer with experience architecting and scaling distributed systems, real-time data pipelines, and cloud-native backend services on Kubernetes. Proven track record of designing low-latency, high-throughput architectures, owning production reliability, and delivering resilient systems on modern cloud platforms."
   },
   education: [
     {
-      degree: "Master of Business and Technology - AI",
-      school: "Purdue University, Daniels School of Business",
+      degree: "Master of Business and Technology (Awarded Fellowship)",
+      school: "Purdue University",
       location: "West Lafayette, IN",
-      period: "Dec 2026 — Fellowship Awarded"
+      period: "Dec 2026",
+      note: "Teaching Assistant & Python Programming Tutor"
     },
     {
       degree: "Bachelor of Technology in Information Technology",
@@ -219,26 +220,15 @@ const resumeData = {
   ],
   experience: [
     {
-      role: "Python Programming Tutor",
-      company: "Purdue University",
-      location: "West Lafayette, IN",
-      period: "Oct 2025 — Present",
-      highlights: [
-        "Conduct weekly tutoring sessions focused on Python, data structures, algorithms, and OOP.",
-        "Guide students in debugging, code optimisation, modular design, and unit testing."
-      ]
-    },
-    {
-      role: "Engineering Lead (Founder Role)",
+      role: "Engineering Lead",
       company: "Starportal Software LLP",
       location: "Noida, India",
       period: "Dec 2023 — July 2025",
       highlights: [
-        "Designed and implemented distributed transaction infrastructure across 10+ networks.",
-        "Delivered high‑performance messaging and APIs that processed 1M+ messages per day.",
-        "Achieved sub‑100 ms latency and 4× throughput using a WebSocket streaming layer for trading data.",
-        "Implemented 2FA, TOTP, JWTs with RBAC, encrypted secrets, audit logs, and rate limits for secure operations.",
-        "Built cloud‑native microservices on AWS and scaled products to 250K+ MAU."
+        "Architected and scaled a real-time trading platform serving 300K+ MAU, building a high-throughput event-driven stack using Kafka (consumer groups, DLQs, idempotent producers), Redis for ultra-low-latency, and WebSockets for bidirectional order flow.",
+        "Designed resilient distributed services using Docker containers with stateless APIs, active-active deployments, health-based routing, circuit breakers, retries with timeouts, and controlled backpressure, maintaining uptime during rolling updates.",
+        "Implemented end-to-end security and trading primitives including 2FA/TOTP, device binding, short-lived JWTs with RBAC, encrypted secrets, audit trails, and rate limits, supporting secure execution of trading actions and platform APIs.",
+        "Drove platform growth and operational ownership by leading on-call and scaling a Telegram Mini App to 300K+ MAU, while launching tiered pricing, usage limits, and analytics-driven rollouts to improve activation, retention, and ARPU."
       ]
     },
     {
@@ -247,9 +237,9 @@ const resumeData = {
       location: "Singapore",
       period: "Nov 2022 — Dec 2023",
       highlights: [
-        "Architected core backend using Node.js, Redis, Docker, and Kafka, reducing database load by 40%.",
-        "Built onboarding pipelines for 50+ B2B partners and supported a campaign with 1M users and $3M in revenue.",
-        "Designed a rewards engine with fraud prevention, rate limits, checks, and auditable payout workflows."
+        "Architected a large-scale, event-driven backend platform using Node.js and TypeScript, designing policy-based rules, eligibility checks, fraud controls, and scalable payout workflows backed by PostgreSQL, Redis, and Kafka / pub-sub.",
+        "Built low-latency data pipelines and distributed processing systems with event ingestion, caching, idempotent workers, rate limiting, and auditability, supported by Prometheus, Grafana, and CI/CD quality gates.",
+        "Owned production reliability by shipping a high-traffic personalized analytics experience (Intract Rewind 2022), optimizing for burst traffic using precomputation, caching, and CDN delivery while leading on-call and architecture reviews."
       ]
     },
     {
@@ -258,8 +248,8 @@ const resumeData = {
       location: "Delhi, India",
       period: "Oct 2021 — Nov 2022",
       highlights: [
-        "Built distributed backend systems in Python and Java with Kubernetes orchestration and gRPC communication.",
-        "Implemented event‑driven automation using cron jobs, WebSockets, and cloud functions, increasing user engagement by 50%+."
+        "Architected and scaled distributed backend systems in Python and Java using Kubernetes and gRPC microservices, with autoscaling, zero-downtime deployments, and production-grade reliability patterns, supporting 50K+ users with high availability.",
+        "Built event-driven pipelines and observability foundations using queues or pub/sub, WebSocket fan-out, cloud functions, SLIs/SLOs, reliably handling traffic bursts and driving a 40% increase in user engagement."
       ]
     },
     {
@@ -268,20 +258,22 @@ const resumeData = {
       location: "Noida, India",
       period: "2019 — 2021",
       highlights: [
-        "Developed React and TypeScript dashboards for system health and real‑time trader metrics.",
-        "Built a Linux benchmarking tool with multithreading that reduced manual testing time by 80%.",
-        "Delivered 100+ CI/CD pipelines that reduced incident response time by 60%."
+        "Designed and optimized backend systems in C++, improving replication and fault recovery through resumable synchronization and adaptive backoff, reducing latency by 89% and improving availability.",
+        "Improved p99 latency and system stability by optimizing performance-critical code paths using multithreaded I/O, efficient memory management, batching, and contention reduction, enabling reliable operation under peak traffic and bursty workloads.",
+        "Shipped 50+ production releases using CI/CD with staged deployments, automated testing, monitoring, and rollback, while building incident automation and observability that reduced incident response time by 60% and improved on-call reliability."
       ]
     }
   ],
   projects: [
     {
-      name: "Pulse — AI Healthcare Assistant",
-      description: "Developed an AI health assistant using OpenAI LLMs for virtual consultations, symptom triage, and medical report analysis, integrated with HIPAA‑compliant storage and piloted with 5K+ users."
+      name: "Pulse — AI-Powered Healthcare Platform (LLM-Driven Clinical Workflows)",
+      description: "Architected and built an AI-driven healthcare platform using LLM-based workflows for symptom triage, virtual consultations, and medical report analysis, serving 5K+ users with secure, HIPAA-compliant Restful APIs and inference pipelines.",
+      date: "Apr 2025"
     },
     {
-      name: "Thunder Wallet — Unified Digital Payments",
-      description: "Built a non‑custodial wallet supporting multi‑rail payments with an award‑winning UI/UX experience."
+      name: "Thunder Wallet — Non-Custodial Payments Infrastructure",
+      description: "Enabled secure multi-rail transactions via modular services and user-controlled key management; won Best UI/UX Award.",
+      date: "Jan 2022"
     },
     {
       name: "Acquisense — AI Deal Intelligence Platform",
@@ -293,22 +285,20 @@ const resumeData = {
     }
   ],
   skills: {
-    languages: ["Python", "Java", "C", "C++", "JavaScript", "TypeScript"],
-    frameworks: ["React", "Node.js", "Spring Boot", "TensorFlow", "PyTorch", "LangChain"],
-    ai: ["LLMs", "Applied AI", "Machine Learning", "Artificial Intelligence", "RAG pipelines"],
-    databases: ["MySQL", "MongoDB", "PostgreSQL", "Redis", "SQL"],
-    cloud: ["AWS", "Azure", "Kubernetes", "Microservices", "gRPC", "Docker", "CI/CD"],
-    web: ["HTML", "CSS", "WebSockets", "REST APIs"],
-    messaging: ["RabbitMQ", "Kafka", "SQS"]
+    languages: ["Python", "Java", "C", "C++", "C#", "JavaScript", "Ruby", "TypeScript", "HTML", "CSS", "Node.js", "SQL", "Kotlin", "Swift", "R", "Golang", "Rust", "PHP", "Shell", "Bash", "GraphQL"],
+    frameworks: ["React", "Spring Boot", ".NET", "MVC", "TensorFlow", "PyTorch", "LangChain", "Django"],
+    devops: ["Linux", "Git", "Azure", "GCP", "TCP/IP", "DNS", "JIRA", "S3", "API Gateway", "Terraform", "NGINX", "Reverse Proxy", "Load Balancing", "DynamoDB", "Ansible", "Grafana", "ELK Stack", "Serverless Architecture", "Jenkins", "SDLC", "SDK", "Object-Oriented", "Performance Testing"],
+    systems: ["MySQL", "MongoDB", "NoSQL", "IAM", "OpenID Connect", "Load Testing", "Event Sourcing", "Computer Science Fundamentals", "Service-Oriented Architecture", "Data Analysis", "System Design", "Design Patterns", "Applied AI", "Machine Learning"],
+    essentials: ["Problem Solving", "Analytical Thinking", "Clear Communication", "Attention to Detail", "Critical Thinking", "Agile", "Adaptability", "Collaboration", "Continuous Learning", "Accountability", "Leadership", "Strategic Thinking", "Code Reviews", "Technical Documentation"]
   },
   certifications: [
     "AWS Certified Cloud Practitioner",
-    "Google PM Certificate",
-    "ACM ICPC Regional Qualifier (2016, 2018)",
-    "Teaching Assistant — Programming and DSA",
-    "Vice President — Toastmasters International (2018)",
-    "Certified Yoga Teacher (2018)",
-    "Club Head — AI & Blockchain, GGSIPU"
+    "AWS Certified AI Practitioner",
+    "Google Generative AI",
+    "ACM ICPC Regional Finalist (2016, 2018)",
+    "Teaching Assistant — Programming & DSA",
+    "Vice President 2018 — Toastmasters International",
+    "Certified Yoga Teacher — Batch 2018"
   ],
   contact: {
     email: "ujjwal451@gmail.com",
@@ -329,7 +319,7 @@ ${resumeData.about.title}
 ${resumeData.about.description}
 
 EDUCATION:
-${resumeData.education.map(edu => `• ${edu.degree} - ${edu.school}, ${edu.location} (${edu.period})`).join('\n')}
+${resumeData.education.map(edu => `• ${edu.degree} - ${edu.school}, ${edu.location} (${edu.period})${edu.note ? ` - ${edu.note}` : ''}`).join('\n')}
 
 WORK EXPERIENCE:
 ${resumeData.experience.map(exp => {
@@ -337,16 +327,14 @@ ${resumeData.experience.map(exp => {
 }).join('\n\n')}
 
 PROJECTS:
-${resumeData.projects.map(proj => `• ${proj.name}: ${proj.description}`).join('\n\n')}
+${resumeData.projects.map(proj => `• ${proj.name}${proj.date ? ` (${proj.date})` : ''}: ${proj.description}`).join('\n\n')}
 
 SKILLS:
-Programming Languages: ${resumeData.skills.languages.join(', ')}
-Frameworks & Libraries: ${resumeData.skills.frameworks.join(', ')}
-AI & ML: ${resumeData.skills.ai.join(', ')}
-Databases: ${resumeData.skills.databases.join(', ')}
-Cloud & Infrastructure: ${resumeData.skills.cloud.join(', ')}
-Web Technologies: ${resumeData.skills.web.join(', ')}
-Messaging & Queues: ${resumeData.skills.messaging.join(', ')}
+Languages & Frameworks: ${resumeData.skills.languages.join(', ')}
+Frameworks: ${resumeData.skills.frameworks.join(', ')}
+DevOps: ${resumeData.skills.devops.join(', ')}
+Systems & Architecture: ${resumeData.skills.systems.join(', ')}
+Essentials: ${resumeData.skills.essentials.join(', ')}
 
 CERTIFICATIONS & HONORS:
 ${resumeData.certifications.map(c => `• ${c}`).join('\n')}

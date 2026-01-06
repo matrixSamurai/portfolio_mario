@@ -60,10 +60,7 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                   Software Engineer · Backend & Distributed Systems
                 </p>
                 <p style={{ fontSize: '14px', lineHeight: '1.8', marginBottom: '15px' }}>
-                  Software Engineer with experience designing scalable backend systems and cloud‑native distributed
-                  services. Skilled in building low‑latency, high‑throughput applications and real‑time data pipelines.
-                  Currently pursuing a Master of Business and Technology at Purdue and seeking a Summer 2026 Software
-                  Engineering internship.
+                  Software Engineer with experience architecting and scaling distributed systems, real-time data pipelines, and cloud-native backend services on Kubernetes. Proven track record of designing low-latency, high-throughput architectures, owning production reliability, and delivering resilient systems on modern cloud platforms.
                 </p>
               </div>
             </div>
@@ -83,10 +80,11 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     alt="Purdue University logo"
                   />
                   <div className="education-text">
-                    <h3>Master of Business and Technology - AI</h3>
-                    <p><strong>Purdue University, Daniels School of Business</strong></p>
+                    <h3>Master of Business and Technology (Awarded Fellowship)</h3>
+                    <p><strong>Purdue University</strong></p>
                     <p>West Lafayette, IN</p>
-                    <p>Dec 2026 &mdash; Fellowship Awarded</p>
+                    <p>Dec 2026</p>
+                    <p><em>Teaching Assistant & Python Programming Tutor</em></p>
                   </div>
                 </div>
                 <div className="education-item">
@@ -116,36 +114,19 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                 <div className="experience-item">
                   <img
                     className="experience-logo"
-                    src={`${process.env.PUBLIC_URL || ''}/workAssets/purdue.png`}
-                    alt="Purdue University logo"
-                  />
-                  <div className="experience-text">
-                    <h3>Python Programming Tutor</h3>
-                    <p><strong>Purdue University</strong> &mdash; West Lafayette, IN</p>
-                    <p>Oct 2025 &mdash; Present</p>
-                  </div>
-                  <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Conduct weekly tutoring sessions focused on Python, data structures, algorithms, and OOP.</li>
-                    <li>Guide students in debugging, code optimisation, modular design, and unit testing.</li>
-                  </ul>
-                </div>
-                <div className="experience-item">
-                  <img
-                    className="experience-logo"
                     src={`${process.env.PUBLIC_URL || ''}/workAssets/starportal.png`}
                     alt="Starportal Software logo"
                   />
                   <div className="experience-text">
-                    <h3>Engineering Lead (Founder Role)</h3>
+                    <h3>Engineering Lead</h3>
                     <p><strong>Starportal Software LLP</strong> &mdash; Noida, India</p>
                     <p>Dec 2023 &mdash; July 2025</p>
                   </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Designed and implemented distributed transaction infrastructure across 10+ networks.</li>
-                    <li>Delivered high‑performance messaging and APIs that processed 1M+ messages per day.</li>
-                    <li>Achieved sub‑100&nbsp;ms latency and 4× throughput using a WebSocket streaming layer for trading data.</li>
-                    <li>Implemented 2FA, TOTP, JWTs with RBAC, encrypted secrets, audit logs, and rate limits for secure operations.</li>
-                    <li>Built cloud‑native microservices on AWS and scaled products to 250K+ MAU.</li>
+                    <li>Architected and scaled a real-time trading platform serving 300K+ MAU, building a high-throughput event-driven stack using Kafka (consumer groups, DLQs, idempotent producers), Redis for ultra-low-latency, and WebSockets for bidirectional order flow.</li>
+                    <li>Designed resilient distributed services using Docker containers with stateless APIs, active-active deployments, health-based routing, circuit breakers, retries with timeouts, and controlled backpressure, maintaining uptime during rolling updates.</li>
+                    <li>Implemented end-to-end security and trading primitives including 2FA/TOTP, device binding, short-lived JWTs with RBAC, encrypted secrets, audit trails, and rate limits, supporting secure execution of trading actions and platform APIs.</li>
+                    <li>Drove platform growth and operational ownership by leading on-call and scaling a Telegram Mini App to 300K+ MAU, while launching tiered pricing, usage limits, and analytics-driven rollouts to improve activation, retention, and ARPU.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
@@ -160,9 +141,9 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     <p>Nov 2022 &mdash; Dec 2023</p>
                   </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Architected core backend using Node.js, Redis, Docker, and Kafka, reducing database load by 40%.</li>
-                    <li>Built onboarding pipelines for 50+ B2B partners and supported a campaign with 1M users and $3M in revenue.</li>
-                    <li>Designed a rewards engine with fraud prevention, rate limits, checks, and auditable payout workflows.</li>
+                    <li>Architected a large-scale, event-driven backend platform using Node.js and TypeScript, designing policy-based rules, eligibility checks, fraud controls, and scalable payout workflows backed by PostgreSQL, Redis, and Kafka / pub-sub.</li>
+                    <li>Built low-latency data pipelines and distributed processing systems with event ingestion, caching, idempotent workers, rate limiting, and auditability, supported by Prometheus, Grafana, and CI/CD quality gates.</li>
+                    <li>Owned production reliability by shipping a high-traffic personalized analytics experience (Intract Rewind 2022), optimizing for burst traffic using precomputation, caching, and CDN delivery while leading on-call and architecture reviews.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
@@ -177,8 +158,8 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     <p>Oct 2021 &mdash; Nov 2022</p>
                   </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Built distributed backend systems in Python and Java with Kubernetes orchestration and gRPC communication.</li>
-                    <li>Implemented event‑driven automation using cron jobs, WebSockets, and cloud functions, increasing user engagement by 50%+.</li>
+                    <li>Architected and scaled distributed backend systems in Python and Java using Kubernetes and gRPC microservices, with autoscaling, zero-downtime deployments, and production-grade reliability patterns, supporting 50K+ users with high availability.</li>
+                    <li>Built event-driven pipelines and observability foundations using queues or pub/sub, WebSocket fan-out, cloud functions, SLIs/SLOs, reliably handling traffic bursts and driving a 40% increase in user engagement.</li>
                   </ul>
                 </div>
                 <div className="experience-item">
@@ -193,9 +174,9 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     <p>2019 &mdash; 2021</p>
                   </div>
                   <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
-                    <li>Developed React and TypeScript dashboards for system health and real‑time trader metrics.</li>
-                    <li>Built a Linux benchmarking tool with multithreading that reduced manual testing time by 80%.</li>
-                    <li>Delivered 100+ CI/CD pipelines that reduced incident response time by 60%.</li>
+                    <li>Designed and optimized backend systems in C++, improving replication and fault recovery through resumable synchronization and adaptive backoff, reducing latency by 89% and improving availability.</li>
+                    <li>Improved p99 latency and system stability by optimizing performance-critical code paths using multithreaded I/O, efficient memory management, batching, and contention reduction, enabling reliable operation under peak traffic and bursty workloads.</li>
+                    <li>Shipped 50+ production releases using CI/CD with staged deployments, automated testing, monitoring, and rollback, while building incident automation and observability that reduced incident response time by 60% and improved on-call reliability.</li>
                   </ul>
                 </div>
               </div>
@@ -215,9 +196,9 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     src={`${process.env.PUBLIC_URL || ''}/workAssets/Pulss.png`}
                     alt="Pulse project logo"
                   />
-                  <h3>Pulse &mdash; AI Healthcare Assistant</h3>
-                  <p>Developed an AI health assistant using OpenAI LLMs for virtual consultations, symptom triage, and
-                    medical report analysis, integrated with HIPAA‑compliant storage and piloted with 5K+ users.</p>
+                  <h3>Pulse &mdash; AI-Powered Healthcare Platform (LLM-Driven Clinical Workflows)</h3>
+                  <p>Architected and built an AI-driven healthcare platform using LLM-based workflows for symptom triage, virtual consultations, and medical report analysis, serving 5K+ users with secure, HIPAA-compliant Restful APIs and inference pipelines.</p>
+                  <p style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Apr 2025</p>
                 </div>
                 <div className="project-card">
                   <img
@@ -225,8 +206,9 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     src={`${process.env.PUBLIC_URL || ''}/workAssets/ThunderWallet.png`}
                     alt="Thunder Wallet logo"
                   />
-                  <h3>Thunder Wallet &mdash; Unified Digital Payments</h3>
-                  <p>Built a non‑custodial wallet supporting multi‑rail payments with an award‑winning UI/UX experience.</p>
+                  <h3>Thunder Wallet &mdash; Non-Custodial Payments Infrastructure</h3>
+                  <p>Enabled secure multi-rail transactions via modular services and user-controlled key management; won Best UI/UX Award.</p>
+                  <p style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>Jan 2022</p>
                 </div>
                 <div className="project-card">
                   <img
@@ -263,87 +245,142 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
             <div className="section-content">
               <div className="skills-container">
                 <div className="skill-category">
-                  <h3>Programming Languages</h3>
+                  <h3>Languages & Frameworks</h3>
                   <div className="skill-tags">
                     <span className="skill-tag">Python</span>
                     <span className="skill-tag">Java</span>
                     <span className="skill-tag">C</span>
                     <span className="skill-tag">C++</span>
+                    <span className="skill-tag">C#</span>
                     <span className="skill-tag">JavaScript</span>
+                    <span className="skill-tag">Ruby</span>
                     <span className="skill-tag">TypeScript</span>
-                  </div>
-                </div>
-                <div className="skill-category">
-                  <h3>Frameworks & Libraries</h3>
-                  <div className="skill-tags">
-                    <span className="skill-tag">React</span>
+                    <span className="skill-tag">HTML</span>
+                    <span className="skill-tag">CSS</span>
                     <span className="skill-tag">Node.js</span>
+                    <span className="skill-tag">SQL</span>
+                    <span className="skill-tag">Kotlin</span>
+                    <span className="skill-tag">Swift</span>
+                    <span className="skill-tag">R</span>
+                    <span className="skill-tag">Golang</span>
+                    <span className="skill-tag">Rust</span>
+                    <span className="skill-tag">PHP</span>
+                    <span className="skill-tag">Shell</span>
+                    <span className="skill-tag">Bash</span>
+                    <span className="skill-tag">GraphQL</span>
+                    <span className="skill-tag">React</span>
                     <span className="skill-tag">Spring Boot</span>
+                    <span className="skill-tag">.NET</span>
+                    <span className="skill-tag">MVC</span>
                     <span className="skill-tag">TensorFlow</span>
                     <span className="skill-tag">PyTorch</span>
                     <span className="skill-tag">LangChain</span>
+                    <span className="skill-tag">Django</span>
                   </div>
                 </div>
                 <div className="skill-category">
-                  <h3>AI & ML</h3>
+                  <h3>DevOps</h3>
                   <div className="skill-tags">
-                    <span className="skill-tag">LLMs</span>
-                    <span className="skill-tag">Applied AI</span>
-                    <span className="skill-tag">Machine Learning</span>
-                    <span className="skill-tag">Artificial Intelligence</span>
-                    <span className="skill-tag">RAG pipelines</span>
+                    <span className="skill-tag">Linux</span>
+                    <span className="skill-tag">Git</span>
+                    <span className="skill-tag">Azure</span>
+                    <span className="skill-tag">GCP</span>
+                    <span className="skill-tag">TCP/IP</span>
+                    <span className="skill-tag">DNS</span>
+                    <span className="skill-tag">JIRA</span>
+                    <span className="skill-tag">S3</span>
+                    <span className="skill-tag">API Gateway</span>
+                    <span className="skill-tag">Terraform</span>
+                    <span className="skill-tag">NGINX</span>
+                    <span className="skill-tag">Reverse Proxy</span>
+                    <span className="skill-tag">Load Balancing</span>
+                    <span className="skill-tag">DynamoDB</span>
+                    <span className="skill-tag">Ansible</span>
+                    <span className="skill-tag">Grafana</span>
+                    <span className="skill-tag">ELK Stack</span>
+                    <span className="skill-tag">Serverless Architecture</span>
+                    <span className="skill-tag">Jenkins</span>
+                    <span className="skill-tag">SDLC</span>
+                    <span className="skill-tag">SDK</span>
+                    <span className="skill-tag">Object-Oriented</span>
+                    <span className="skill-tag">Performance Testing</span>
                   </div>
                 </div>
                 <div className="skill-category">
-                  <h3>Databases & Storage</h3>
+                  <h3>Systems & Architecture</h3>
                   <div className="skill-tags">
                     <span className="skill-tag">MySQL</span>
                     <span className="skill-tag">MongoDB</span>
-                    <span className="skill-tag">PostgreSQL</span>
-                    <span className="skill-tag">Redis</span>
-                    <span className="skill-tag">SQL</span>
+                    <span className="skill-tag">NoSQL</span>
+                    <span className="skill-tag">IAM</span>
+                    <span className="skill-tag">OpenID Connect</span>
+                    <span className="skill-tag">Load Testing</span>
+                    <span className="skill-tag">Event Sourcing</span>
+                    <span className="skill-tag">Computer Science Fundamentals</span>
+                    <span className="skill-tag">Service-Oriented Architecture</span>
+                    <span className="skill-tag">Data Analysis</span>
+                    <span className="skill-tag">System Design</span>
+                    <span className="skill-tag">Design Patterns</span>
+                    <span className="skill-tag">Applied AI</span>
+                    <span className="skill-tag">Machine Learning</span>
                   </div>
                 </div>
                 <div className="skill-category">
-                  <h3>Cloud & Infrastructure</h3>
+                  <h3>Essentials</h3>
                   <div className="skill-tags">
-                    <span className="skill-tag">AWS</span>
-                    <span className="skill-tag">Azure</span>
-                    <span className="skill-tag">Kubernetes</span>
-                    <span className="skill-tag">Microservices</span>
-                    <span className="skill-tag">gRPC</span>
-                    <span className="skill-tag">Docker</span>
-                    <span className="skill-tag">CI/CD</span>
+                    <span className="skill-tag">Problem Solving</span>
+                    <span className="skill-tag">Analytical Thinking</span>
+                    <span className="skill-tag">Clear Communication</span>
+                    <span className="skill-tag">Attention to Detail</span>
+                    <span className="skill-tag">Critical Thinking</span>
+                    <span className="skill-tag">Agile</span>
+                    <span className="skill-tag">Adaptability</span>
+                    <span className="skill-tag">Collaboration</span>
+                    <span className="skill-tag">Continuous Learning</span>
+                    <span className="skill-tag">Accountability</span>
+                    <span className="skill-tag">Leadership</span>
+                    <span className="skill-tag">Strategic Thinking</span>
+                    <span className="skill-tag">Code Reviews</span>
+                    <span className="skill-tag">Technical Documentation</span>
                   </div>
                 </div>
-                <div className="skill-category">
-                  <h3>Web Technologies</h3>
-                  <div className="skill-tags">
-                    <span className="skill-tag">HTML</span>
-                    <span className="skill-tag">CSS</span>
-                    <span className="skill-tag">WebSockets</span>
-                    <span className="skill-tag">REST APIs</span>
-                  </div>
+              </div>
+            </div>
+          )
+        };
+      case 'certifications':
+        return {
+          title: 'Certifications & Honors',
+          icon: '🏆',
+          content: (
+            <div className="section-content">
+              <div className="certifications-list">
+                <div className="certification-item">
+                  <h3>Competitions & Achievements</h3>
+                  <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
+                    <li><a href="https://drive.google.com/file/d/1Y5QqRFMLorUSOB5uadf7b2z5bVUB4wMn/view" target="_blank" rel="noopener noreferrer" style={{ color: '#ff6b6b', textDecoration: 'underline' }}>ACM ICPC Regional Finalist (2016, 2018)</a></li>
+                  </ul>
                 </div>
-                <div className="skill-category">
-                  <h3>Messaging & Queues</h3>
-                  <div className="skill-tags">
-                    <span className="skill-tag">RabbitMQ</span>
-                    <span className="skill-tag">Kafka</span>
-                    <span className="skill-tag">SQS</span>
-                  </div>
+                <div className="certification-item">
+                  <h3>AWS Certifications</h3>
+                  <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
+                    <li><a href="https://www.credly.com/badges/b5e7fc04-e66d-4b7b-95b3-b4576c7017b2" target="_blank" rel="noopener noreferrer" style={{ color: '#ff6b6b', textDecoration: 'underline' }}>Certified Cloud Practitioner</a></li>
+                    <li><a href="https://www.credly.com/badges/97357130-cca0-4edf-bcb3-2f55a47bae80" target="_blank" rel="noopener noreferrer" style={{ color: '#ff6b6b', textDecoration: 'underline' }}>Certified AI Practitioner</a></li>
+                  </ul>
                 </div>
-                <div className="skill-category">
-                  <h3>Certifications & Honors</h3>
-                  <div className="skill-tags">
-                    <span className="skill-tag">AWS Certified Cloud Practitioner</span>
-                    <span className="skill-tag">Google PM Certificate</span>
-                    <span className="skill-tag">ACM ICPC Regional Qualifier (2016, 2018)</span>
-                    <span className="skill-tag">Teaching Assistant &mdash; Programming and DSA</span>
-                    <span className="skill-tag">Vice President &mdash; Toastmasters International (2018)</span>
-                    <span className="skill-tag">Certified Yoga Teacher (2018)</span>
-                    <span className="skill-tag">Club Head &mdash; AI &amp; Blockchain, GGSIPU</span>
-                  </div>
+                <div className="certification-item">
+                  <h3>Google</h3>
+                  <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
+                    <li>Generative AI</li>
+                  </ul>
+                </div>
+                <div className="certification-item">
+                  <h3>Teaching & Leadership</h3>
+                  <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
+                    <li><a href="https://drive.google.com/file/d/1Cf0A-iSpMMK0S518V2ak0ZTM_G6W3N2M/view" target="_blank" rel="noopener noreferrer" style={{ color: '#ff6b6b', textDecoration: 'underline' }}>Teaching Assistant &mdash; Programming & DSA</a></li>
+                    <li>Vice President 2018 &mdash; Toastmasters International</li>
+                    <li>Certified Yoga Teacher &mdash; Batch 2018</li>
+                  </ul>
                 </div>
               </div>
             </div>

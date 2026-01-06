@@ -79,11 +79,11 @@ const MarioGame = () => {
   }, [windowSize.height]);
 
   // Calculate world width to end right after the last box (contact)
-  // Last box (contact) is at windowSize.width * 1.6 (or more on mobile with spacing)
+  // Last box (contact) is at windowSize.width * 1.9 (or more on mobile with spacing)
   const worldWidth = useMemo(() => {
     const isMobile = windowSize.width <= 768;
     const extraSpacing = isMobile ? windowSize.width * 0.15 : 0;
-    const lastBoxPosition = windowSize.width * 1.6 + (extraSpacing * 5);
+    const lastBoxPosition = windowSize.width * 1.9 + (extraSpacing * 6);
     const lastBoxWidth = 80; // boxSize
     return lastBoxPosition + lastBoxWidth + 50; // End right after contact box with minimal buffer
   }, [windowSize.width]);
@@ -143,13 +143,22 @@ const MarioGame = () => {
         type: 'brick'
       },
       { 
-        id: 'contact',
+        id: 'certifications',
         left: windowSize.width * 1.6 + (extraSpacing * 5),
         top: baseHeight - (isMobile ? 220 : 260),
         width: boxSize,
         height: boxSize,
-        label: 'CONTACT',
+        label: 'CERTIFICATIONS',
         type: 'question'
+      },
+      { 
+        id: 'contact',
+        left: windowSize.width * 1.9 + (extraSpacing * 6),
+        top: baseHeight - (isMobile ? 200 : 240),
+        width: boxSize,
+        height: boxSize,
+        label: 'CONTACT',
+        type: 'brick'
       },
     ];
   }, [windowSize.width, groundLevel]);
