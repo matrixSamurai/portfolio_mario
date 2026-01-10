@@ -220,7 +220,7 @@ const resumeData = {
   ],
   experience: [
     {
-      role: "Engineering Lead",
+      role: "Lead Software Engineer",
       company: "Starportal Software LLP",
       location: "Noida, India",
       period: "Dec 2023 — July 2025",
@@ -232,7 +232,7 @@ const resumeData = {
       ]
     },
     {
-      role: "Lead Software Engineer",
+      role: "Senior Software Engineer",
       company: "Intract Software Pvt Ltd",
       location: "Singapore",
       period: "Nov 2022 — Dec 2023",

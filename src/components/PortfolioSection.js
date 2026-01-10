@@ -122,7 +122,7 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     alt="Starportal Software logo"
                   />
                   <div className="experience-text">
-                    <h3>Engineering Lead</h3>
+                    <h3>Lead Software Engineer</h3>
                     <p><strong>Starportal Software LLP</strong> &mdash; Noida, India</p>
                     <p>Dec 2023 &mdash; July 2025</p>
                   </div>
@@ -140,7 +140,7 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     alt="Intract Software logo"
                   />
                   <div className="experience-text">
-                    <h3>Lead Software Engineer</h3>
+                    <h3>Senior Software Engineer</h3>
                     <p><strong>Intract Software Pvt Ltd</strong> &mdash; Singapore</p>
                     <p>Nov 2022 &mdash; Dec 2023</p>
                   </div>
