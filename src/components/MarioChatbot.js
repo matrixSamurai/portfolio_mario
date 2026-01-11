@@ -225,10 +225,10 @@ const resumeData = {
       location: "Noida, India",
       period: "Dec 2023 — July 2025",
       highlights: [
-        "Architected and scaled a real-time trading platform serving 300K+ MAU, building a high-throughput event-driven stack using Kafka (consumer groups, DLQs, idempotent producers), Redis for ultra-low-latency, and WebSockets for bidirectional order flow.",
-        "Designed resilient distributed services using Docker containers with stateless APIs, active-active deployments, health-based routing, circuit breakers, retries with timeouts, and controlled backpressure, maintaining uptime during rolling updates.",
-        "Implemented end-to-end security and trading primitives including 2FA/TOTP, device binding, short-lived JWTs with RBAC, encrypted secrets, audit trails, and rate limits, supporting secure execution of trading actions and platform APIs.",
-        "Drove platform growth and operational ownership by leading on-call and scaling a Telegram Mini App to 300K+ MAU, while launching tiered pricing, usage limits, and analytics-driven rollouts to improve activation, retention, and ARPU."
+        "Led Engineering and Product to build and scale a real-time trading platform to 300K+ MAU using Kafka, Redis, and WebSockets. Owned architecture, SRE, and growth levers including tiered pricing and analytics-driven roadmap, improving activation and retention while keeping acquisition costs low.",
+        "Built high-throughput trading stack with Kafka (consumer groups, DLQs, idempotent producers), Redis for ultra-low latency, and WebSockets for bidirectional order flow. Designed resilient services with active-active deployment, circuit breakers, and controlled backpressure for 99.9% uptime.",
+        "Implemented end-to-end security including 2FA/TOTP, device binding, short-lived JWTs with RBAC, and audit trails. Delivered predictions market module with signal aggregation, risk limits, and backtesting harness. Scaled Mini App to 300K+ MAU with tiered pricing and data-driven rollouts.",
+        "Led cross-functional execution including on-call, mentoring engineers, and driving integrations with 50+ partners while aligning with compliance, finance, and community teams."
       ]
     },
     {
@@ -237,9 +237,10 @@ const resumeData = {
       location: "Singapore",
       period: "Nov 2022 — Dec 2023",
       highlights: [
-        "Architected a large-scale, event-driven backend platform using Node.js and TypeScript, designing policy-based rules, eligibility checks, fraud controls, and scalable payout workflows backed by PostgreSQL, Redis, and Kafka / pub-sub.",
-        "Built low-latency data pipelines and distributed processing systems with event ingestion, caching, idempotent workers, rate limiting, and auditability, supported by Prometheus, Grafana, and CI/CD quality gates.",
-        "Owned production reliability by shipping a high-traffic personalized analytics experience (Intract Rewind 2022), optimizing for burst traffic using precomputation, caching, and CDN delivery while leading on-call and architecture reviews."
+        "Led end-to-end architecture of Intract Quest Platform using Node.js and TypeScript, designing policy-based rules engine, fraud controls, and scalable payout workflows backed by PostgreSQL, Redis, and event-driven orchestration.",
+        "Built event ingestion pipeline using Kafka/pub-sub, Redis, and worker-based orchestration for reliable, low-latency reward campaigns. Implemented secure payout layer with batched execution, rate limiting, and idempotent workers, supported by Prometheus, Grafana, and CI/CD pipelines.",
+        "Shipped Intract Rewind 2022, a Spotify Wrapped–style analytics experience with precomputed cohorts and CDN delivery, optimized for burst traffic, contributing to Product Hunt Launch of the Week recognition.",
+        "Drove growth outcomes by integrating with 50+ external teams via REST APIs and webhooks, instrumenting analytics pipelines, and iterating reward mechanics to lift completion and retention while keeping acquisition costs low."
       ]
     },
     {
@@ -248,8 +249,10 @@ const resumeData = {
       location: "Delhi, India",
       period: "Oct 2021 — Nov 2022",
       highlights: [
-        "Architected and scaled distributed backend systems in Python and Java using Kubernetes and gRPC microservices, with autoscaling, zero-downtime deployments, and production-grade reliability patterns, supporting 50K+ users with high availability.",
-        "Built event-driven pipelines and observability foundations using queues or pub/sub, WebSocket fan-out, cloud functions, SLIs/SLOs, reliably handling traffic bursts and driving a 40% increase in user engagement."
+        "Architected distributed backend systems in Python and Java, deploying microservices on Kubernetes with gRPC APIs and smart load balancing. Built event-driven automation using cron jobs, WebSockets, and cloud functions, driving 40% engagement lift across 50K+ users.",
+        "Designed microservices at scale with gRPC contracts, service discovery, HPA autoscaling, and zero-downtime canary/blue-green deploys. Implemented event pipelines with idempotent workers and controlled backpressure for reliable traffic burst handling.",
+        "Hardened reliability with timeouts, retries, circuit breakers, and graceful degradation. Built end-to-end observability with SLIs/SLOs, structured logs, metrics, tracing, and automated testing, reducing MTTR and enabling fast rollbacks.",
+        "Provided senior technical leadership through design reviews, RFCs, and mentoring. Partnered with Product, Infra, and Security to deliver compliant, cost-aware releases."
       ]
     },
     {
@@ -258,9 +261,10 @@ const resumeData = {
       location: "Noida, India",
       period: "2019 — 2021",
       highlights: [
-        "Designed and optimized backend systems in C++, improving replication and fault recovery through resumable synchronization and adaptive backoff, reducing latency by 89% and improving availability.",
-        "Improved p99 latency and system stability by optimizing performance-critical code paths using multithreaded I/O, efficient memory management, batching, and contention reduction, enabling reliable operation under peak traffic and bursty workloads.",
-        "Shipped 50+ production releases using CI/CD with staged deployments, automated testing, monitoring, and rollback, while building incident automation and observability that reduced incident response time by 60% and improved on-call reliability."
+        "Built and optimized low-latency trading systems in C++, evolving a TCP-based recovery protocol that reduced master-to-replica sync time by 89% and improved trading uptime by 20+ minutes per session for global banks. Delivered 100+ CI/CD releases with automation that cut incident response time by 60%.",
+        "Improved TCP recovery and failover with resumable synchronization, sequence gap repair, and congestion/backoff tuning. Optimized critical hot paths using multithreaded I/O, memory management, and batching strategies, stabilizing p99 latency during heavy market bursts.",
+        "Delivered 100+ production releases through CI/CD with staged rollouts, automated testing, and one-click rollback. Built incident automation with health checks, alerts, dashboards, and runbooks, reducing MTTR across multiple client environments.",
+        "Partnered with client trading desks, operations, and QA teams. Defined SLAs, led code/design reviews, authored technical documentation, and supported on-call responsibilities for consistent, reliable trading sessions."
       ]
     }
   ],
