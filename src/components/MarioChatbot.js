@@ -220,7 +220,7 @@ const resumeData = {
   ],
   experience: [
     {
-      role: "Lead Software Engineer",
+      role: "Founder",
       company: "Starportal Software LLP",
       location: "Noida, India",
       period: "Dec 2023 — July 2025",

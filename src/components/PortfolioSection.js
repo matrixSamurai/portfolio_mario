@@ -122,7 +122,7 @@ const PortfolioSection = ({ section, onClose, nightMode = false }) => {
                     alt="Starportal Software logo"
                   />
                   <div className="experience-text">
-                    <h3>Lead Software Engineer</h3>
+                    <h3>Founder</h3>
                     <p><strong>Starportal Software LLP</strong> &mdash; Noida, India</p>
                     <p>Dec 2023 &mdash; July 2025</p>
                   </div>
