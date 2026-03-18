@@ -1,0 +1,2455 @@
+.mario-game {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(185deg, #0f7fc4 0%, #2aa8f0 28%, #52c8ff 58%, #87deff 85%, #b8ecff 100%);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  /* Disable text/element selection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  /* Disable iOS callout menu */
+  -webkit-tap-highlight-color: transparent;
+  /* Remove tap highlight on mobile */
+  /* Add subtle animated gradient overlay */
+  position: relative;
+  transition: background 0.5s ease;
+}
+
+/* Reduce game rendering when chatbot is open to prevent flickering */
+body.chatbot-open .mario-game {
+  /* Reduce repaints during chatbot scrolling */
+  contain: layout style;
+  will-change: auto;
+}
+
+/* Night Mode - Mario Second Level (Underground) Dark Theme */
+.mario-game.night-mode {
+  background: linear-gradient(to bottom, #1a2d33 0%, #0d1a1f 100%);
+  background-attachment: fixed;
+}
+
+/* Disable selection / drag for all images in the game to improve long-press UX */
+.mario-game img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.mario-game::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 30% at 20% 85%, rgba(0,40,100,0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+  animation: skyGlow 8s ease-in-out infinite alternate;
+  transition: background 0.5s ease;
+}
+
+.mario-game.night-mode::before {
+  background: radial-gradient(ellipse at top, rgba(53, 122, 138, 0.2) 0%, transparent 50%);
+}
+
+@keyframes skyGlow {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+/* Alternative Link Button */
+.alternative-link {
+  /* Base styles shared by desktop and mobile */
+  background: rgba(20, 20, 20, 0.8);
+  color: #FFD700;
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  border-radius: 30px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 900;
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  box-shadow:
+    inset -2px -2px 0 #E6C200,
+    inset 2px 2px 0 #FFE44D,
+    0 0 0 2px #000,
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(255, 215, 0, 0.2);
+  image-rendering: pixelated;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  pointer-events: auto;
+  /* Ensure it's clickable */
+  display: inline-block;
+  /* Inline-block for proper sizing */
+  width: auto;
+  /* Auto width based on content */
+  max-width: none;
+  /* No max-width on desktop */
+  text-align: center;
+  /* Center text inside button */
+  position: relative;
+  overflow: hidden;
+}
+
+.alternative-link.desktop-only {
+  position: fixed;
+  bottom: 30px;
+  /* On the road, same as sound button */
+  left: 90px;
+  /* Next to sound button */
+  z-index: 250;
+  display: inline-block;
+}
+
+.alternative-link.mobile-only {
+  position: relative;
+  top: auto;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  z-index: auto;
+  display: none;
+  /* Hidden by default on desktop */
+  margin-top: 5px;
+  font-size: 12px;
+  padding: 8px 16px;
+}
+
+.alternative-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.alternative-link:hover::before {
+  left: 100%;
+}
+
+.alternative-link:hover {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  transform: translateY(-2px);
+  box-shadow:
+    inset -2px -2px 0 #CC9900,
+    inset 2px 2px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 8px 16px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(255, 215, 0, 0.4);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+.alternative-link:active {
+  background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
+  transform: translateY(0);
+  box-shadow:
+    inset 2px 2px 0 #CC9900,
+    inset -2px -2px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* UI Layer - Top Container (Flexbox for score and welcome) */
+.ui-layer-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 15px;
+  padding-top: 15px;
+  padding-right: 20px;
+  z-index: 200;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.ui-layer-top .welcome-text {
+  position: fixed !important;
+  /* Override flex positioning for welcome text */
+  /* Remove any flex influence */
+  align-self: auto !important;
+  margin: 0 !important;
+}
+
+.ui-layer-top.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Score Display - Inside Flex Container */
+.score-display {
+  position: relative;
+  /* Changed from fixed */
+  pointer-events: none;
+  text-align: center;
+  margin-bottom: 5px;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+.score-text {
+  font-family: 'Courier New', monospace;
+  font-size: 24px;
+  font-weight: 900;
+  color: #FFD700;
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    0 0 18px rgba(255, 215, 0, 0.9),
+    0 0 36px rgba(255, 215, 0, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  background: rgba(10, 10, 10, 0.72);
+  padding: 8px 20px;
+  border: 2px solid #FFD700;
+  border-radius: 14px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3),
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  image-rendering: auto;
+  white-space: nowrap;
+  position: relative;
+  animation: scorePulse 2s ease-in-out infinite;
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+.mario-game.night-mode .score-text {
+  background: rgba(10, 20, 25, 0.8);
+  border-color: rgba(53, 122, 138, 0.6);
+  color: #357A8A;
+  text-shadow:
+    4px 4px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0 15px rgba(53, 122, 138, 0.8),
+    0 0 30px rgba(53, 122, 138, 0.4);
+}
+
+@keyframes scorePulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow:
+      inset -3px -3px 0 #E6C200,
+      inset 3px 3px 0 #FFE44D,
+      0 0 0 2px #000,
+      0 6px 12px rgba(0, 0, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.3);
+  }
+
+  50% {
+    transform: scale(1.02);
+    box-shadow:
+      inset -3px -3px 0 #E6C200,
+      inset 3px 3px 0 #FFE44D,
+      0 0 0 2px #000,
+      0 8px 16px rgba(0, 0, 0, 0.7),
+      0 0 30px rgba(255, 215, 0, 0.5);
+  }
+}
+
+/* Welcome Text - Inside Flex Container */
+.welcome-text {
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  pointer-events: none;
+  width: auto;
+  max-width: 90%;
+  /* Responsive width */
+  text-align: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  transition:
+    transform 2s cubic-bezier(0.33, 0, 0.2, 1),
+    left 2s cubic-bezier(0.33, 0, 0.2, 1),
+    top 2s cubic-bezier(0.33, 0, 0.2, 1),
+    opacity 0.8s ease-out;
+  /* Smooth, slower transition for movement when it moves left after box break.
+     No entry animation so it starts centered without sliding in. */
+}
+
+.welcome-text.game-started {
+  position: fixed;
+  top: 13% !important;
+  left: 4% !important;
+  transform: translate(0, 0) !important;
+  /* Move to the left side when game starts, maintaining original width */
+  opacity: 0.85;
+  width: 520px;
+  max-width: 520px;
+  /* Larger square-style card on the left */
+  text-align: center;
+}
+
+.mario-welcome {
+  text-align: center;
+  margin: 0 0 15px 0;
+  white-space: normal;
+  word-wrap: break-word;
+  animation: welcomeAura 4s ease-in-out infinite alternate;
+  display: block;
+  position: relative;
+  background: linear-gradient(
+    150deg,
+    rgba(5, 8, 28, 0.94) 0%,
+    rgba(14, 6, 42, 0.92) 50%,
+    rgba(4, 10, 32, 0.94) 100%
+  );
+  padding: 30px 48px 26px;
+  border: 1.5px solid rgba(255, 215, 0, 0.55);
+  border-radius: 22px;
+  backdrop-filter: blur(36px) saturate(1.3);
+  -webkit-backdrop-filter: blur(36px) saturate(1.3);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    0 32px 64px rgba(0, 0, 0, 0.25),
+    0 0 28px rgba(255, 200, 0, 0.22),
+    0 0 80px rgba(255, 140, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.30);
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+/* Welcome board child elements */
+.welcome-tag {
+  font-family: 'Outfit', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  color: #FFD700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 4px 14px;
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 20px;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+}
+
+.welcome-name-line {
+  font-family: 'Courier New', monospace;
+  font-size: 46px;
+  font-weight: 900;
+  color: #FFE555;
+  text-shadow:
+    3px 3px 0 rgba(0, 0, 0, 0.95),
+    -1px -1px 0 rgba(0, 0, 0, 0.95),
+    1px -1px 0 rgba(0, 0, 0, 0.95),
+    -1px 1px 0 rgba(0, 0, 0, 0.95),
+    0 0 24px rgba(255, 215, 0, 0.80),
+    0 0 56px rgba(255, 165, 0, 0.40);
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  display: block;
+  line-height: 1.12;
+  margin-bottom: 18px;
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+.welcome-divider-line {
+  width: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.55), transparent);
+  margin: 0 auto 16px;
+}
+
+.welcome-title-line {
+  font-family: 'Outfit', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: 2px;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7), 0 2px 16px rgba(0, 0, 0, 0.4);
+  display: block;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+}
+
+.welcome-spec-line {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.90);
+  letter-spacing: 0.8px;
+  display: block;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+.mario-game.night-mode .mario-welcome {
+  background: linear-gradient(135deg, rgba(5, 20, 50, 0.75) 0%, rgba(15, 8, 45, 0.80) 100%);
+  border-color: rgba(95, 176, 197, 0.5);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.45),
+    0 0 36px rgba(95, 176, 197, 0.22),
+    inset 0 1px 0 rgba(95, 176, 197, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.mario-game.night-mode .welcome-tag {
+  color: rgba(95, 176, 197, 0.6);
+}
+
+.mario-game.night-mode .welcome-name-line {
+  color: #5FB0C5;
+  text-shadow:
+    3px 3px 0 rgba(0, 0, 0, 1),
+    -1px -1px 0 rgba(0, 0, 0, 1),
+    1px -1px 0 rgba(0, 0, 0, 1),
+    -1px 1px 0 rgba(0, 0, 0, 1),
+    0 0 20px rgba(95, 176, 197, 0.9),
+    0 0 40px rgba(95, 176, 197, 0.5);
+}
+
+.mario-game.night-mode .welcome-divider-line {
+  background: linear-gradient(90deg, transparent, rgba(95, 176, 197, 0.5), transparent);
+}
+
+.mario-game.night-mode .welcome-spec-line {
+  color: rgba(95, 176, 197, 0.65);
+}
+
+.welcome-text.game-started .mario-welcome {
+  padding: 20px 28px 18px;
+  margin: 0;
+}
+
+.welcome-text.game-started .welcome-name-line {
+  font-size: 30px;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+.welcome-text.game-started .welcome-title-line {
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+
+.welcome-text.game-started .welcome-spec-line {
+  font-size: 11px;
+  letter-spacing: 0.4px;
+}
+
+.mario-subtitle {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin: 0;
+  letter-spacing: 2px;
+  animation: subtitleBlink 2s ease-in-out infinite;
+  position: relative;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.30);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.50);
+  border-top: 1px solid rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  transition: opacity 0.5s ease, background 0.5s ease, border-color 0.5s ease;
+}
+
+.mario-game.night-mode .mario-subtitle {
+  background: rgba(10, 20, 25, 0.5);
+  border-color: rgba(53, 122, 138, 0.3);
+  color: #4A9FB0;
+  text-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(53, 122, 138, 0.6);
+}
+
+.welcome-text.game-started .mario-subtitle {
+  display: none;
+  /* Hide subtitle when game starts */
+}
+
+@keyframes welcomePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.015); opacity: 1; }
+}
+
+@keyframes welcomeAura {
+  0% {
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.5),
+      0 12px 32px rgba(0,0,0,0.45),
+      0 32px 64px rgba(0,0,0,0.25),
+      0 0 24px rgba(255,200,0,0.18),
+      0 0 70px rgba(255,140,0,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.14),
+      inset 0 -1px 0 rgba(0,0,0,0.30);
+    border-color: rgba(255,215,0,0.50);
+  }
+  100% {
+    box-shadow:
+      0 2px 4px rgba(0,0,0,0.5),
+      0 12px 32px rgba(0,0,0,0.45),
+      0 32px 64px rgba(0,0,0,0.25),
+      0 0 44px rgba(255,200,0,0.38),
+      0 0 110px rgba(255,140,0,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.18),
+      inset 0 -1px 0 rgba(0,0,0,0.30);
+    border-color: rgba(255,215,0,0.80);
+  }
+}
+
+/* Night mode version of welcomePulse - teal instead of yellow */
+@keyframes welcomePulseNight {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 
+      0 8px 32px 0 rgba(0, 0, 0, 0.7),
+      0 0 50px rgba(95, 176, 197, 0.5),
+      0 0 80px rgba(95, 176, 197, 0.3),
+      inset 0 2px 0 rgba(95, 176, 197, 0.3),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+    box-shadow: 
+      0 12px 40px 0 rgba(0, 0, 0, 0.8),
+      0 0 70px rgba(95, 176, 197, 0.7),
+      0 0 100px rgba(95, 176, 197, 0.5),
+      0 0 120px rgba(95, 176, 197, 0.3),
+      inset 0 2px 0 rgba(95, 176, 197, 0.4),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.6);
+  }
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 0.8),
+      -2px -2px 0 rgba(0, 0, 0, 0.8),
+      2px -2px 0 rgba(0, 0, 0, 0.8),
+      -2px 2px 0 rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(255, 215, 0, 1),
+      0 0 40px rgba(255, 215, 0, 0.6),
+      0 0 60px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 0.8),
+      -2px -2px 0 rgba(0, 0, 0, 0.8),
+      2px -2px 0 rgba(0, 0, 0, 0.8),
+      -2px 2px 0 rgba(0, 0, 0, 0.8),
+      0 0 30px rgba(255, 215, 0, 1.2),
+      0 0 60px rgba(255, 215, 0, 0.8),
+      0 0 90px rgba(255, 215, 0, 0.5);
+  }
+}
+
+/* Night mode text glow - teal instead of yellow */
+.mario-game.night-mode .mario-welcome {
+  animation: welcomePulseNight 3s ease-in-out infinite, textGlowNight 3s ease-in-out infinite;
+}
+
+@keyframes textGlowNight {
+  0%, 100% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 1),
+      -2px -2px 0 rgba(0, 0, 0, 1),
+      2px -2px 0 rgba(0, 0, 0, 1),
+      -2px 2px 0 rgba(0, 0, 0, 1),
+      0 0 25px rgba(95, 176, 197, 1),
+      0 0 50px rgba(95, 176, 197, 0.8),
+      0 0 75px rgba(95, 176, 197, 0.5),
+      0 0 100px rgba(95, 176, 197, 0.3);
+  }
+  50% {
+    text-shadow:
+      4px 4px 0 rgba(0, 0, 0, 1),
+      -2px -2px 0 rgba(0, 0, 0, 1),
+      2px -2px 0 rgba(0, 0, 0, 1),
+      -2px 2px 0 rgba(0, 0, 0, 1),
+      0 0 35px rgba(95, 176, 197, 1.2),
+      0 0 70px rgba(95, 176, 197, 1),
+      0 0 100px rgba(95, 176, 197, 0.7),
+      0 0 130px rgba(95, 176, 197, 0.5);
+  }
+}
+
+@keyframes subtitleBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Sky and clouds */
+.sky {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400vw;
+  height: 100%;
+  background: linear-gradient(185deg, #0f7fc4 0%, #2aa8f0 28%, #52c8ff 58%, #87deff 85%, #b8ecff 100%);
+  overflow: hidden;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition: background 0.5s ease;
+  z-index: 0;
+}
+
+/* Night Mode Sky - Dark Underground */
+.mario-game.night-mode .sky {
+  background: linear-gradient(to bottom, #1a2d33 0%, #0d1a1f 100%);
+}
+
+.mario-game.night-mode .cloud {
+  opacity: 0.3;
+  filter: brightness(0.4) hue-rotate(180deg);
+}
+
+.cloud {
+  position: absolute;
+  opacity: 0.9;
+  animation: float 25s infinite linear;
+  will-change: transform;
+  width: 120px;
+  height: 60px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+@keyframes float {
+  0% {
+    transform: translateX(-100px);
+  }
+
+  100% {
+    transform: translateX(calc(400vw + 100px));
+  }
+}
+
+/* Ground - Using road.png sprite (loaded via inline styles in JSX) */
+.ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  overflow: hidden;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  transition: background-color 0.5s ease;
+}
+
+.mario-game.night-mode .ground {
+  filter: brightness(0.5) contrast(1.2) hue-rotate(180deg) saturate(0.8);
+}
+
+/* Pipe sitting on the road near the end */
+.pipe-wrapper {
+  position: absolute;
+}
+
+.pipe {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+/* Grass patches attached to the road */
+.grass-wrapper {
+  position: absolute;
+}
+
+.grass {
+  width: 260px;
+  height: 100px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+/* Thanks banner attached to the road after the last pipe */
+.thanks-wrapper {
+  position: absolute;
+}
+
+.thanks {
+  width: 260px;
+  height: 120px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+  transition: filter 0.5s ease;
+}
+
+/* Night mode: Change thanks banner color to teal (#357A8A) */
+.thanks.night-mode {
+  filter: 
+    hue-rotate(200deg) 
+    saturate(1.3) 
+    brightness(0.85)
+    contrast(1.15)
+    sepia(0.3);
+  /* This shifts the colors to teal/cyan (#357A8A range) */
+}
+
+/* Slightly smaller variant for grass2.png (about 40% smaller area) */
+.grass2 {
+  width: 156px;
+  height: 60px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+/* End Wall - Prevents character from going forward */
+.end-wall {
+  position: absolute;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  /* Brick pattern using CSS */
+  background-image:
+    repeating-linear-gradient(90deg,
+      transparent 0px,
+      transparent 7px,
+      rgba(0, 0, 0, 0.15) 7px,
+      rgba(0, 0, 0, 0.15) 8px),
+    repeating-linear-gradient(0deg,
+      transparent 0px,
+      transparent 7px,
+      rgba(0, 0, 0, 0.1) 7px,
+      rgba(0, 0, 0, 0.1) 8px);
+}
+
+/* Sound Toggle Button - Top Left */
+.sound-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  bottom: auto;
+  right: auto;
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  min-height: 52px;
+  background: linear-gradient(145deg, #2a2a2a 0%, #0a0a0a 100%);
+  border: 2px solid #FFD700;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 3px 0 rgba(255,255,255,0.12),
+    inset 0 -3px 0 rgba(0,0,0,0.4),
+    0 0 0 1px rgba(0,0,0,0.6),
+    0 6px 16px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(255, 215, 0, 0.25);
+  font-family: 'Courier New', monospace;
+  transition: all 0.18s ease;
+  overflow: visible;
+}
+
+.sound-toggle:hover {
+  transform: scale(1.12);
+  box-shadow:
+    inset 0 3px 0 rgba(255,255,255,0.12),
+    inset 0 -3px 0 rgba(0,0,0,0.4),
+    0 0 0 1px rgba(0,0,0,0.6),
+    0 8px 20px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+/* Night Mode Toggle Button - Next to Sound Toggle */
+.night-mode-toggle {
+  position: fixed;
+  top: 20px;
+  left: 82px;
+  bottom: auto;
+  right: auto;
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  min-height: 52px;
+  background: linear-gradient(145deg, #2a2a2a 0%, #0a0a0a 100%);
+  border: 2px solid #FFD700;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 3px 0 rgba(255,255,255,0.12),
+    inset 0 -3px 0 rgba(0,0,0,0.4),
+    0 0 0 1px rgba(0,0,0,0.6),
+    0 6px 16px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(255, 215, 0, 0.25);
+  font-family: 'Courier New', monospace;
+  transition: all 0.18s ease;
+  overflow: visible;
+}
+
+.night-mode-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.night-mode-toggle:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.night-mode-toggle:hover {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    inset -3px -3px 0 #CC9900,
+    inset 3px 3px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 8px 16px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(255, 215, 0, 0.4);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.night-mode-toggle:active {
+  background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
+  transform: translateY(0) scale(1);
+  box-shadow:
+    inset 3px 3px 0 #CC9900,
+    inset -3px -3px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.sound-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.sound-toggle:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.sound-toggle:hover {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow:
+    inset -3px -3px 0 #CC9900,
+    inset 3px 3px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 8px 16px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(255, 215, 0, 0.4);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.sound-toggle:active {
+  background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
+  transform: translateY(0) scale(1);
+  box-shadow:
+    inset 3px 3px 0 #CC9900,
+    inset -3px -3px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Controls Instructions Box - Mario Bros Style */
+.instructions-overlay {
+  position: fixed;
+  top: 20.5%;
+  transform: translateY(-50%);
+  /* Vertically align with welcome text (which is centered at 35% with translateY(-50%)) */
+  left: 20px;
+  pointer-events: none;
+  z-index: 100;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-width: 300px;
+  /* Fixed max-width to prevent overlap */
+  animation: fadeInLeft 1.2s ease-out 0.3s both;
+}
+
+.instructions {
+  background: rgba(255, 255, 255, 0.22);
+  color: #1a1a2e;
+  padding: 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.50);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
+  font-size: 14px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(255, 215, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  max-width: 280px;
+  image-rendering: auto;
+  font-family: 'Outfit', sans-serif;
+  pointer-events: auto;
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+}
+
+.mario-game.night-mode .instructions {
+  background: linear-gradient(135deg, rgba(10, 20, 25, 0.9) 0%, rgba(26, 45, 51, 0.9) 100%);
+  color: #357A8A;
+  border-color: rgba(53, 122, 138, 0.6);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(53, 122, 138, 0.3),
+    inset 0 1px 0 rgba(53, 122, 138, 0.2);
+}
+
+.instructions:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(255, 215, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.mario-game.night-mode .instructions:hover {
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(53, 122, 138, 0.4),
+    inset 0 1px 0 rgba(74, 159, 176, 0.2);
+}
+
+.instructions::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 215, 0, 0.05) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.5s ease;
+}
+
+.mario-game.night-mode .instructions::before {
+  background: linear-gradient(180deg, rgba(53, 122, 138, 0.05) 0%, transparent 100%);
+}
+
+.instructions>* {
+  position: relative;
+  z-index: 1;
+}
+
+.instructions h3 {
+  margin-bottom: 16px;
+  color: #1a1a2e;
+  font-size: 20px;
+  font-weight: 900;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+}
+
+.mario-game.night-mode .instructions h3 {
+  color: #4A9FB0;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.instructions p {
+  margin: 10px 0;
+  line-height: 1.6;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2a2a40;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+  transition: color 0.3s ease;
+}
+
+.instructions p:hover {
+  color: #e65100;
+  text-shadow: 0 1px 6px rgba(230, 81, 0, 0.3);
+}
+
+.mario-game.night-mode .instructions p:hover {
+  color: #357A8A;
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(53, 122, 138, 0.6);
+}
+
+/* Arrow key indicators */
+.arrow-indicators {
+  position: absolute;
+  pointer-events: auto;
+  z-index: 400;
+}
+
+.arrow-key {
+  font-size: 36px;
+  color: #FFD700;
+  text-shadow:
+    2px 2px 0 rgba(0, 0, 0, 0.85),
+    -1px -1px 0 rgba(0, 0, 0, 0.85),
+    1px -1px 0 rgba(0, 0, 0, 0.85),
+    -1px 1px 0 rgba(0, 0, 0, 0.85),
+    0 0 12px rgba(255, 215, 0, 0.7);
+  animation: pulse 2s infinite;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.28);
+  border: 2px solid rgba(255, 215, 0, 0.80);
+  border-top: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 10px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px) saturate(1.3);
+  -webkit-backdrop-filter: blur(10px) saturate(1.3);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.35),
+    0 4px 12px rgba(0,0,0,0.22),
+    0 0 14px rgba(255, 215, 0, 0.22);
+  transition: color 0.5s ease, background 0.5s ease, border-color 0.5s ease;
+}
+
+.mario-game.night-mode .arrow-key {
+  color: #357A8A;
+  filter: drop-shadow(0 0 5px rgba(53, 122, 138, 0.6));
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    0 0 10px rgba(53, 122, 138, 0.7),
+    0 0 20px rgba(53, 122, 138, 0.4);
+}
+
+/* Up arrow for mobile - make it clickable */
+.mobile-jump-arrow {
+  pointer-events: auto !important;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mobile-jump-arrow:active {
+  transform: scale(0.9);
+  opacity: 0.8;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Mario Character - Using sprite images */
+.mario {
+  position: absolute;
+  z-index: 250;
+  /* Above all other elements including jump button (z-index 150) */
+  transition: transform 0.07s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.mario-sprite {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  object-fit: contain;
+}
+
+/* Facing directions */
+.mario.facing-left {
+  transform: scaleX(-1);
+}
+
+.mario.facing-left.facing-right {
+  transform: scaleX(1);
+}
+
+/* Jump squash-and-stretch on the sprite (separate from direction flip on wrapper) */
+@keyframes marioJumpLift {
+  0%   { transform: scaleY(0.78) scaleX(1.18); }
+  25%  { transform: scaleY(1.12) scaleX(0.92); }
+  70%  { transform: scaleY(1.04) scaleX(0.98); }
+  100% { transform: scaleY(1)    scaleX(1);    }
+}
+
+.mario.jumping .mario-sprite {
+  animation: marioJumpLift 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Subtle lean when running (applied to sprite for clean stacking) */
+@keyframes marioRuntle {
+  0%, 100% { transform: rotate(0deg);  }
+  50%       { transform: rotate(2deg); }
+}
+
+.mario.running .mario-sprite {
+  animation: marioRuntle 0.3s ease-in-out infinite;
+}
+
+.box-label {
+  font-size: 18px;
+  font-weight: 900;
+  color: #FFFFFF;
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    0 0 8px rgba(255, 255, 255, 0.5);
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  z-index: 2;
+  padding: 6px 10px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 20, 0.95) 100%);
+  border: 3px solid #FFD700;
+  border-radius: 0;
+  /* Sharp corners for pixelated look */
+  margin-top: -8px;
+  letter-spacing: 1px;
+  display: block;
+  min-width: max-content;
+  /* Allow label to be as wide as needed */
+  width: auto;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: visible;
+  /* Show full text */
+  text-overflow: clip;
+  /* Don't use ellipsis */
+  position: absolute;
+  bottom: -25px;
+  /* Move further down to show full text */
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: none;
+  /* Remove clipping to show full text */
+  box-shadow:
+    inset -2px -2px 0 #E6C200,
+    inset 2px 2px 0 #FFE44D,
+    0 0 0 1px #000,
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(3px);
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+.mario-game.night-mode .box-label {
+  background: linear-gradient(135deg, rgba(10, 20, 25, 0.95) 0%, rgba(26, 45, 51, 0.95) 100%);
+  border-color: #4A9FB0;
+  color: #FFFFFF;
+  box-shadow:
+    inset -2px -2px 0 #357A8A,
+    inset 2px 2px 0 #5FB0C5,
+    0 0 0 1px #000,
+    0 4px 8px rgba(0, 0, 0, 0.7),
+    0 0 15px rgba(74, 159, 176, 0.5);
+  text-shadow:
+    3px 3px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    0 0 8px rgba(74, 159, 176, 0.6);
+}
+
+/* Box wrapper for scroll positioning */
+.mario-box-wrapper {
+  position: absolute;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  z-index: 50;
+}
+
+/* Breakable Mario Boxes - Perfect Square with Coin Image */
+.mario-box {
+  position: relative;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  cursor: pointer;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  /* Ensure perfect square - force equal width and height */
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  /* Prevent any distortion */
+  object-fit: contain;
+  overflow: visible;
+}
+
+/* Living glow on intact boxes */
+@keyframes boxLiveGlow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 6px rgba(255, 215, 0, 0.55)) drop-shadow(0 0 14px rgba(255, 190, 0, 0.3));
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    filter: brightness(1.1) drop-shadow(0 0 14px rgba(255, 215, 0, 0.90)) drop-shadow(0 0 28px rgba(255, 190, 0, 0.55));
+    transform: translateY(-3px) scale(1.025);
+  }
+}
+
+.mario-box:not(.broken) {
+  animation: boxLiveGlow 2.4s ease-in-out infinite;
+}
+
+/* Stagger each box so they pulse out of sync — much more alive */
+.mario-box-wrapper:nth-child(1) .mario-box:not(.broken) { animation-delay: 0s; }
+.mario-box-wrapper:nth-child(2) .mario-box:not(.broken) { animation-delay: 0.35s; }
+.mario-box-wrapper:nth-child(3) .mario-box:not(.broken) { animation-delay: 0.70s; }
+.mario-box-wrapper:nth-child(4) .mario-box:not(.broken) { animation-delay: 1.05s; }
+.mario-box-wrapper:nth-child(5) .mario-box:not(.broken) { animation-delay: 1.40s; }
+.mario-box-wrapper:nth-child(6) .mario-box:not(.broken) { animation-delay: 1.75s; }
+.mario-box-wrapper:nth-child(7) .mario-box:not(.broken) { animation-delay: 2.10s; }
+
+/* Coin image in boxes */
+.box-coin-image {
+  transition: filter 0.5s ease;
+}
+
+/* Night mode: Change coin color to teal (#357A8A) */
+.mario-game.night-mode .box-coin-image {
+  filter: 
+    hue-rotate(200deg) 
+    saturate(1.3) 
+    brightness(0.85)
+    contrast(1.15)
+    sepia(0.3);
+  /* This shifts gold/yellow coins to teal/cyan (#357A8A range) */
+}
+
+/* Broken box animation */
+.mario-box.broken {
+  animation: breakBox 0.5s ease-out forwards;
+  pointer-events: none;
+  overflow: hidden;
+  /* Contain the blast animation within the box */
+}
+
+@keyframes breakBox {
+  0% {
+    transform: scale(1) translateY(0) rotate(0deg);
+    opacity: 1;
+    filter: brightness(1) blur(0px);
+  }
+
+  15% {
+    transform: scale(1.5) translateY(-15px) rotate(-15deg);
+    opacity: 1;
+    filter: brightness(2) blur(2px);
+  }
+
+  30% {
+    transform: scale(1.2) translateY(-5px) rotate(20deg);
+    opacity: 0.9;
+    filter: brightness(1.8) blur(3px);
+  }
+
+  50% {
+    transform: scale(0.6) translateY(10px) rotate(-30deg);
+    opacity: 0.5;
+    filter: brightness(1.2) blur(5px);
+  }
+
+  70% {
+    transform: scale(0.3) translateY(25px) rotate(45deg);
+    opacity: 0.2;
+    filter: brightness(0.6) blur(8px);
+  }
+
+  100% {
+    transform: scale(0) translateY(50px) rotate(60deg);
+    opacity: 0;
+    filter: brightness(0) blur(10px);
+  }
+}
+
+/* Blast shockwave effect */
+.mario-box.broken::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 165, 0, 0.6) 30%, transparent 70%);
+  transform: translate(-50%, -50%);
+  animation: shockwave 0.5s ease-out forwards;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes shockwave {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  50% {
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+
+  100% {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+}
+
+/* Enhanced particles with multiple directions */
+.box-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+  /* Contain particles within box */
+}
+
+.box-particles::before,
+.box-particles::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #FFD700;
+  border-radius: 50%;
+  box-shadow:
+    -15px -10px 0 #FFA500,
+    15px -10px 0 #FFD700,
+    -20px 5px 0 #FF8C00,
+    20px 5px 0 #FFA500,
+    -10px 15px 0 #FFD700,
+    10px 15px 0 #FF8C00,
+    -25px -5px 0 #FFA500,
+    25px -5px 0 #FFD700,
+    -5px -20px 0 #FF8C00,
+    5px -20px 0 #FFA500,
+    -15px 20px 0 #FFD700,
+    15px 20px 0 #FF8C00;
+  animation: particleBlast 0.8s ease-out forwards;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.box-particles::after {
+  animation-delay: 0.1s;
+  box-shadow:
+    -12px -8px 0 #FF8C00,
+    12px -8px 0 #FFD700,
+    -18px 8px 0 #FFA500,
+    18px 8px 0 #FF8C00,
+    -8px 18px 0 #FFD700,
+    8px 18px 0 #FFA500,
+    -22px -3px 0 #FFD700,
+    22px -3px 0 #FF8C00,
+    -3px -18px 0 #FFA500,
+    3px -18px 0 #FFD700,
+    -12px 22px 0 #FF8C00,
+    12px 22px 0 #FFA500;
+}
+
+@keyframes particleBlast {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(2.5) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Additional particle elements for more dramatic effect */
+.mario-box.broken .box-particles {
+  background:
+    radial-gradient(circle at 20% 20%, #FFD700 6px, transparent 6px),
+    radial-gradient(circle at 80% 20%, #FFA500 6px, transparent 6px),
+    radial-gradient(circle at 20% 80%, #FFD700 6px, transparent 6px),
+    radial-gradient(circle at 80% 80%, #FFA500 6px, transparent 6px),
+    radial-gradient(circle at 50% 50%, #FFD700 8px, transparent 8px),
+    radial-gradient(circle at 10% 50%, #FF8C00 5px, transparent 5px),
+    radial-gradient(circle at 90% 50%, #FFD700 5px, transparent 5px),
+    radial-gradient(circle at 50% 10%, #FFA500 5px, transparent 5px),
+    radial-gradient(circle at 50% 90%, #FF8C00 5px, transparent 5px);
+  background-size: 100% 100%;
+  animation: particlesExplode 0.8s ease-out forwards;
+}
+
+@keyframes particlesExplode {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 1;
+    filter: brightness(1);
+  }
+
+  30% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.9;
+    filter: brightness(1.5);
+  }
+
+  60% {
+    transform: scale(1.5) rotate(360deg);
+    opacity: 0.5;
+    filter: brightness(1.2);
+  }
+
+  100% {
+    transform: scale(1.8) rotate(540deg);
+    opacity: 0;
+    filter: brightness(0.8);
+  }
+}
+
+/* Duplicate instructions rule removed - using the main one at line 255 */
+
+/* Mobile Touch Controls */
+.mobile-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+  /* Hidden on desktop, shown on mobile */
+  gap: 15px;
+  z-index: 200;
+  flex-direction: row;
+  align-items: center;
+}
+
+.mobile-button {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  /* Ensure minimum touch target size (44px recommended, using 60px) */
+  min-height: 60px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+  border: 4px solid #FFD700;
+  border-radius: 0;
+  font-size: 32px;
+  font-weight: 900;
+  color: #FFD700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset -3px -3px 0 #E6C200,
+    inset 3px 3px 0 #FFE44D,
+    0 0 0 2px #000,
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(255, 215, 0, 0.2);
+  image-rendering: pixelated;
+  font-family: 'Courier New', monospace;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mario-game.night-mode .mobile-button {
+  border-color: #357A8A;
+  color: #357A8A;
+  box-shadow:
+    inset -3px -3px 0 #2a5f6b,
+    inset 3px 3px 0 #4A9FB0,
+    0 0 0 2px #000,
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(53, 122, 138, 0.3);
+}
+
+.mobile-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.mobile-button:active::before {
+  width: 100%;
+  height: 100%;
+}
+
+.mobile-button:active {
+  background: linear-gradient(135deg, #0a0a0a 0%, #000 100%);
+  box-shadow:
+    inset 3px 3px 0 #CC9900,
+    inset -3px -3px 0 #FFCC00,
+    0 0 0 2px #000,
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  transform: scale(0.92);
+}
+
+.mobile-jump {
+  order: 2;
+  /* Jump button in the middle */
+}
+
+.mobile-left {
+  order: 1;
+}
+
+.mobile-right {
+  order: 3;
+}
+
+
+/* iPad and Tablet Responsive design */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mario {
+    width: 90px !important;
+    /* Slightly larger than mobile but smaller than desktop */
+    height: 90px !important;
+  }
+
+  .mario-box-wrapper {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .mario-box {
+    width: 70px !important;
+    height: 70px !important;
+    min-width: 70px !important;
+    min-height: 70px !important;
+    max-width: 70px !important;
+    max-height: 70px !important;
+  }
+
+  .welcome-text {
+    top: 3% !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    max-width: 70% !important;
+    text-align: center !important;
+  }
+
+  .welcome-text.game-started {
+    top: 60px !important;
+    left: 15px !important;
+    transform: translate(0, 0) !important;
+    max-width: 200px !important;
+    text-align: left !important;
+  }
+
+  .mario-welcome {
+    font-size: 36px;
+    letter-spacing: 3px;
+    line-height: 1.2;
+    text-align: center !important;
+  }
+
+  .welcome-text.game-started .mario-welcome {
+    font-size: 24px !important;
+    text-align: left !important;
+  }
+
+  .instructions-overlay {
+    top: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin-top: 150px !important;
+    /* Position further down below welcome text */
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+  }
+
+  .instructions {
+    max-width: 320px;
+    font-size: 14px;
+    padding: 18px 22px;
+    margin: 0 auto !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+  }
+
+  .alternative-link {
+    top: auto !important;
+    bottom: 30px !important;
+    /* On the road, same as sound button */
+    left: 100px !important;
+    /* Next to sound button (sound button is 50px wide + 20px left + 10px gap) */
+    transform: none !important;
+    font-size: 14px;
+    padding: 10px 20px;
+    max-width: none !important;
+    width: auto;
+    text-align: center !important;
+  }
+
+  .sound-toggle {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: 22px;
+    top: 20px;
+    left: 20px;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .night-mode-toggle {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: 22px;
+    top: 20px;
+    left: 80px;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .mobile-controls {
+    display: none !important;
+    /* Hide mobile controls on iPad - use keyboard/touch zones */
+  }
+
+  .arrow-indicators {
+    display: none !important;
+    /* Hide arrow indicators on iPad */
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  /* Disable ALL transitions on welcome-text for mobile to prevent ANY animation */
+  .welcome-text,
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text,
+  .ui-layer-top .welcome-text.game-started {
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+  }
+
+  /* Explicitly prevent base .welcome-text.game-started from applying on mobile - MUST STAY CENTERED */
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text.game-started {
+    position: fixed !important;
+    top: 70px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 40px) !important;
+    max-width: 90% !important;
+    opacity: 1 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .mario-game {
+    font-size: 14px;
+    touch-action: pan-y;
+    /* Allow vertical scrolling but prevent horizontal */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
+    /* Disable all selection on mobile */
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Disable selection on all game elements on mobile */
+  .mario-game * {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .mario {
+    width: 80px !important;
+    /* Increased from 64px - bigger than boxes */
+    height: 80px !important;
+  }
+
+  .platform {
+    border-width: 2px;
+  }
+
+  .box-label {
+    font-size: 10px;
+    padding: 4px 6px;
+    bottom: -20px;
+  }
+
+  .mario-box-wrapper {
+    width: 60px !important;
+    /* Keep boxes smaller than Mario */
+    height: 60px !important;
+  }
+
+  .mario-box {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+    max-width: 60px !important;
+    max-height: 60px !important;
+  }
+
+  .instructions-overlay {
+    top: 30% !important;
+    /* Brought even further below the welcome banner on mobile */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translateX(-50%) !important;
+    /* Center horizontally only */
+    right: auto !important;
+    bottom: auto !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+  }
+
+  .instructions {
+    max-width: 96%;
+    width: 96%;
+    /* Wide, shallow rectangle on mobile */
+    font-size: 12px;
+    padding: 10px 18px;
+    /* Reduced padding for smaller text */
+    margin: 0 auto !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    border-radius: 18px;
+    box-shadow: 
+      0 8px 32px 0 rgba(0, 0, 0, 0.6),
+      0 0 40px rgba(255, 215, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .instructions h3 {
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #FFD700;
+    text-shadow:
+      2px 2px 0 rgba(0, 0, 0, 0.9),
+      -1px -1px 0 rgba(0, 0, 0, 0.9),
+      1px -1px 0 rgba(0, 0, 0, 0.9),
+      -1px 1px 0 rgba(0, 0, 0, 0.9),
+      0 0 15px rgba(255, 215, 0, 0.7),
+      0 0 30px rgba(255, 215, 0, 0.4);
+    line-height: 1.3;
+  }
+
+  .instructions p {
+    margin: 6px 0;
+    line-height: 1.5;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: #FFFFFF;
+    text-shadow: 
+      1px 1px 2px rgba(0, 0, 0, 0.9),
+      0 0 8px rgba(255, 255, 255, 0.3),
+      0 0 15px rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .instructions p:hover {
+    color: #FFD700;
+    text-shadow: 
+      1px 1px 2px rgba(0, 0, 0, 0.9),
+      0 0 12px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.4);
+    transform: translateX(2px);
+  }
+
+  .alternative-link.mobile-only {
+    display: inline-block;
+    /* Show on mobile */
+  }
+
+  .alternative-link.desktop-only {
+    display: none;
+    /* Hide desktop version on mobile */
+  }
+
+  .score-display {
+    top: 10px !important;
+    /* Position at top */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 200;
+    /* Above welcome text */
+    position: fixed !important;
+  }
+
+  .score-text {
+    font-size: 20px;
+    padding: 8px 16px;
+    letter-spacing: 2px;
+  }
+
+  .welcome-text {
+    position: fixed !important;
+    top: 70px !important;
+    /* Position below score display to avoid overlap */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translateX(-50%) !important;
+    /* Center the element horizontally */
+    right: auto !important;
+    /* Override right positioning */
+    padding-top: 4px;
+    width: calc(100% - 40px);
+    max-width: 90%;
+    /* Full-width card with equal margins on both sides */
+    z-index: 100;
+    /* Below score display */
+    text-align: center !important;
+    /* Center align text */
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .welcome-text.game-started {
+    /* On mobile, keep the welcome card centered even after game starts - STRICTLY NO LEFT SHIFT */
+    position: fixed !important;
+    top: 70px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 40px) !important;
+    max-width: 90% !important;
+    min-width: auto !important;
+    opacity: 1 !important;
+    text-align: center !important;
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .mario-welcome {
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    padding: 16px 20px;
+    /* Smaller card on mobile so it doesn't visually collide with controls */
+    text-align: center !important;
+    /* Center align text */
+  }
+
+  .welcome-text.game-started .mario-welcome {
+    font-size: 16px !important;
+    text-align: center !important;
+  }
+
+  .sound-toggle {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    min-height: 45px;
+    font-size: 20px;
+    top: 10px !important;
+    /* Position at top, same as score display */
+    left: 10px !important;
+    /* Small margin from left edge */
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .night-mode-toggle {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    min-height: 45px;
+    font-size: 20px;
+    top: 10px !important;
+    left: 65px !important;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .mobile-controls {
+    display: flex;
+    position: fixed;
+    bottom: calc(15% - 40px - 12px);
+    /* Position with more space below road surface (road surface is at 15% from bottom, 12px gap) */
+    left: 0;
+    right: 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 15px;
+    gap: 0;
+    z-index: 200;
+  }
+
+  .mobile-button {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 22px;
+    border-width: 2px;
+  }
+
+  .mobile-button.mobile-left {
+    order: 1;
+    /* Leftmost position */
+    margin-right: auto;
+  }
+
+  .mobile-button.mobile-jump {
+    order: 2;
+    /* Center position - positioned absolutely in center */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .mobile-button.mobile-right {
+    order: 3;
+    /* Rightmost position */
+    margin-left: auto;
+  }
+
+
+  .arrow-indicators {
+    display: none !important;
+    /* Hide the extra on-road movement arrows on mobile; keep only bottom controls */
+  }
+
+  .arrow-key {
+    font-size: 36px;
+    /* Smaller on mobile */
+  }
+
+  .mobile-jump-arrow {
+    pointer-events: auto !important;
+    /* Make up arrow clickable on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Disable ALL transitions on welcome-text for very small mobile to prevent ANY animation */
+  .welcome-text,
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text,
+  .ui-layer-top .welcome-text.game-started {
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+  }
+
+  /* Explicitly prevent base .welcome-text.game-started from applying on very small mobile - MUST STAY CENTERED */
+  .welcome-text.game-started,
+  .ui-layer-top .welcome-text.game-started {
+    position: fixed !important;
+    top: 60px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 90% !important;
+    opacity: 1 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .mario {
+    width: 70px !important;
+    /* Increased from 56px - bigger than boxes */
+    height: 70px !important;
+  }
+
+  .box-label {
+    font-size: 9px;
+    padding: 3px 5px;
+    bottom: -18px;
+  }
+
+  .mario-box-wrapper {
+    width: 50px !important;
+    /* Keep boxes smaller than Mario */
+    height: 50px !important;
+  }
+
+  .mario-box {
+    width: 50px !important;
+    height: 50px !important;
+    min-width: 50px !important;
+    min-height: 50px !important;
+    max-width: 50px !important;
+    max-height: 50px !important;
+  }
+
+  .instructions-overlay {
+    top: 35% !important;
+    /* Vertically around the middle of the screen */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translate(-50%, -50%) !important;
+    /* Center both horizontally and vertically */
+    right: auto !important;
+    bottom: auto !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .instructions {
+    max-width: 95%;
+    width: 100%;
+    /* Wide horizontal rectangle */
+    font-size: 11px;
+    padding: 8px 14px;
+    margin: 0 auto !important;
+    /* Center the box within overlay */
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    box-shadow: 
+      0 8px 32px 0 rgba(0, 0, 0, 0.6),
+      0 0 40px rgba(255, 215, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .instructions h3 {
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #FFD700;
+    text-shadow:
+      2px 2px 0 rgba(0, 0, 0, 0.9),
+      -1px -1px 0 rgba(0, 0, 0, 0.9),
+      1px -1px 0 rgba(0, 0, 0, 0.9),
+      -1px 1px 0 rgba(0, 0, 0, 0.9),
+      0 0 15px rgba(255, 215, 0, 0.7),
+      0 0 30px rgba(255, 215, 0, 0.4);
+    line-height: 1.3;
+  }
+
+  .instructions p {
+    margin: 5px 0;
+    line-height: 1.4;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #FFFFFF;
+    text-shadow: 
+      1px 1px 2px rgba(0, 0, 0, 0.9),
+      0 0 8px rgba(255, 255, 255, 0.3),
+      0 0 15px rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .instructions p:hover {
+    color: #FFD700;
+    text-shadow: 
+      1px 1px 2px rgba(0, 0, 0, 0.9),
+      0 0 12px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.4);
+    transform: translateX(2px);
+  }
+
+  /* No specific overrides needed for small screens as flexbox handles it */
+
+  .score-display {
+    top: 8px !important;
+    /* Position at top */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    align-items: center;
+    z-index: 200;
+    /* Above welcome text */
+    position: fixed !important;
+  }
+
+  .score-text {
+    font-size: 16px;
+    padding: 6px 12px;
+    letter-spacing: 1px;
+  }
+
+  .welcome-text {
+    position: fixed !important;
+    top: 60px !important;
+    /* Position below score display to avoid overlap */
+    left: 50% !important;
+    /* Center horizontally */
+    transform: translateX(-50%) !important;
+    /* Center the element horizontally */
+    right: auto !important;
+    /* Override right positioning */
+    padding-top: 3px;
+    width: calc(100% - 32px);
+    max-width: 90%;
+    /* Wider on mobile for centering */
+    z-index: 100;
+    /* Below score display */
+    text-align: center !important;
+    /* Center align text */
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .welcome-text.game-started {
+    /* On very small mobile, keep the welcome card centered even after game starts - STRICTLY NO LEFT SHIFT */
+    position: fixed !important;
+    top: 60px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 90% !important;
+    min-width: auto !important;
+    opacity: 1 !important;
+    text-align: center !important;
+    transition: none !important;
+    /* Disable all transitions on mobile to prevent animation */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .mario-welcome {
+    font-size: 16px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    text-align: center !important;
+    /* Center align text */
+  }
+
+  .welcome-text.game-started .mario-welcome {
+    font-size: 14px !important;
+    text-align: center !important;
+  }
+
+  .sound-toggle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 18px;
+    top: 8px !important;
+    /* Position at top, same as score display */
+    left: 8px;
+    /* Small margin from left edge */
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .night-mode-toggle {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 18px;
+    top: 8px !important;
+    left: 58px;
+    bottom: auto;
+    right: auto;
+    overflow: visible;
+  }
+
+  .mobile-button {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    font-size: 28px;
+  }
+
+  .mobile-controls {
+    position: fixed;
+    bottom: calc(15% - 36px - 12px);
+    /* Position with more space below road surface (road surface is at 15% from bottom, 12px gap) */
+    left: 0;
+    right: 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 10px;
+    gap: 0;
+    z-index: 200;
+  }
+
+  .mobile-button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    font-size: 20px;
+    border-width: 2px;
+  }
+
+  .mobile-button.mobile-left {
+    order: 1;
+    /* Leftmost position */
+    margin-right: auto;
+  }
+
+  .mobile-button.mobile-jump {
+    order: 2;
+    /* Center position - positioned absolutely in center */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .mobile-button.mobile-right {
+    order: 3;
+    /* Rightmost position */
+    margin-left: auto;
+  }
+
+  .arrow-key {
+    font-size: 32px;
+    /* Even smaller on very small screens */
+  }
+
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .cloud {
+    animation: none;
+  }
+
+  .mario.running .mario-leg-left,
+  .mario.running .mario-leg-right,
+  .mario.running .mario-arm-left,
+  .mario.running .mario-arm-right {
+    animation: none;
+  }
+
+  .question-mark {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .mario-sprite {
+    border: 3px solid #000;
+  }
+
+  .platform {
+    border-width: 4px;
+  }
+
+  .mario-box {
+    border-width: 5px;
+  }
+}
