@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import './MarioGame.css';
 import PortfolioSection from './PortfolioSection';
 import MarioChatbot from './MarioChatbot';
+import { IS_AI_PROFILE } from '../constants/profileConfig';
 
 // Mario sprite images for walking animation
 const MARIO_SPRITES = ['/1.png', '/2.png', '/3.png'];
@@ -1316,8 +1317,12 @@ const MarioGame = () => {
             <span className="welcome-tag">Portfolio</span>
             <div className="welcome-name-line">UJJWAL JAIN</div>
             <div className="welcome-divider-line"></div>
-            <div className="welcome-title-line">Backend Engineer & AI Infrastructure</div>
-            <div className="welcome-spec-line">Distributed Systems · Cloud Native · ML Infra</div>
+            <div className="welcome-title-line">
+              {IS_AI_PROFILE ? 'AI Engineer · Intelligent Systems' : 'Backend Engineer & AI Infrastructure'}
+            </div>
+            <div className="welcome-spec-line">
+              {IS_AI_PROFILE ? 'AI Agents · RAG Systems · Real-time AI' : 'Distributed Systems · Cloud Native · ML Infra'}
+            </div>
           </div>
           <p className="mario-subtitle">
             {activeContent ? (

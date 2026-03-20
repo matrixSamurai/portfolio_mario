@@ -1,109 +1,100 @@
+import { ACTIVE_PROFILE } from './profileConfig.mjs';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 const resumeData = {
   about: {
-    title: "Software Engineer · Backend & Distributed Systems",
-    description: "Software Engineer with experience architecting and scaling distributed systems, real-time data pipelines, and cloud-native backend services on Kubernetes. Proven track record of designing low-latency, high-throughput architectures, owning production reliability, and delivering resilient systems on modern cloud platforms."
+    title: "AI Engineer",
+    description: "AI Engineer experienced in intelligent systems, AI agents, and scalable ML pipelines for real-world applications. Skilled with LLMs, LangChain, and LangSmith, focused on production readiness and performance."
   },
   education: [
     {
-      degree: "Master of Business and Technology (Awarded Fellowship)",
+      degree: "Master of Business and Technology (AI Innovations Fellowship) (GPA: 3.71)",
       school: "Purdue University",
       location: "West Lafayette, IN",
       period: "Dec 2026",
-      note: "Teaching Assistant & Python Programming Tutor"
+      note: "Graduate Teaching Assistant (Python Programming, Data Visualization); Global Student Ambassador"
     },
     {
       degree: "Bachelor of Technology in Information Technology",
       school: "Guru Gobind Singh Indraprastha University",
       location: "Delhi, India",
-      period: "2015 — 2019"
+      period: "2015 — 2019",
+      note: "GPA: 3.53; Founding Head, AI & Blockchain Club"
     }
   ],
   experience: [
     {
-      role: "Founder",
+      role: "AI Engineer",
       company: "Starportal Software LLP",
       location: "Noida, India",
       period: "Dec 2023 — July 2025",
       highlights: [
-        "Led Engineering and Product to build and scale a real-time trading platform to 300K+ MAU using Kafka, Redis, and WebSockets. Owned architecture, SRE, and growth levers including tiered pricing and analytics-driven roadmap, improving activation and retention while keeping acquisition costs low.",
-        "Built high-throughput trading stack with Kafka (consumer groups, DLQs, idempotent producers), Redis for ultra-low latency, and WebSockets for bidirectional order flow. Designed resilient services with active-active deployment, circuit breakers, and controlled backpressure for 99.9% uptime.",
-        "Implemented end-to-end security including 2FA/TOTP, device binding, short-lived JWTs with RBAC, and audit trails. Delivered predictions market module with signal aggregation, risk limits, and backtesting harness. Scaled Mini App to 300K+ MAU with tiered pricing and data-driven rollouts.",
-        "Led cross-functional execution including on-call, mentoring engineers, and driving integrations with 50+ partners while aligning with compliance, finance, and community teams."
+        "Built data ingestion pipelines for structured and unstructured sources, transforming raw documents into clean, queryable formats for downstream analytics and RAG-based workflows.",
+        "Designed retrieval pipelines over large datasets using vector embeddings, optimized indexing, chunking, and ranking strategies to improve search relevance.",
+        "Implemented LLM-powered utilities using LangChain for document querying and summarization, and improved response quality with structured evaluation and LangSmith tracing.",
+        "Implemented Responsible AI safeguards including input filtering, PII redaction, prompt constraints, and output validation."
       ]
     },
     {
-      role: "Senior Software Engineer",
+      role: "Software Engineer",
       company: "Intract Software Pvt Ltd",
       location: "Singapore",
       period: "Nov 2022 — Dec 2023",
       highlights: [
-        "Led end-to-end architecture of Intract Quest Platform using Node.js and TypeScript, designing policy-based rules engine, fraud controls, and scalable payout workflows backed by PostgreSQL, Redis, and event-driven orchestration.",
-        "Built event ingestion pipeline using Kafka/pub-sub, Redis, and worker-based orchestration for reliable, low-latency reward campaigns. Implemented secure payout layer with batched execution, rate limiting, and idempotent workers, supported by Prometheus, Grafana, and CI/CD pipelines.",
-        "Shipped Intract Rewind 2022, a Spotify Wrapped–style analytics experience with precomputed cohorts and CDN delivery, optimized for burst traffic, contributing to Product Hunt Launch of the Week recognition.",
-        "Drove growth outcomes by integrating with 50+ external teams via REST APIs and webhooks, instrumenting analytics pipelines, and iterating reward mechanics to lift completion and retention while keeping acquisition costs low."
+        "Built a large-scale fault-tolerant backend processing millions of events daily using Node.js and TypeScript, with policy rules, eligibility checks, fraud controls, and payout workflows powered by PostgreSQL, Redis, and Kafka/pub-sub.",
+        "Developed low-latency data pipelines with event ingestion, caching, idempotent workers, API rate limiting, and audit logs, monitored via Prometheus, Grafana, and CI/CD quality checks.",
+        "Owned production reliability for a high-traffic personalized analytics product, handling burst traffic through precomputation, caching, CDN delivery, and on-call support."
       ]
     },
     {
-      role: "Senior Software Developer",
+      role: "Software Developer",
       company: "Syndr LLC",
       location: "Delhi, India",
       period: "Oct 2021 — Nov 2022",
       highlights: [
-        "Architected distributed backend systems in Python and Java, deploying microservices on Kubernetes with gRPC APIs and smart load balancing. Built event-driven automation using cron jobs, WebSockets, and cloud functions, driving 40% engagement lift across 50K+ users.",
-        "Designed microservices at scale with gRPC contracts, service discovery, HPA autoscaling, and zero-downtime canary/blue-green deploys. Implemented event pipelines with idempotent workers and controlled backpressure for reliable traffic burst handling.",
-        "Hardened reliability with timeouts, retries, circuit breakers, and graceful degradation. Built end-to-end observability with SLIs/SLOs, structured logs, metrics, tracing, and automated testing, reducing MTTR and enabling fast rollbacks.",
-        "Provided senior technical leadership through design reviews, RFCs, and mentoring. Partnered with Product, Infra, and Security to deliver compliant, cost-aware releases."
+        "Built and scaled distributed backend systems in Python and Java using Kubernetes and gRPC microservices for 50K+ users.",
+        "Enabled autoscaling and zero-downtime deployments with resilient production reliability.",
+        "Developed event-driven pipelines using queues/pub-sub, WebSocket fan-out, and cloud functions.",
+        "Set up observability with SLIs/SLOs to handle traffic spikes reliably, contributing to a 40% engagement increase."
       ]
     },
     {
       role: "Software Developer",
       company: "ION Group",
       location: "Noida, India",
-      period: "2019 — 2021",
+      period: "June 2019 — Oct 2021",
       highlights: [
-        "Built and optimized low-latency trading systems in C++, evolving a TCP-based recovery protocol that reduced master-to-replica sync time by 89% and improved trading uptime by 20+ minutes per session for global banks. Delivered 100+ CI/CD releases with automation that cut incident response time by 60%.",
-        "Improved TCP recovery and failover with resumable synchronization, sequence gap repair, and congestion/backoff tuning. Optimized critical hot paths using multithreaded I/O, memory management, and batching strategies, stabilizing p99 latency during heavy market bursts.",
-        "Delivered 100+ production releases through CI/CD with staged rollouts, automated testing, and one-click rollback. Built incident automation with health checks, alerts, dashboards, and runbooks, reducing MTTR across multiple client environments.",
-        "Partnered with client trading desks, operations, and QA teams. Defined SLAs, led code/design reviews, authored technical documentation, and supported on-call responsibilities for consistent, reliable trading sessions."
+        "Enhanced low-latency trading systems by evolving a TCP-based recovery protocol in C++, reducing master-slave sync time by 89% and improving uptime by 20+ minutes per session.",
+        "Built an automated Linux benchmarking tool for high-volume logs using multithreading for parallel parsing, reducing manual analysis time by 80%.",
+        "Delivered 100+ CI/CD releases and automated deployment pipelines for global banks, cutting incident response time by 60%."
       ]
     }
   ],
   projects: [
     {
+      name: "Driver Behavior AI Twin — Real-Time Behavioral Modeling System",
+      description: "Engineered a real-time telemetry pipeline for mobile sensor streams, detected driving anomalies, and built a personalized AI Twin that learns behavioral baselines and generates adaptive safety insights.",
+      date: "Jan 2026"
+    },
+    {
       name: "Pulse — AI-Powered Healthcare Platform (LLM-Driven Clinical Workflows)",
-      description: "Architected and built an AI-driven healthcare platform using LLM-based workflows for symptom triage, virtual consultations, and medical report analysis, serving 5K+ users with secure, HIPAA-compliant Restful APIs and inference pipelines.",
+      description: "Engineered an AI-driven healthcare platform for symptom triage, virtual consultations, and medical report analysis, serving 5K+ users with secure HIPAA-compliant RESTful APIs and inference pipelines.",
       date: "Apr 2025"
-    },
-    {
-      name: "Thunder Wallet — Non-Custodial Payments Infrastructure",
-      description: "Enabled secure multi-rail transactions via modular services and user-controlled key management; won Best UI/UX Award.",
-      date: "Jan 2022"
-    },
-    {
-      name: "Acquisense — AI Deal Intelligence Platform",
-      description: "AI‑powered due diligence and automated deal‑sourcing platform for mergers and acquisitions. Surfaces high‑fit targets from large datasets, scores opportunities using financial and strategic signals, and generates explainable risk summaries so deal teams can focus on the most promising transactions."
-    },
-    {
-      name: "Automated Benchmarking Tool",
-      description: "Linux benchmarking tool with multithreaded parallel parsing that reduced release validation and manual analysis time by 80% for trading systems."
     }
   ],
   skills: {
-    languages: ["Python", "Java", "C", "C++", "C#", "JavaScript", "Ruby", "TypeScript", "HTML", "CSS", "Node.js", "SQL", "Kotlin", "Swift", "R", "Golang", "Rust", "PHP", "Shell", "Bash", "GraphQL"],
-    frameworks: ["React", "Spring Boot", ".NET", "MVC", "TensorFlow", "PyTorch", "LangChain", "Django"],
-    devops: ["Linux", "Git", "Azure", "GCP", "TCP/IP", "DNS", "JIRA", "S3", "API Gateway", "Terraform", "NGINX", "Reverse Proxy", "Load Balancing", "DynamoDB", "Ansible", "Grafana", "ELK Stack", "Serverless Architecture", "Jenkins", "SDLC", "SDK", "Object-Oriented", "Performance Testing"],
-    systems: ["MySQL", "MongoDB", "NoSQL", "IAM", "OpenID Connect", "Load Testing", "Event Sourcing", "Computer Science Fundamentals", "Service-Oriented Architecture", "Data Analysis", "System Design", "Design Patterns", "Applied AI", "Machine Learning"],
-    essentials: ["Problem Solving", "Analytical Thinking", "Clear Communication", "Attention to Detail", "Critical Thinking", "Agile", "Adaptability", "Collaboration", "Continuous Learning", "Accountability", "Leadership", "Strategic Thinking", "Code Reviews", "Technical Documentation"]
+    languages: ["Python", "Go", "Java", "C/C++", "JavaScript", "SQL"],
+    frameworks: ["LangChain", "LangSmith", "Prompt Engineering", "Fine-tuning", "Vector Databases", "Embeddings"],
+    devops: ["AWS", "GCP", "Azure", "Docker", "Kubernetes", "Terraform", "CI/CD", "Model Deployment", "Monitoring", "Model Evaluation"],
+    systems: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "NoSQL", "Distributed Systems", "Microservices", "Event-Driven Architecture", "Concurrency", "Multithreading", "System Design", "TCP/IP"],
+    essentials: ["Autonomous Agents", "RAG Systems", "Real-time AI Solutions"]
   },
   certifications: [
     "AWS Certified Cloud Practitioner",
     "AWS Certified AI Practitioner",
-    "Google Generative AI",
+    "Teaching Assistant — Data Structures & Algorithms",
     "ACM ICPC Regional Finalist (2016, 2018)",
-    "Teaching Assistant — Programming & DSA",
-    "Vice President 2018 — Toastmasters International",
+    "Vice-President — Toastmasters International",
     "Certified Yoga Teacher — Batch 2018"
   ],
   contact: {
@@ -114,41 +105,106 @@ const resumeData = {
   }
 };
 
+const softwareResumeData = {
+  about: {
+    title: "Software Engineer · Backend & Distributed Systems",
+    description: "Software Engineer with experience architecting and scaling distributed systems, real-time data pipelines, and cloud-native backend services on Kubernetes."
+  },
+  education: resumeData.education,
+  experience: [
+    {
+      role: "Founder",
+      company: "Starportal Software LLP",
+      location: "Noida, India",
+      period: "Dec 2023 — July 2025",
+      highlights: [
+        "Led engineering and product to build and scale a real-time trading platform to 300K+ MAU using Kafka, Redis, and WebSockets.",
+        "Built high-throughput trading stack with Kafka, Redis, and WebSockets with resilient active-active service design.",
+        "Implemented end-to-end security including 2FA/TOTP, JWT with RBAC, and audit trails.",
+        "Led cross-functional execution, on-call, mentoring, and 50+ partner integrations."
+      ]
+    },
+    {
+      role: "Senior Software Engineer",
+      company: "Intract Software Pvt Ltd",
+      location: "Singapore",
+      period: "Nov 2022 — Dec 2023",
+      highlights: [
+        "Led end-to-end architecture of Intract Quest Platform using Node.js and TypeScript.",
+        "Built event ingestion and payout orchestration with Kafka/pub-sub, Redis, idempotent workers, and rate limiting.",
+        "Shipped Intract Rewind 2022 with precomputed cohorts and CDN delivery for burst traffic.",
+        "Integrated with 50+ external teams via REST APIs and webhooks."
+      ]
+    }
+  ],
+  projects: [
+    {
+      name: "Pulse — AI-Powered Healthcare Platform (LLM-Driven Clinical Workflows)",
+      description: "AI-driven healthcare platform for triage, virtual consultations, and medical report analysis.",
+      date: "Apr 2025"
+    },
+    {
+      name: "Thunder Wallet — Non-Custodial Payments Infrastructure",
+      description: "Secure multi-rail transactions via modular services and user-controlled key management.",
+      date: "Jan 2022"
+    },
+    {
+      name: "Acquisense — AI Deal Intelligence Platform",
+      description: "AI-powered due diligence and deal-sourcing with explainable risk summaries."
+    },
+    {
+      name: "Automated Benchmarking Tool",
+      description: "Linux benchmarking tool with multithreaded parsing that reduced validation time by 80%."
+    }
+  ],
+  skills: {
+    languages: ["Python", "Java", "C/C++", "JavaScript", "TypeScript", "Node.js", "SQL"],
+    frameworks: ["React", "Spring Boot", "Django", "LangChain"],
+    devops: ["Linux", "AWS", "GCP", "Kubernetes", "Terraform", "Redis", "Grafana"],
+    systems: ["Distributed Systems", "Microservices", "Event-Driven Architecture", "System Design", "TCP/IP"],
+    essentials: ["Problem Solving", "Leadership", "Collaboration"]
+  },
+  certifications: resumeData.certifications,
+  contact: resumeData.contact
+};
+
+const activeResume = ACTIVE_PROFILE === 'ai' ? resumeData : softwareResumeData;
+
 function createSystemPrompt() {
   return `You are Mario, Ujjwal's friendly assistant chatbot. You help visitors learn about Ujjwal's professional background, experience, and skills. Be conversational, helpful, and enthusiastic (like Mario!). Always stay in character as Mario.
 
 Here is Ujjwal's resume information:
 
 ABOUT:
-${resumeData.about.title}
-${resumeData.about.description}
+${activeResume.about.title}
+${activeResume.about.description}
 
 EDUCATION:
-${resumeData.education.map(edu => `• ${edu.degree} - ${edu.school}, ${edu.location} (${edu.period})${edu.note ? ` - ${edu.note}` : ''}`).join('\n')}
+${activeResume.education.map(edu => `• ${edu.degree} - ${edu.school}, ${edu.location} (${edu.period})${edu.note ? ` - ${edu.note}` : ''}`).join('\n')}
 
 WORK EXPERIENCE:
-${resumeData.experience.map(exp => {
+${activeResume.experience.map(exp => {
   return `• ${exp.role} at ${exp.company} (${exp.location}, ${exp.period})\n  Key achievements:\n${exp.highlights.map(h => `  - ${h}`).join('\n')}`;
 }).join('\n\n')}
 
 PROJECTS:
-${resumeData.projects.map(proj => `• ${proj.name}${proj.date ? ` (${proj.date})` : ''}: ${proj.description}`).join('\n\n')}
+${activeResume.projects.map(proj => `• ${proj.name}${proj.date ? ` (${proj.date})` : ''}: ${proj.description}`).join('\n\n')}
 
 SKILLS:
-Languages & Frameworks: ${resumeData.skills.languages.join(', ')}
-Frameworks: ${resumeData.skills.frameworks.join(', ')}
-DevOps: ${resumeData.skills.devops.join(', ')}
-Systems & Architecture: ${resumeData.skills.systems.join(', ')}
-Essentials: ${resumeData.skills.essentials.join(', ')}
+Languages & Frameworks: ${activeResume.skills.languages.join(', ')}
+Frameworks: ${activeResume.skills.frameworks.join(', ')}
+DevOps: ${activeResume.skills.devops.join(', ')}
+Systems & Architecture: ${activeResume.skills.systems.join(', ')}
+Essentials: ${activeResume.skills.essentials.join(', ')}
 
 CERTIFICATIONS & HONORS:
-${resumeData.certifications.map(c => `• ${c}`).join('\n')}
+${activeResume.certifications.map(c => `• ${c}`).join('\n')}
 
 CONTACT INFORMATION:
-Email: ${resumeData.contact.email}
-Phone: ${resumeData.contact.phone}
-Location: ${resumeData.contact.location}
-LinkedIn: ${resumeData.contact.linkedin}
+Email: ${activeResume.contact.email}
+Phone: ${activeResume.contact.phone}
+Location: ${activeResume.contact.location}
+LinkedIn: ${activeResume.contact.linkedin}
 
 When answering questions:
 - Be friendly and enthusiastic (like Mario!)
