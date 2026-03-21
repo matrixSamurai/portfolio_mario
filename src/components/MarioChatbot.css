@@ -525,21 +525,21 @@ body.night-mode .chatbot-toggle {
 }
 
 .message.user .message-text {
-  background: rgba(255, 215, 0, 0.3);
-  color: #FFD700;
-  border: 1px solid rgba(255, 215, 0, 0.5);
+  background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+  color: #ffffff;
+  border: 1px solid rgba(183, 28, 28, 0.6);
   border-bottom-right-radius: 4px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: none;
 }
 
 .message.user .message-text strong {
-  color: #fff;
+  color: #ffffff;
   font-weight: 700;
 }
 
 .message.user .message-text code {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff8e1;
 }
 
 /* Night Mode Styles */
@@ -559,9 +559,18 @@ body.night-mode .chatbot-toggle {
 }
 
 .chatbot-window.night-mode .message.user .message-text {
-  background: rgba(53, 122, 138, 0.4);
-  color: #4A9FB0;
-  border-color: rgba(74, 159, 176, 0.5);
+  background: linear-gradient(135deg, rgba(74, 159, 176, 0.95) 0%, rgba(53, 122, 138, 0.98) 100%);
+  color: #ffffff;
+  border-color: rgba(123, 196, 214, 0.55);
+}
+
+.chatbot-window.night-mode .message.user .message-text strong {
+  color: #ffffff;
+}
+
+.chatbot-window.night-mode .message.user .message-text code {
+  background: rgba(0, 0, 0, 0.25);
+  color: #e8f7fa;
 }
 
 .chatbot-window.night-mode .message-avatar {
